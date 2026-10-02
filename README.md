@@ -1,0 +1,12 @@
+# GOTA · Estaciones inteligentes (demo)
+
+Demo de venta de **GOTA**, la plataforma de IA para estaciones de servicio de Black Code y Oficinas de Jhonson.
+
+**Entrar a la demo:** https://blackcode-oficinasdejhonson.github.io/Gotita_Black_Code-Oficinas_de_Jhonson_DEMO/
+
+- Todos los datos son **ficticios** (precios, volúmenes, personas, proveedores y patentes). No corresponden a ninguna estación real.
+- Los videos de las cámaras son clips de ejemplo. Los recuadros de «Cámaras en vivo» los generó el motor de visión de GOTA sobre esos mismos clips.
+- Es una página estática: `index.html` + `media/`. Se abre también con doble clic, sin servidor.
+- Para presentar: botón «Presentar», arriba a la derecha.
+
+Este repo se actualiza desde el repo privado del proyecto con `tools/publicar-demo-pages.sh`; no editar acá.
