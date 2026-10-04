@@ -461,6 +461,29 @@ table.tbl.heat-t{table-layout:fixed;width:100%;min-width:420px} .heat-t td{paddi
 @media (max-width:620px){.motor-svg text{font-size:15px}} /* en el teléfono el SVG se achica: letra más grande en unidades del dibujo */
 @media (max-width:1100px){.flow.motor-flow{grid-template-columns:minmax(0,1fr)}.flow.motor-flow .arr{transform:rotate(90deg)}}
 /* <<< css motor */
+/* >>> css camdet */
+.cd-title{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:26px 0 12px;scroll-margin-top:90px}
+.cd-title h2{margin:2px 0 0;font-size:20px;line-height:1.25}
+.eyebrow-s{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+#camdet{scroll-margin-top:90px}
+.cd-trends{display:flex;flex-direction:column}
+.cd-tr{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:12px;align-items:center;padding:10px 16px;border-top:1px solid var(--line)}
+.cd-tr:first-child{border-top:0}
+.cd-tr .chart{width:240px;height:auto}
+@media (max-width:560px){.cd-tr{grid-template-columns:minmax(0,1fr)}.cd-tr .chart{width:100%}}
+.cd-recos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:12px;padding:14px 16px 4px}
+.cd-reco{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--surface-2)}
+.cd-reco.off{opacity:.55}
+.cd-pred{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px;align-items:start}
+.cd-trends .cd-tr{grid-template-columns:minmax(0,1fr) 240px}
+@media (min-width:1200px){.cd-trends{display:grid;grid-template-columns:1fr 1fr}.cd-tr:nth-child(2){border-top:0}}
+
+
+
+
+
+
+/* <<< css camdet */
 </style>
 </head>
 <body>
@@ -1027,8 +1050,9 @@ function gondHtml(){const hot=GOND.filter(g=>g.s>=18&&g.c/g.t<.5&&g.p>=.5).sort(
  <div class="tbl-wrap flat"><table class="tbl" style="min-width:560px"><thead><tr><th>Góndola</th><th class="r">Pasan</th><th class="r">Se detienen</th><th class="r">Toman un producto</th><th class="r">Compran</th></tr></thead><tbody>${GOND.map(g=>`<tr${g===hot||g===hid?' style="font-weight:600"':''}><td>${g.n}</td><td class="r num">${pcu(g.p)}</td><td class="r num">${g.s} s</td><td class="r num">${pcu(g.t)}</td><td class="r num ${g.c/g.t<.5?'badc':''}">${pcu(g.c)}</td></tr>`).join('')}</tbody></table></div>
  <ul class="why">${hot?`<li class="warn">${ic('eye')}<span><b>${hot.n}:</b> los clientes se detienen ${hot.s} s y el ${pcu(hot.t)} toma un producto, pero solo el ${pcu(hot.c)} compra. Mucho interés y poca compra: revisar precio, surtido o faltantes en la góndola.</span></li>`:''}${hid?`<li>${ic('map')}<span><b>${hid.n}:</b> solo pasa el ${pcu(hid.p)} de los clientes, pero los que llegan miran ${hid.s} s. Probar ubicarlos cerca de la caja dos semanas y medir.</span></li>`:''}<li>${ic('lock')}<span>Se cuentan pasos y segundos por zona, sin reconocimiento facial ni identificación de personas.</span></li></ul>`}
 const lprTable=()=>`<div class="tbl-wrap flat"><table class="tbl" style="min-width:560px"><thead><tr><th>Patente</th><th class="r">Fugas</th><th>Última</th><th>Dónde</th><th>Denuncia</th><th>Alerta</th></tr></thead><tbody>${LPR.map(r=>`<tr><td class="mono"><b>${r.plate}</b></td><td class="r num">${r.n}</td><td class="small">${fDay(addD(TODAY,r.last))}</td><td class="small">${r.suc}</td><td>${r.den?pill('p-ok','Sí'):pill('p-mute','No')}</td><td class="small">${r.den?'Activa: pedir pago anticipado':'Inactiva hasta que haya denuncia'}</td></tr>`).join('')}</tbody></table></div>`;
-V.vision=()=>{const evs=D.ev.slice().sort((a,b)=>b.at-a.at),sel=evs.find(e=>e.id===S.ev)||evs[0];
- return `<div class="grid-cam">${panel('Cámaras en vivo',camsHtml(sel)+`<p class="small muted" style="padding:0 14px 12px">Clips de ejemplo. ${window.GOTA_DET?'Con la detección real activada, los recuadros, las zonas y los conteos los genera el motor de visión sobre estos mismos videos. ':''}Si un video no carga, esa cámara muestra una simulación animada. Tocá una cámara para ver su último evento.</p>`,{icon:'camera',right:pill('p-ok',CAMS.length+' cámaras en línea')})}${panel('Eventos de hoy',evs.map(e=>evItem(e,sel)).join(''),{icon:'alert',n:evs.length})}</div>
+V.vision=()=>{const evs=D.ev.slice().sort((a,b)=>b.at-a.at),sel=evs.find(e=>e.id===S.ev)||evs[0],cid=S.cam||camOf(sel);
+ return `<div class="grid-cam">${panel('Cámaras en vivo',camsHtml(cid)+`<p class="small muted" style="padding:0 14px 12px">Clips de ejemplo. ${window.GOTA_DET?'Con la detección real activada, los recuadros, las zonas y los conteos los genera el motor de visión sobre estos mismos videos. ':''}Si un video no carga, esa cámara muestra una simulación animada. Tocá una cámara para ver su último evento.</p>`,{icon:'camera',right:pill('p-ok',CAMS.length+' cámaras en línea')})}<div>${panel('Eventos de hoy',evs.map(e=>evItem(e,sel)).join(''),{icon:'alert',n:evs.length})}<div class="mt">${camDetCard(cid)}</div></div></div>
+ <div id="camdet">${camDetHtml(cid)}</div>
  ${window.GOTA_DET?`<div class="mt">${detPanel()}</div>`:''}
  <div class="mt">${panel('Qué mira cada cámara',cvMapHtml(),{icon:'spark'})}</div>
  <p class="note">Cada evento queda en uno de tres estados: DETECTADO, NO DETECTADO o NO OBSERVABLE (cuando la imagen no permite afirmar nada). Una persona confirma o descarta; nada se resuelve solo. Las patentes de la demo son ficticias. En producción se usan las cámaras que ya tiene la estación, si la resolución alcanza. La lista de fugas solo incluye hechos con denuncia, se avisa con cartelería y los datos tienen un plazo de conservación definido.</p>`};
@@ -1229,7 +1253,7 @@ const CAMS=[{id:'C1',n:'Ingreso',f:'cam1'},{id:'C2',n:'Tienda',f:'cam2'},{id:'C3
 const camOf=e=>e.cam.split(' ')[0];
 const EV_BOX={e1:[.36,.4,.36,.4],e6:[.36,.4,.36,.4],e2:[.56,.22,.17,.56],e3:[.6,.04,.36,.42],e4:[.6,.04,.36,.42],e5:[.12,.32,.6,.52],e7:[.38,.22,.22,.66]};
 const SEVC={crit:'#ff3b30',warn:'#ffcc00',info:'#4da3ff',ok:'#34c759'};
-function camsHtml(sel){return `<div class="cams">${CAMS.map(c=>`<div class="cam${sel&&camOf(sel)===c.id?' hot':''}" data-cam="${c.id}" data-act="camSel" role="button" tabindex="0" aria-label="Cámara ${c.id}, ${c.n}"><video muted loop playsinline preload="auto" data-src="${camSrcs(c)}" aria-hidden="true"></video><canvas class="base" width="480" height="270" aria-hidden="true"></canvas><canvas class="hud" width="480" height="270" aria-hidden="true"></canvas><div class="cam-l"><i></i>${c.id} · ${c.n}</div><div class="cam-src">simulación</div></div>`).join('')}</div>`}
+function camsHtml(cid){return `<div class="cams">${CAMS.map(c=>`<div class="cam${cid===c.id?' hot':''}" data-cam="${c.id}" data-act="camSel" role="button" tabindex="0" aria-label="Cámara ${c.id}, ${c.n}"><video muted loop playsinline preload="auto" data-src="${camSrcs(c)}" aria-hidden="true"></video><canvas class="base" width="480" height="270" aria-hidden="true"></canvas><canvas class="hud" width="480" height="270" aria-hidden="true"></canvas><div class="cam-l"><i></i>${c.id} · ${c.n}</div><div class="cam-src">simulación</div></div>`).join('')}</div>`}
 function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
 function carD(c,x,y,w,col){const h=w*.42;c.fillStyle=col;rr(c,x,y+h*.35,w,h*.55,6);c.fill();rr(c,x+w*.18,y,w*.6,h*.5,8);c.fill();c.fillStyle='rgba(18,22,22,.8)';rr(c,x+w*.24,y+h*.08,w*.22,h*.3,3);c.fill();rr(c,x+w*.5,y+h*.08,w*.22,h*.3,3);c.fill();c.fillStyle='#0c0c0c';[.2,.78].forEach(f=>{c.beginPath();c.arc(x+w*f,y+h*.9,h*.17,0,7);c.fill()})}
 function personD(c,x,y,s,col,ph){c.fillStyle=col;c.beginPath();c.arc(x,y,s*.17,0,7);c.fill();rr(c,x-s*.2,y+s*.2,s*.4,s*.68,s*.12);c.fill();const k=Math.sin(ph)*s*.06;c.fillRect(x-s*.17,y+s*.84,s*.13,s*.44+k);c.fillRect(x+s*.04,y+s*.84,s*.13,s*.44-k)}
@@ -2261,6 +2285,1051 @@ const ACT_MOTOR={
 V.motor=V_motor;
 /* <<< módulo motor */
 
+/* >>> módulo camdet */
+/* ---------- Detalle por cámara: qué intenta identificar la IA, recorridos, tendencias, predicción y recomendaciones ----------
+   Cada cámara declara su ficha en CAMDET.Cn (bloques «cámara Cn», contrato en CAMDET-CONTRACT.md). Este núcleo:
+   - calcula los recorridos del clip real (media/deteccion.js) con las mismas zonas, líneas y punto de apoyo que el motor;
+   - analiza series diarias de 28 días: tendencia (Mann-Kendall y pendiente de Sen sobre la serie sin el efecto del día de la semana),
+     cambio de nivel (CUSUM, solo si un escalón explica mejor que una recta), predicción (Holt-Winters aditivo semanal con intervalo
+     del 80 % y error medido sobre las 2 últimas semanas) y si ayer se salió de lo esperado;
+   - arma la ficha. Todos los números salen de acá o de D; los textos solo los citan. */
+const CAMDET={},CD_N=28,CD_MIN=14,CD_P=.05;
+const cdAvg=a=>a.length?sum(a)/a.length:null;
+const cdVar=a=>{const m=cdAvg(a);return a.length>1?sum(a.map(v=>(v-m)**2))/(a.length-1):0};
+function cdErf(x){const s=Math.sign(x),t=1/(1+.3275911*Math.abs(x));return s*(1-((((1.061405429*t-1.453152027)*t+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x))}
+const cdPhi=z=>.5*(1+cdErf(z/Math.SQRT2));
+/* quita el efecto del día de la semana: a cada posición (i mod 7) le resta su desvío medio */
+function cdDeseason(y,p=7){const m=cdAvg(y),idx=[...Array(p)].map((_,k)=>cdAvg(y.filter((_,i)=>i%p===k))-m);return y.map((v,i)=>v-idx[i%p])}
+/* Mann-Kendall: ¿la serie sube o baja de forma sostenida? p a dos colas con aproximación normal (sin empates: valores continuos) */
+function cdMK(y){const n=y.length;let S=0;for(let i=0;i<n-1;i++)for(let j=i+1;j<n;j++)S+=Math.sign(y[j]-y[i]);
+ const v=n*(n-1)*(2*n+5)/18,z=S>0?(S-1)/Math.sqrt(v):S<0?(S+1)/Math.sqrt(v):0;return{S,z,p:2*(1-cdPhi(Math.abs(z)))}}
+/* pendiente de Sen: mediana de las pendientes entre todos los pares (robusta a días raros) */
+function cdSen(y){const s=[];for(let i=0;i<y.length-1;i++)for(let j=i+1;j<y.length;j++)s.push((y[j]-y[i])/(j-i));s.sort((a,b)=>a-b);const m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function cdTrend(y){if(!y||y.length<CD_MIN||y.some(v=>v==null||!isFinite(v)))return{ok:false,n:y?y.length:0};
+ const ds=cdDeseason(y),mk=cdMK(ds),sen=cdSen(ds),m=cdAvg(y),l7=cdAvg(y.slice(-7)),p7=cdAvg(y.slice(-14,-7));
+ return{ok:true,n:y.length,mean:m,sen,sem:sen*7,pct:m?sen*7/m:null,z:mk.z,p:mk.p,dir:mk.p<CD_P?(sen>0?'sube':'baja'):'estable',l7,p7,r7:p7?l7/p7-1:null}}
+/* Holt-Winters aditivo con estación semanal. La serie termina ayer: fc[0] es hoy y fc[1], mañana. Devuelve h días de pronóstico con intervalo del 80 %, el error típico (MAPE de las
+   predicciones a un día de las 2 últimas semanas) y cuánto se apartó ayer de lo que el modelo esperaba (en desvíos). */
+function cdHW(y,h=7,p=7,al=.3,be=.05,ga=.3){const n=y?y.length:0;if(n<2*p+3)return null;
+ const m1=cdAvg(y.slice(0,p)),m2=cdAvg(y.slice(p,2*p));let L=m1,T=(m2-m1)/p;const Sx=y.slice(0,p).map(v=>v-m1),err=[];
+ for(let t=p;t<n;t++){const f=L+T+Sx[t%p],e=y[t]-f;if(t>=2*p)err.push({e,y:y[t]});const L0=L;L=al*(y[t]-Sx[t%p])+(1-al)*(L+T);T=be*(L-L0)+(1-be)*T;Sx[t%p]=ga*(y[t]-L)+(1-ga)*Sx[t%p]}
+ const sd=Math.sqrt(cdAvg(err.map(x=>x.e*x.e))),ape=err.slice(-14).filter(x=>x.y).map(x=>Math.abs(x.e/x.y)),last=err[err.length-1];
+ const fc=[];for(let k=1;k<=h;k++){const v=L+k*T+Sx[(n+k-1)%p],w=1.28*sd*Math.sqrt(1+(k-1)*al*al);fc.push({v,lo:v-w,hi:v+w})}
+ return{fc,sd,mape:ape.length?cdAvg(ape):null,zAyer:sd?last.e/sd:null,esperado:last.y-last.e}}
+/* cambio de nivel: sobre la serie sin día de la semana y SIN su tendencia (pendiente de Sen), busca con CUSUM el punto de más desvío
+   acumulado y lo informa si el escalón es claro (|t| de Welch ≥ 3,5, al menos 5 días de cada lado). Así una tendencia no se confunde con un escalón. */
+function cdCambio(y){if(!y||y.length<CD_MIN)return null;const ds=cdDeseason(y),n=ds.length,sen=cdSen(ds),xm=(n-1)/2,r=ds.map((v,i)=>v-sen*(i-xm)),m=cdAvg(r);let c=0,best=0,k=-1;
+ for(let i=0;i<n-1;i++){c+=r[i]-m;if(Math.abs(c)>best){best=Math.abs(c);k=i}}
+ if(k<4||k>n-6)return null;const a=r.slice(0,k+1),b=r.slice(k+1),t=(cdAvg(b)-cdAvg(a))/Math.sqrt(cdVar(a)/a.length+cdVar(b)/b.length||1e-12);
+ return Math.abs(t)>=3.5?{i:k+1,antes:cdAvg(y.slice(0,k+1)),despues:cdAvg(y.slice(k+1)),t}:null}
+/* serie diaria de 28 días que termina exactamente en «ayer» (el número que muestra el módulo).
+   motor 'autos': forma de la semana, lluvia y tendencia de D.hist (litros por día). Si no, pesos por día de la semana (dow, domingo primero) o plana.
+   drift: cambio por semana (−0,02 = baja 2 % por semana); ruido: desvío relativo; seed: semilla propia. */
+function cdSerie(o){const g=RNG(o.seed),H=D.hist.slice(-CD_N),N=H.length,tot=H.map(x=>sum(PRODS.map(p=>x.v[p.id]))),last=H[N-1].d.getDay();
+ const y=H.map((x,i)=>{const w=o.motor==='autos'?tot[i]/tot[N-1]:o.dow?o.dow[x.d.getDay()]/o.dow[last]:1;let v=o.ayer*w*(1+(o.drift||0)*(i-(N-1))/7)*(1+(o.ruido??.04)*g.n());
+  if(o.min!=null)v=Math.max(o.min,v);if(o.max!=null)v=Math.min(o.max,v);return o.entero?Math.round(v):v});
+ y[N-1]=o.ayer;return{d:H.map(x=>x.d),y}}
+/* reparte el total pronosticado de mañana según el perfil por hora de ayer */
+function cdHoras(hrs,total){const t=sum(hrs.map(x=>x[1]));return t>0?hrs.map(([h,v])=>[h,total*v/t]):null}
+const cdFmt=(v,f)=>v==null||!isFinite(v)?'<span class="muted">sin dato</span>':f==='pct'?pcu(v,1):f==='s'?num(v)+' s':f==='min'?mmss(v):f==='ars'?ars(v):f==='dec'?num(v,1):num(v);
+const cdFmtD=(v,f)=>f==='pct'?(v>=0?'+':'−')+fa(Math.abs(v)*100,1)+' pp':f==='s'?(v>=0?'+':'−')+num(Math.abs(v))+' s':f==='min'?(v>=0?'+':'−')+mmss(Math.abs(v)):f==='ars'?(v>=0?'+':'−')+ars(Math.abs(v)):(v>=0?'+':'−')+num(Math.abs(v),f==='dec'?1:0);
+
+/* análisis de una cámara (se recalcula si cambia D, por ejemplo al tocar Parámetros) */
+let cdCache={D:null,A:{}};
+function cdAnalyze(id){if(cdCache.D!==D)cdCache={D,A:{}};if(cdCache.A[id])return cdCache.A[id];const C=CAMDET[id];if(!C)return null;
+ const S0=C.series().map(s=>({...s,tr:cdTrend(s.y),hw:cdHW(s.y,8),cb:cdCambio(s.y)})),main=S0[0],hrs=C.horas?C.horas():null;
+ const man=main&&main.hw?main.hw.fc[1]:null,hh=man&&hrs?cdHoras(hrs.hrs,man.v):null,pk=hh?hh.reduce((a,b)=>b[1]>a[1]?b:a):null;
+ const A={id,S:Object.fromEntries(S0.map(s=>[s.id,s])),list:S0,main,man,hrs,hh,pk};A.recos=C.recos?C.recos(A):[];return cdCache.A[id]=A}
+
+/* ---------- recorridos del clip real: mismas zonas y punto de apoyo (centro del borde de abajo) que el motor ---------- */
+function cdIn([x,y],poly){let r=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[x1,y1]=poly[i],[x2,y2]=poly[j];if((y1>y)!==(y2>y)&&x<(x2-x1)*(y-y1)/(y2-y1)+x1)r=!r}return r}
+const cdSide=(p,a,b)=>(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);
+function cdJourneys(R){if(!R)return[];const zs=R.zonas||[],ls=R.lineas||[],gap=2.5/R.hz,tr={},d0=R.res.desde,d1=R.res.hasta;
+ R.f.forEach(([t,obs])=>obs.forEach(([id,k,x1,y1,x2,y2])=>{const a=[(x1+x2)/2,y2],j=tr[id]??={id,k,pts:[]};j.pts.push({t,a,z:(zs.find(z=>cdIn(a,z.poligono))||{}).id||null})}));
+ return Object.values(tr).map(j=>{const P=j.pts,zt={},seq=[],cr=[];
+  P.forEach((p,i)=>{if(p.z&&seq[seq.length-1]!==p.z)seq.push(p.z);const q=P[i+1];if(q&&q.t-p.t<=gap&&p.z)zt[p.z]=(zt[p.z]||0)+(q.t-p.t)});
+  ls.forEach(l=>{let last=null;P.forEach(p=>{const s=cdSide(p.a,l.a,l.b);if(!s)return;if(last&&Math.sign(last.s)!==Math.sign(s)){const pq=cdSide(l.a,last.a,p.a),pr=cdSide(l.b,last.a,p.a);if((pq>0)!==(pr>0)){const izq=s>0;cr.push({l:l.id,t:p.t,sentido:l.entra?(izq===(l.entra==='izquierda')?'entra':'sale'):(izq?'izquierda':'derecha')})}}last={s,a:p.a}})});
+  const t0=P[0].t,t1=P[P.length-1].t;
+  return{id:j.id,k:j.k,t0,t1,dur:t1-t0,n:P.length,zt,seq,cr,desdeInicio:t0<=d0+gap,hastaFinal:t1>=d1-gap}}).sort((a,b)=>a.t0-b.t0)}
+
+/* ---------- ficha ---------- */
+const CD_EST={medido:['p-ok','medido'],estimado:['p-info','estimado'],piloto:['p-warn','en piloto'],falta:['p-mute','falta un modelo']};
+const cdObjHtml=C=>`<div class="tbl-wrap flat"><table class="tbl" style="min-width:560px"><thead><tr><th>Qué intenta identificar</th><th>Cómo lo mide</th><th>Estado</th></tr></thead><tbody>${C.objetivos.map(o=>`<tr><td><b>${o.q}</b></td><td class="small">${o.como}</td><td>${pill(...(CD_EST[o.estado]||CD_EST.estimado))}${o.conf?`<div class="sub">confianza ${o.conf}</div>`:''}</td></tr>`).join('')}</tbody></table></div>
+ <p class="small muted pad" style="padding-top:8px">${C.modelo}</p>`;
+const CD_K={v:['auto','autos'],p:['persona','personas'],a:['playero','playeros'],c:['celular','celulares'],b:['bidón','bidones']};
+function cdClipHtml(id,C){const R=detCam(id);if(!R)return `<p class="pad small muted">Sin video de esta cámara: sin dato.</p>`;const J=cdJourneys(R),zn=z=>(DET_Z[z]||z);
+ const custom=C.clip?C.clip(J,R):null,cnt=Object.entries(J.reduce((a,j)=>(a[j.k]=(a[j.k]||0)+1,a),{})).map(([k,n])=>`${n} ${(CD_K[k]||[k,k])[n===1?0:1]}`).join(', ');
+ const rows=custom?custom.rows:J.map(j=>[`<b>${j.id}</b>`,(CD_K[j.k]||[j.k])[0],`${num(j.t0,1)} a ${num(j.t1,1)} s`,Object.keys(j.zt).length?Object.entries(j.zt).map(([z,s])=>`${zn(z)} ${num(s,1)} s`).join(' · '):'<span class="muted">fuera de las zonas</span>',
+  j.cr.length?j.cr.map(c=>`cruzó «${c.l}» (${c.sentido})`).join(' · '):'—',j.hastaFinal?'<span class="muted">seguía en cuadro</span>':'salió del cuadro']);
+ const cols=custom?custom.cols:['Track','Qué es','En cuadro','Tiempo por zona','Líneas','Al terminar el clip'];
+ return `<p class="small pad" style="padding-bottom:6px">Clip de ${num(R.res.hasta-R.res.desde,0)} s: el motor siguió <b>${cnt||'nada'}</b>. ${custom&&custom.resumen?custom.resumen:''}</p>
+ <div class="tbl-wrap flat"><table class="tbl" style="min-width:600px"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>`<td class="small">${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}" class="muted">El motor no siguió a nadie en este clip.</td></tr>`}</tbody></table></div>
+ <p class="small muted pad" style="padding-top:8px">Medido de verdad sobre el video (${esc(window.GOTA_DET.detector)}). Cada track es un número anónimo que dura lo que dura la visita. Un track que ya estaba al empezar o que sigue al terminar tiene el tiempo cortado.${custom&&custom.nota?' '+custom.nota:''}</p>`}
+function cdAyerHtml(C){const a=C.ayer();return `${a.resumen?`<p class="small pad" style="padding-bottom:6px">${a.resumen}</p>`:''}<div class="tbl-wrap flat"><table class="tbl" style="min-width:${a.minW||720}px"><thead><tr>${a.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${a.rows.map(r=>`<tr>${r.map(c=>`<td class="small">${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+ <p class="small muted pad" style="padding-top:8px">${a.nota||''} Recorridos de ejemplo de la estación demo: en producción salen del motor, uno por track anónimo, y se borran al cerrar el día; a la nube suben solo los totales.</p>`}
+const cdSpark=s=>{const y=s.y,mn=Math.min(...y),mx=Math.max(...y),pad=(mx-mn)*.15||Math.abs(mx)*.1||1;return lineChart({w:240,h:64,pl:4,pr:4,pt:6,pb:6,label:s.n,x0:0,x1:y.length-1,y0:mn-pad,y1:mx+pad,series:[{pts:y.map((v,i)=>[i,v]),cls:s.tr.ok&&s.tr.dir!=='estable'?((s.tr.dir==='sube')===(s.mejor!=='baja')?'sacc':'sbad'):'smut'}],dots:[{x:y.length-1,y:y[y.length-1],r:3,cls:'acc'}]})};
+function cdTrendTxt(s){const t=s.tr;if(!t.ok)return'<span class="muted">sin dato (menos de 14 días)</span>';const good=(t.dir==='sube')===(s.mejor!=='baja');
+ const base=t.dir==='estable'?`<b>estable</b>: sin tendencia sostenida (p = ${num(t.p,2)})`:`<b class="${good?'okc':'badc'}">${t.dir} ${s.fmt==='pct'?cdFmtD(Math.abs(t.sem),'pct').slice(1):pcu(Math.abs(t.pct),1)} por semana</b> (${t.p<.001?'p &lt; 0,001':'p = '+t.p.toFixed(3).replace('.',',')})`;
+ const c=s.cb?` · cambió de nivel el ${fDay(s.d[s.cb.i])}: de ${cdFmt(s.cb.antes,s.fmt)} a ${cdFmt(s.cb.despues,s.fmt)}`:'',an=s.hw&&s.hw.zAyer!=null&&Math.abs(s.hw.zAyer)>=2?` · <b>ayer fuera de lo esperado</b> (${cdFmt(s.hw.esperado,s.fmt)} esperado)`:'';
+ return base+c+an}
+function cdTrendsHtml(A){return `<div class="cd-trends">${A.list.map(s=>`<div class="cd-tr"><div><b>${s.n}</b><div class="small">ayer <b>${cdFmt(s.y[s.y.length-1],s.fmt)}</b> · últimos 7 días ${cdFmt(s.tr.l7,s.fmt)} contra ${cdFmt(s.tr.p7,s.fmt)} los 7 anteriores</div><div class="small">${cdTrendTxt(s)}</div></div>${cdSpark(s)}</div>`).join('')}</div>
+ <p class="small muted pad" style="padding-top:8px">Algoritmo de tendencia: se quita el efecto del día de la semana; Mann-Kendall dice si hay una tendencia sostenida (se informa solo con p &lt; 0,05) y la pendiente de Sen da cuánto por semana. Un cambio de nivel se marca solo si un escalón explica claramente mejor que una recta (CUSUM). Verde: va en la dirección buena; rojo: en la mala.</p>`}
+function cdPredHtml(A){const s=A.main;if(!s||!s.hw)return '<p class="pad small muted">Sin dato: hacen falta al menos 17 días de historia.</p>';const y=s.y,fc=s.hw.fc,n=y.length;
+ const lo=Math.min(...y,...fc.map(f=>f.lo)),hi=Math.max(...y,...fc.map(f=>f.hi)),pd=(hi-lo)*.08,y0=Math.max(s.fmt==='pct'?0:lo-pd,lo<0?lo-pd:0),y1=hi+pd,t=v=>s.fmt==='pct'?pcu(v):s.fmt==='min'?mmss(v):num(v);
+ const ch=lineChart({label:`${s.n}: últimos 28 días y pronóstico de hoy y los 7 siguientes`,x0:0,x1:n+7,y0,y1,yt:niceTicks(y0,y1,4).map(v=>[v,t(v)]),xt:[[0,fDay(s.d[0])],[n-1,'ayer'],[n+7,'+7 días']],bands:[{x0:n-.5,x1:n+7.5}],
+  series:[{pts:y.map((v,i)=>[i,v]),cls:'sfg'},{pts:[[n-1,y[n-1]],...fc.map((f,k)=>[n+k,f.v])],cls:'sacc'},{pts:fc.map((f,k)=>[n+k,f.hi]),cls:'smut',dash:true,thin:true},{pts:fc.map((f,k)=>[n+k,f.lo]),cls:'smut',dash:true,thin:true}],dots:[{x:n+1,y:fc[1].v,cls:'acc',label:`mañana: ${cdFmt(fc[1].v,s.fmt).replace(/<[^>]+>/g,'')}`}]});
+ const conf=s.hw.mape==null?'sin dato':s.hw.mape<.08?'alta':s.hw.mape<.15?'media':'baja',h=A.hh,mx=h?Math.max(...h.map(x=>x[1]))*1.15:0;
+ return `<div class="pad cd-pred"><div>${ch}<div class="legend" style="padding:6px 0 0"><span><i class="sw" style="background:var(--fg)"></i>Historia</span><span><i class="sw" style="background:var(--accent-ink)"></i>Pronóstico</span><span><i class="sw" style="background:var(--faint)"></i>Rango probable (80 %)</span></div>
+ <div class="kv2" style="max-width:520px"><span>Hoy (${fDay(addD(s.d[n-1],1))})</span><b>${cdFmt(fc[0].v,s.fmt)} <span class="small muted">entre ${cdFmt(fc[0].lo,s.fmt)} y ${cdFmt(fc[0].hi,s.fmt)}</span></b><span>Mañana (${fDay(addD(s.d[n-1],2))})</span><b>${cdFmt(fc[1].v,s.fmt)} <span class="small muted">entre ${cdFmt(fc[1].lo,s.fmt)} y ${cdFmt(fc[1].hi,s.fmt)}</span></b><span>Los 7 días después de hoy</span><b>${s.fmt==='pct'||s.fmt==='s'||s.fmt==='min'||s.fmt==='dec'?'promedio '+cdFmt(cdAvg(fc.slice(1).map(f=>f.v)),s.fmt):cdFmt(sum(fc.slice(1).map(f=>f.v)),s.fmt)}</b><span>Error típico</span><b>${s.hw.mape==null?'<span class="muted">sin dato</span>':pcu(s.hw.mape,1)} <span class="small muted">· confianza ${conf} (predicciones a un día de las últimas 2 semanas)</span></b></div></div>
+ <div>${h?`${barChart({label:`${A.hrs.n}: reparto de mañana por hora`,h:150,y0:0,y1:mx,yt:niceTicks(0,mx,3).map(v=>[v,num(v,mx<10?1:0)]),items:h.map(([hh,v])=>({v,l:hh%3?'':hh+' h',cls:A.pk&&hh===A.pk[0]?'acc':'mute',t:`${hh} h: ${num(v,mx<10?1:0)} esperado`}))})}<p class="small" style="margin-top:6px"><b>Pico esperado mañana: de ${A.pk[0]} a ${A.pk[0]+1} h, ${num(A.pk[1],mx<10?1:0)} ${A.hrs.u||''} esperados.</b> Reparte el pronóstico del día según el perfil por hora de ayer.</p>`:''}
+ <p class="small muted" style="margin-top:6px">Holt-Winters aditivo con estación semanal (α 0,3 · β 0,05 · γ 0,3). Antes de decidir con él, mirar el error típico: con confianza baja, usarlo solo como orientación.</p></div></div>`}
+function cdRecoHtml(id,A){S.cdReco??={};const rs=A.recos;if(!rs.length)return '<p class="pad small muted">Sin recomendaciones: los indicadores de esta cámara están en rango.</p>';
+ return `<div class="cd-recos">${rs.map(r=>{const k=id+':'+r.id,st=S.cdReco[k];return `<div class="cd-reco${st==='no'?' off':''}"><div class="row" style="gap:8px;align-items:flex-start;flex-wrap:nowrap"><span class="evdot ${r.prio==='alta'?'crit':r.prio==='media'?'warn':'info'}"></span><div style="flex:1;min-width:0"><b>${r.t}</b><p class="small" style="margin:4px 0">${r.porque}</p>
+  ${r.impacto?`<p class="small" style="margin:4px 0"><b>Impacto estimado:</b> ${r.impacto}</p>`:''}<p class="small muted" style="margin:4px 0">Cómo se sabe si funcionó: ${r.medir}</p>
+  <div class="row" style="gap:6px;margin-top:6px">${pill(r.conf==='alta'?'p-ok':r.conf==='media'?'p-info':'p-warn','confianza '+r.conf)}${st==='ok'?pill('p-ok','Prueba agendada: 2 semanas'):st==='no'?pill('p-mute','Descartada'):`<button class="btn sm pri" data-act="cdReco" data-k="${k}" data-v="ok">Probar 2 semanas</button><button class="btn sm ghost" data-act="cdReco" data-k="${k}" data-v="no">Descartar</button>`}</div></div></div></div>`}).join('')}</div>
+ <p class="small muted pad" style="padding-top:8px">La IA propone y una persona decide. Cada recomendación sale de una regla con sus números a la vista; al aprobarla, la cámara mide antes y después durante 2 semanas.</p>`}
+function camDetHtml(id){const C=CAMDET[id],cam=CAMS.find(c=>c.id===id);if(!C||!cam)return'';const A=cdAnalyze(id);
+ return `<div class="cd-title"><div><span class="eyebrow-s">Análisis de la cámara</span><h2>${id} · ${cam.n}: ${C.titulo}</h2></div><div class="row" style="gap:6px">${CAMS.map(c=>`<button class="btn sm ${c.id===id?'pri':'ghost'}" data-act="cdCam" data-cam="${c.id}" aria-pressed="${c.id===id}">${c.id}</button>`).join('')}<a class="btn sm" href="#${C.modulo}" data-act="go" data-v="${C.modulo}">Módulo ${VIEW[C.modulo].name} →</a></div></div>
+ <div class="grid-fit">${panel('Qué intenta identificar la IA en esta cámara',cdObjHtml(C),{icon:'eye'})}${panel('En este video: medido por el motor',cdClipHtml(id,C),{icon:'camera',right:'<span class="small muted">clip real</span>'})}</div>
+ <div class="mt">${panel(C.ayerTitulo,cdAyerHtml(C),{icon:'users',right:'<span class="small muted">ayer · ejemplo</span>'})}</div>
+ <div class="mt">${panel('Tendencias de comportamiento, 28 días',cdTrendsHtml(A),{icon:'chart',right:'<span class="small muted">ejemplo</span>'})}</div>
+ <div class="mt">${panel('Predicción',cdPredHtml(A),{icon:'spark',right:'<span class="small muted">ejemplo</span>'})}</div>
+ <div class="mt">${panel('Recomendaciones de negocio',cdRecoHtml(id,A),{icon:'check',n:A.recos.length})}</div>`}
+/* tarjeta corta en la columna de la derecha */
+function camDetCard(id){const C=CAMDET[id],cam=CAMS.find(c=>c.id===id);if(!C||!cam)return'';const A=cdAnalyze(id),R=detCam(id),J=R?cdJourneys(R):[],s=A.main,r=A.recos[0];
+ return panel(`${id} · ${cam.n}: qué mide la IA`,`<div class="pad"><ul class="why" style="padding:0">${C.objetivos.slice(0,4).map(o=>`<li>${ic(o.estado==='falta'?'info':'check')}<span>${o.q}</span></li>`).join('')}</ul>
+ <div class="kv2"><span>En el video</span><b>${R?`${J.length} tracks seguidos por el motor`:'<span class="muted">sin video</span>'}</b>${s?`<span>${s.n}</span><b>${cdFmt(s.y[s.y.length-1],s.fmt)} ayer · ${s.tr.ok?s.tr.dir:'sin dato'}</b><span>Mañana</span><b>${s.hw?cdFmt(s.hw.fc[1].v,s.fmt):'<span class="muted">sin dato</span>'}${A.pk?` · pico de ${A.pk[0]} a ${A.pk[0]+1} h`:''}</b>`:''}</div>
+ ${r?`<p class="small" style="margin:10px 0 0"><b>Recomendación:</b> ${r.t}</p>`:''}<button class="btn sm pri" style="margin-top:10px" data-act="cdGo">${ic('arrow')}Ver el análisis completo</button></div>`,{icon:'eye',right:pill('p-acc','cámara elegida')})}
+const ACT_CAMDET={
+ cdCam:el=>{S.cam=el.dataset.cam;render();const t=document.getElementById('camdet');if(t)t.scrollIntoView({block:'start'})},
+ cdGo:()=>{const t=document.getElementById('camdet');if(t)t.scrollIntoView({block:'start',behavior:'smooth'})},
+ cdReco:el=>{S.cdReco??={};const k=el.dataset.k,v=el.dataset.v,[id,rid]=k.split(':'),A=cdAnalyze(id),r=A&&A.recos.find(x=>x.id===rid);S.cdReco[k]=v;
+  if(v==='ok'){log(`Visión ${id}: prueba de 2 semanas · ${r?r.t:rid}`);toast(`Prueba agendada en ${id}: la cámara mide antes y después durante 2 semanas`)}else log(`Visión ${id}: recomendación descartada · ${r?r.t:rid}`);render()}};
+/* >>> cámara C1 */
+/* C1 · Ingreso: qué autos entran, cuánto se quedan y qué hacen adentro. La única cámara que lee patentes: solo a los que entran,
+   como hash con sal contra la lista de fugas con denuncia. Números de «ayer» iguales a Calle y acceso (D.street, D.traffic) y Seguridad (D.sec). */
+// margen por litro ponderado por volumen: la misma fórmula que Calle y acceso (streetHtml)
+const cdC1_mgL=()=>sum(PRODS.map(p=>S.P.p[p.id].vol*(S.P.p[p.id].precio-S.P.p[p.id].costo)))/sum(PRODS.map(p=>S.P.p[p.id].vol));
+const cdC1_mg=id=>S.P.p[id].precio-S.P.p[id].costo;
+// «más de 8 años» entre los clasificados, 7 días: lo mismo que calleAgeHtml («X de cada 10 tendrían más de 8 años») = (9 a 15 + más de 15) ÷ (1 − sin dato)
+const cdC1_old=()=>{const a=D.traffic.age;return sum(a.rows.slice(2).map(r=>r.share))/(1-a.sc)};
+const cdC1_ayerDia=()=>D.traffic.days[D.traffic.days.length-1];
+// tracks del clip que cruzaron la línea l en el sentido s: el contador del motor suma uno por track
+const cdC1_cuenta=(J,l,s)=>J.filter(j=>j.cr.some(c=>c.l===l&&c.sentido===s)).length;
+const cdC1_pl=(n,a,b)=>`${num(n)} ${n===1?a:b}`;
+const cdC1_hm=min=>{const m=Math.round(min)%(24*60);return `${pad(Math.floor(m/60))}:${pad(m%60)}`};
+const cdC1_draw=(g,arr)=>{let u=g.u()*sum(arr.map(x=>x[1]));for(const x of arr){u-=x[1];if(u<=0)return x[0]}return arr[arr.length-1][0]};
+// reparto entero de n casos según pesos (mayores restos): la muestra respeta las proporciones del día
+const cdC1_quota=(w,n)=>{const t=sum(w)||1,raw=w.map(x=>x/t*n),q=raw.map(Math.floor);raw.map((x,i)=>[x-q[i],i]).sort((x,y)=>y[0]-x[0]).slice(0,n-sum(q)).forEach(([,i])=>q[i]++);return q};
+const cdC1_rep=(q,vals)=>q.flatMap((k,i)=>Array(k).fill(vals[i]));
+const cdC1_shuf=(g,a)=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(g.u()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+// cuantiles de la normal para 12 casos: las estadías de la muestra tienen la mediana y el p90 del día
+const cdC1_Z=[-1.73,-1.15,-.81,-.55,-.32,-.1,.1,.32,.55,.81,1.15,1.73];
+/* muestra determinista de ayer: 12 vehículos con las proporciones del día. Hora: muestreo sistemático sobre los autos que entraron por hora (D.street);
+   tipo: reparto del día (D.traffic); marca y antigüedad: reparto de la semana; estadía: mediana y p90 del tipo; playa: espera + carga y cobro + salida
+   de esa hora (D.cv); salida no vista y «se fue sin cargar»: proporción del día; patente: lo que pasó ayer en esa hora (D.sec.lpr). Ejemplo, no recorridos reales. */
+function cdC1_rows(){const N=cdC1_Z.length,g=RNG(9150),st=D.street,d=cdC1_ayerDia(),b=D.traffic.brands,a=D.traffic.age,L=D.sec.lpr,cv=D.cv,sig=Math.log(1.75)/1.2816,seg={auto:/auto/,suv:/camioneta|SUV/};
+ const tot=sum(st.hrs.map(x=>x.enter));let c=0;const cum=st.hrs.map(x=>[x.h,c+=x.enter]);
+ const T=[...Array(N)].map((_,i)=>{const h=cum.find(x=>x[1]>=(i+.5)/N*tot)[0];return h*60+Math.floor(g.u()*60)}).sort((x,y)=>x-y);T.forEach((t,i)=>{if(i&&t<=T[i-1])T[i]=T[i-1]+1});
+ const tps=cdC1_shuf(g,cdC1_rep(cdC1_quota(CALLE_T.map(t=>d.mix[t.id]),N),CALLE_T)),scT=tps.filter(t=>t.id==='sc').length;
+ const known=cdC1_shuf(g,tps.map((t,i)=>t.id==='sc'?-1:i).filter(i=>i>=0)),scB=new Set(known.slice(0,Math.max(0,Math.round(N*b.sc)-scT)));
+ const ages=cdC1_shuf(g,cdC1_rep(cdC1_quota(a.rows.map(r=>r.share),N-scT-scB.size),a.rows.map(r=>r.r)));
+ const nAb=Math.round(N*(cv.cars?cv.ab/cv.cars:0)),nNo=Math.max(0,N-nAb-Math.round(N*d.done)),fl=cdC1_shuf(g,[...Array(N)].map((_,i)=>i<nAb?'ab':i<nAb+nNo?'no':'ok')),zs=cdC1_shuf(g,cdC1_Z.slice());
+ const pr=T.map(t=>{const x=L.hrs.find(r=>r.h===Math.floor(t/60));return x&&x.cars?[x.noObs/x.cars,x.leg/x.cars]:[0,1]});
+ const nNoObs=Math.round(sum(pr.map(x=>x[0]))),nIleg=Math.round(sum(pr.map(x=>1-x[0]-x[1]))),byNight=pr.map((x,i)=>[x[0],i]).sort((x,y)=>y[0]-x[0]).map(x=>x[1]);
+ const pat=Array(N).fill('leg');byNight.slice(0,nNoObs).forEach(i=>pat[i]='noobs');cdC1_shuf(g,byNight.slice(nNoObs)).slice(0,nIleg).forEach(i=>pat[i]='ileg');
+ let ai=0;
+ return T.map((t0,i)=>{const h=Math.floor(t0/60),sh=st.hrs.find(x=>x.h===h),tp=tps[i];
+  const nro=Math.round(sum(st.hrs.filter(x=>x.h<h).map(x=>x.enter))+sh.enter*(t0%60)/60)+1;
+  // marca y modelo: solo modelos compatibles con el tipo (camioneta o SUV, auto); el resto, «otro modelo identificado»
+  let mod=null,age=null;
+  if(tp.id!=='sc'&&!scB.has(i)){const ok=seg[tp.id]?b.models.filter(x=>seg[tp.id].test(x.seg)):[];mod=ok.length?cdC1_draw(g,[...ok.map(x=>[x,x.share]),['otro',b.other]]):'otro';age=ages[ai++]}
+  const cvh=cv.hrs.find(x=>x.h===h),dw=d.dwell[tp.dw?tp.id:'auto'],ab=fl[i]==='ab';
+  let dur=dw.med*Math.exp(sig*zs[i]),pl=(cvh.wait+cvh.fill+cvh.out)*(.85+.3*g.u());
+  if(ab){pl=cvh.wait*(1+.3*g.u());dur=pl+30+30*g.u()}
+  if(pl>dur*.95)pl=dur*(.6+.3*g.u());
+  return{nro,t0,tp,mod,age,dur,pl,seen:fl[i]!=='no',aban:ab,pat:pat[i]}})}
+function cdC1_ayer(){const st=D.street,d=cdC1_ayerDia(),L=D.sec.lpr,b=D.traffic.brands,rows=cdC1_rows();
+ const que=r=>{const rest=r.dur-r.pl;if(r.aban)return `Estuvo ${mmss(r.pl)} en la playa y salió: posible «se fue sin cargar» (lo confirma C4)`;
+  if(!r.seen)return `Playa ${mmss(r.pl)}; la salida no se vio`;
+  return rest>300?`Playa ${mmss(r.pl)}; después ${mmss(rest)} fuera de la playa`:`Playa ${mmss(r.pl)} y salió`};
+ const veh=r=>`${r.tp.id==='sc'?'<span class="muted">tipo sin clasificar</span>':r.tp.n}<div class="sub">${r.mod==null?'marca y modelo sin clasificar':r.mod==='otro'?'otro modelo identificado · estimado':`${r.mod.n} · estimado, confianza ${num(r.mod.conf,2)}`}</div>`;
+ const pat={leg:'Comparada como hash: no está en la lista',ileg:'<span class="muted">Ilegible (confianza menor a '+pcu(SEC_UMBRAL)+'): no se compara</span>',noobs:'<span class="badc">NO OBSERVABLE: falta luz</span>',nd:'<span class="muted">sin dato</span>'};
+ const cars=d.dwell.auto,legR=L.plates?L.legible/L.plates:null;
+ return{cols:['Vehículo','Entró → salió','En la estación','Qué hizo adentro','Tipo · marca y modelo','Antigüedad','Patente vs. lista de fugas'],
+  rows:rows.map(r=>[`<b>v${r.nro}</b>`,r.seen?`${cdC1_hm(r.t0)} → ${cdC1_hm(r.t0+r.dur/60)}`:`${cdC1_hm(r.t0)} → <span class="muted">sin dato</span>`,
+   r.seen?`<b>${mmss(r.dur)}</b>`:'<span class="muted">sin dato</span>',que(r),veh(r),r.age?`${r.age} <span class="muted">· estimado</span>`:'<span class="muted">sin dato</span>',pat[r.pat]]),
+  resumen:`Ayer entraron <b>${num(st.enter)} autos de 6 a 24 h</b> (Calle y acceso) y ${num(L.plates)} contando la madrugada (Seguridad). Camionetas, utilitarios y camiones: <b>${pcu(callePick(d))}</b> de los que entraron. La mitad de los autos estuvo menos de <b>${mmss(cars.med)}</b> en la estación y uno de cada diez, más de ${mmss(cars.p90)} (C1 les vio entrada y salida al ${pcu(d.done)}). Patentes legibles: ${legR==null?'<span class="muted">sin dato</span>':`${num(L.legible)} (${pcu(legR)})`}; coincidencias con la lista de fugas: <b>${num(L.match)}</b> ayer. Marca y modelo sin clasificar en la semana: ${pcu(b.sc)}.`,
+  nota:`El tipo lo da el detector al cruzar «entrada». Marca, modelo y antigüedad los estima un modelo de visión y lenguaje una vez por visita: con poca confianza quedan «sin clasificar» y la antigüedad «sin dato», nunca se completan con un promedio. La antigüedad va siempre por rango, nunca el año exacto. La patente se compara como hash con la lista de fugas con denuncia y no se muestra: en esta tabla no hay ninguna. Playa = espera, carga y cobro.`,minW:980}}
+
+CAMDET.C1={
+ titulo:'qué autos entran, cuánto se quedan y qué hacen',
+ modulo:'calle',
+ modelo:'YOLOv8n detecta los vehículos y el tracker GOTA les da un número anónimo que dura lo que dura la visita. Dos líneas cuentan cruces con sentido («entrada», en el acceso, y «calle», frente al ingreso) y la zona «playa» suma segundos sobre los surtidores. Un modelo de visión y lenguaje (VLM) mira una sola vez el mejor cuadro de cada vehículo y estima tipo, marca, modelo y rango de años, cada uno con su confianza. El lector de patentes corre solo en esta cámara y todavía está en piloto (falta validar un lector dedicado): calcula un hash con sal rotativa y lo compara con la lista de fugas con denuncia; la patente en claro no queda en el registro del vehículo.',
+ objetivos:[
+  {q:'Cuántos autos entran y a qué hora',como:'Línea «entrada» dibujada en el acceso: cada vehículo que la cruza hacia la playa suma uno, una sola vez por track. Se cuenta por hora y por día.',estado:'medido',conf:'alta'},
+  {q:'Cuánto tiempo se queda cada auto en la estación',como:'Entra y sale por esta misma cámara, que ve toda la playa de frente: tiempo entre el cruce de «entrada» hacia adentro y hacia afuera del mismo track. Si el track se corta, el auto queda fuera de la cuenta; no se completa con promedios.',estado:'medido',conf:'media'},
+  {q:'A dónde va adentro: la playa o fuera de ella',como:'Zona «playa» sobre los surtidores: suma los segundos del punto de apoyo del vehículo (el centro del borde de abajo) dentro de la zona. El resto de la visita es fuera de la playa.',estado:'medido',conf:'alta'},
+  {q:'Si la patente está en la lista de fugas con denuncia',como:`Solo a los que cruzan «entrada»: con confianza de ${pcu(SEC_UMBRAL)} o más se calcula un hash con sal rotativa y se compara con la lista. La patente en claro no se guarda en el registro del vehículo ni se cruza con marca, modelo u hora; solo queda en el evento cuando coincide con la lista, para que una persona lo revise (ver Seguridad). De 21 a 6 h, sin infrarrojo, la lectura queda NO OBSERVABLE. Requiere un lector dedicado en C1 validado en el piloto; la tasa de legibles de Seguridad es de ejemplo.`,estado:'piloto',conf:'sin dato hasta validar'},
+  {q:'Qué tipo de vehículo es',como:'Clase del detector al cruzar la línea; el VLM separa camioneta o SUV y utilitario una sola vez por track. «Sin clasificar» se informa y no se reparte entre los demás. La precisión se valida a mano en el piloto (200 cruces).',estado:'estimado',conf:'media'},
+  {q:'Qué marca y modelo es',como:'El VLM responde marca y modelo con su confianza sobre el mejor cuadro de la visita; por debajo de 0,5 queda «sin clasificar». Se publica sumado por semana, sin patente ni hora.',estado:'estimado',conf:'media'},
+  {q:'Qué antigüedad tiene, por rango de años',como:'El mismo VLM estima un rango de 5 años de modelo (por ejemplo, 2015-2019), nunca el año exacto: con el año la precisión cae a la mitad. Se publica por semana en los rangos de Calle y acceso; si no identificó el modelo, «sin dato».',estado:'estimado',conf:'baja'},
+  {q:'Cuántos pasan por la calle sin entrar',como:'Línea «calle», vertical, frente al ingreso: cuenta los que pasan hacia la derecha y hacia la izquierda de la imagen. La captación del día la da C6, en Calle y acceso.',estado:'medido',conf:'alta'}],
+ clip:(J,R)=>{const pos={},L=R.res&&R.res.lineas||{},E=L.entrada,Cl=L.calle,lado={entra:'hacia la derecha',sale:'hacia la izquierda'};
+  R.f.forEach(([,obs])=>obs.forEach(([id,,x1,,x2,y2])=>{const a=[(x1+x2)/2,y2];(pos[id]??={a0:a}).a1=a}));
+  const k={in:0,out:0,calle:0,quieto:0,otro:0};
+  const rows=J.map(j=>{const ent=j.cr.filter(c=>c.l==='entrada'),cal=j.cr.filter(c=>c.l==='calle'),e=ent.find(c=>c.sentido==='entra'),s=ent.find(c=>c.sentido==='sale'),p=pos[j.id],mv=p?Math.hypot(p.a1[0]-p.a0[0],p.a1[1]-p.a0[1]):0,pl=j.zt.playa||0;
+   let q;
+   if(e&&s&&s.t>e.t){q=`<b>Entró y salió</b>: ${num(s.t-e.t,1)} s en la estación`;k.in++}
+   else if(e){q=`<b>Entró a la estación</b> a los ${num(e.t,1)} s${j.hastaFinal?`; seguía adentro al terminar el clip: la estadía queda sin dato`:''}`;k.in++}
+   else if(s){q=`<b>Salió de la estación</b> a los ${num(s.t,1)} s`;k.out++}
+   else if(cal.length){q=`<b>Pasó por la calle</b> ${lado[cal[0].sentido]||cal[0].sentido}, sin entrar`;k.calle++}
+   else if(mv<.03){q=`Quieto mientras se lo vio, sin cruzar ninguna línea`;k.quieto++}
+   else{q='Se movió sin cruzar ninguna línea';k.otro++}
+   return[`<b>${j.id}</b>`,`${num(j.t0,1)} a ${num(j.t1,1)} s`,q,pl?`<b>${num(pl,1)} s</b>${j.hastaFinal?'<div class="sub">seguía al terminar el clip</div>':''}`:'<span class="muted">no entró</span>',
+    '<span class="muted">sin dato</span>',e||s?'<span class="muted">sin dato</span>':'<span class="muted">no se lee: no entró</span>']});
+  const mov=k.in+k.out+k.calle+k.otro,parts=[k.in?`<b>${k.in} ${k.in===1?'entró':'entraron'}</b> a la estación`:'nadie entró a la estación',k.out?`${k.out} ${k.out===1?'salió':'salieron'}`:'',k.calle?`<b>${k.calle} ${k.calle===1?'pasó':'pasaron'} por la calle</b>`:'',k.quieto?`${k.quieto} ${k.quieto===1?'quedó quieto':'quedaron quietos'} sin cruzar líneas`:''].filter(Boolean);
+  const igual=(!E||(E.entra===cdC1_cuenta(J,'entrada','entra')&&E.sale===cdC1_cuenta(J,'entrada','sale')))&&(!Cl||(Cl.entra===cdC1_cuenta(J,'calle','entra')&&Cl.sale===cdC1_cuenta(J,'calle','sale')));
+  const cnt=E||Cl?` El contador del motor ${igual?'da lo mismo':`da distinto que esta lectura por track (por track: «entrada» ${cdC1_cuenta(J,'entrada','entra')} hacia adentro y ${cdC1_cuenta(J,'entrada','sale')} hacia afuera; «calle» ${cdC1_cuenta(J,'calle','entra')} hacia la derecha y ${cdC1_cuenta(J,'calle','sale')} hacia la izquierda)`}: «entrada» ${E?`${num(E.entra)} hacia adentro y ${num(E.sale)} hacia afuera`:'sin dato'}; «calle» ${Cl?`${num(Cl.entra)} hacia la derecha y ${num(Cl.sale)} hacia la izquierda`:'sin dato'}.`:'';
+  return{cols:['Track','En cuadro','Qué hizo','En la playa','Tipo, marca y años','Patente'],rows,
+   resumen:`${parts.slice(0,-1).join(', ')}${parts.length>1?' y ':''}${parts[parts.length-1]}.${cnt} Con ${cdC1_pl(mov,'vehículo','vehículos')} en movimiento no se calcula captación: eso sale del día entero, en Calle y acceso.`,
+   nota:'Tipo, marca, modelo y años: sin dato en este clip, porque el detector exportó solo «vehículo» y el modelo de atributos (VLM) no corrió en la demo. La patente, sin dato por lo mismo; en producción se lee solo a los que cruzan «entrada», se compara como hash con sal con la lista de fugas y la patente en claro no queda en el registro del vehículo, solo en el evento si coincide con la lista. A los que pasan por la calle no se les lee.'}},
+ ayerTitulo:'Autos de ayer, uno por uno',
+ ayer:cdC1_ayer,
+ series:()=>{const st=D.street,d=cdC1_ayerDia(),L=D.sec.lpr;return[
+  // ayer = «Entraron» del panel «Calle: autos que pasan y autos que entran» (D.street.enter, de 6 a 24 h); sigue la forma de la semana de los litros
+  {id:'entradas',n:'Autos que entran por día',fmt:'num',mejor:'sube',...cdSerie({ayer:st.enter,seed:9100,motor:'autos',ruido:.03,entero:true})},
+  // ayer = «más de 8 años» de Calle y acceso (7 días, entre los clasificados). La antigüedad se publica solo por semana: cada punto es la ventana de 7 días que termina ese día
+  {id:'viejos',n:'Autos de más de 8 años, entre los clasificados',fmt:'pct',mejor:'baja',...cdSerie({ayer:cdC1_old(),seed:9101,drift:.025,ruido:.012,min:0,max:1})},
+  // ayer = mediana de los autos en «Tiempo en la estación» (D.traffic.days[6].dwell.auto.med); fin de semana +12 %, como en Calle y acceso
+  {id:'estadia',n:'Tiempo en la estación, mediana de los autos',fmt:'min',mejor:'baja',...cdSerie({ayer:d.dwell.auto.med,seed:9120,dow:[1.12,1,1,1,1,1,1.12],ruido:.04})},
+  // ayer = callePick(ayer): camionetas/SUV, utilitarios, camiones y colectivos sobre los que entraron (stat «Camionetas y utilitarios» de Calle y acceso)
+  {id:'pick',n:'Camionetas, utilitarios y camiones',fmt:'pct',mejor:'sube',...cdSerie({ayer:callePick(d),seed:9118,ruido:.04,min:0,max:1})},
+  // ayer = legibles ÷ autos en el ingreso en 24 h (Seguridad, «Lectura de patentes en el ingreso»)
+  {id:'legibles',n:'Patentes legibles en el ingreso',fmt:'pct',mejor:'sube',...cdSerie({ayer:L.plates?L.legible/L.plates:0,seed:9119,ruido:.015,min:0,max:1})}]},
+ // perfil por hora de ayer de los autos que entran (el mismo de Calle y acceso y de Personal)
+ horas:()=>({n:'Autos que entran por hora',u:'autos',hrs:D.street.hrs.map(x=>[x.h,x.enter])}),
+ recos:A=>{const out=[],man=A.man?A.man.v:null,b=D.traffic.brands,ptxt=t=>t.p<.001?'p &lt; 0,001':'p = '+t.p.toFixed(3).replace('.',',');
+  // 1. flota que envejece → aceite, filtros y chequeo en la isla (precio de Lubricantes y margen de tienda: supuestos de Tienda)
+  const V=A.S.viejos,old=V&&V.y[V.y.length-1],lub=TIENDA_CAT.find(c=>c.n==='Lubricantes'),gl=GOND.find(x=>x.n==='Lubricantes');
+  if(V&&V.tr.ok&&man&&lub&&(V.tr.dir==='sube'||old>=.5)){
+   // la cuenta se hace con los factores redondeados que se muestran, para que cierre a la vista
+   const manR=Math.round(man),idR=+(1-b.sc).toFixed(2),oldR=+old.toFixed(3),nOld=Math.round(manR*idR*oldR),m1=nOld*.01*lub.pr*lub.u*TIENDA_MG*30;
+   out.push({id:'lubricentro',t:'Ofrecé cambio de aceite en la isla a los autos de más de 8 años',
+    porque:`Entre los autos que C1 pudo clasificar, el <b>${pcu(old,1)}</b> tiene más de 8 años${V.tr.dir==='sube'?` y ese porcentaje <b>sube ${cdFmtD(V.tr.sem,'pct')} por semana</b> (${ptxt(V.tr)}): la flota que entra envejece`:''}. Mañana se esperan ${num(manR)} autos: unos <b>${num(nOld)} de más de 8 años</b> (${num(manR)} × ${pcu(idR)} clasificados × ${pcu(oldR,1)}).${gl?` En la tienda solo el ${pcu(gl.p)} de los clientes pasa por la góndola de lubricantes y compra el ${pcu(gl.c)} de los que pasan (Tienda): por eso la oferta va en la isla, no en la góndola.`:''}`,
+    impacto:`Cada 1 % de esos autos que compre un lubricante en la isla deja <b>${ars(m1)} de margen por mes</b>: ${num(nOld)} × 1 %${lub.u!==1?` × ${num(lub.u)} unidades`:''} × ${ars(lub.pr)} por unidad × ${pcu(TIENDA_MG)} de margen de tienda × 30 días (supuestos de Tienda).`,
+    conf:'media',prio:V.tr.dir==='sube'?'alta':'media',
+    medir:'C1 sigue el porcentaje de autos de más de 8 años y el POS, las unidades de lubricante vendidas por día; se comparan las 2 semanas de prueba con las 2 anteriores, sin unir ningún auto con un ticket.'})}
+  // 2. pico de entradas pronosticado por encima de lo que atienden los playeros de la grilla actual (ATT autos por hora por playero, como Personal), con medio auto por hora de margen
+  const hh=A.hh||[],over=hh.filter(([h,v])=>v>=ATT*STAFF_NOW(h)+.5).map(x=>x[0]);
+  if(over.length&&man){const cvh=D.cv.hrs.filter(x=>over.includes(x.h)),ab=sum(cvh.map(x=>x.ab)),wmax=cvh.length?Math.max(...cvh.map(x=>x.wait)):null,vmax=Math.max(...hh.filter(x=>over.includes(x[0])).map(x=>x[1]));
+   const sd=staffDay(addD(TODAY,1)),pd=sd.need.map((n,h)=>n>sd.have[h]?h:-1).filter(h=>h>=0),coin=over.some(h=>pd.includes(h)),pl=[...new Set(over.map(STAFF_NOW))],mgL=+cdC1_mgL().toFixed(1),abE=+ab.toFixed(1),gan=abE*CAR_L*mgL,cost=over.length*HR_PLAY,rg=hourRanges(over).join(' y '),mape=A.main.hw.mape;
+   out.push({id:'refuerzo',t:`Sumá un playero mañana ${rg}`,
+    porque:`Mañana se esperan ${num(man)} autos y, con el reparto por hora de ayer, ${rg} entrarían hasta <b>${num(vmax,1)} autos por hora</b>, ${pl.length===1?`más de los ${num(ATT*pl[0])} que atienden ${cdC1_pl(pl[0],'playero','playeros')}`:'más de lo que atiende la grilla actual'} (${ATT} por playero por hora, supuesto de Personal).${coin?` Personal, con su propio pronóstico por producto, también marca gente de menos ${hourRanges(pd).join(' y ')}.`:''}${wmax!=null?` Ayer en esas horas la espera promedio hasta ser atendido llegó a <b>${mmss(wmax)}</b>${abE>0?`; con la tasa de la regla «Se fue sin cargar» (C4), en esa franja se van sin cargar unos <b>${num(abE,1)} autos por día</b> (valor esperado, no un conteo)`:''}.`:''}`,
+    impacto:abE>0?`Recuperar esos ${num(abE,1)} autos esperados son ${lit(abE*CAR_L,1)} y <b>${ars(gan)} de margen por día</b> (${num(abE,1)} × ${CAR_L} L por carga × ${ars(mgL,1)} por litro), contra ${ars(cost)} de ${over.length===1?'una hora':num(over.length)+' horas'} de refuerzo (${ars(HR_PLAY)} la hora, supuesto de Personal).`:null,
+    conf:mape==null?'baja':mape<.08?'alta':mape<.15?'media':'baja',prio:gan>=cost?'alta':'media',
+    medir:'C1 cuenta los autos que entran por hora y C3 y C4 miden la espera hasta ser atendido en esa franja: objetivo, menos de 90 s.'})}
+  // 3. lectura de patentes de noche: NO OBSERVABLES por falta de luz (Seguridad)
+  const Lp=D.sec.lpr,Lg=A.S.legibles,nN=sum(Lp.hrs.filter(x=>x.night).map(x=>x.cars)),dH=Lp.hrs.filter(x=>!x.night),dayR=sum(dH.map(x=>x.cars))?sum(dH.map(x=>x.leg))/sum(dH.map(x=>x.cars)):null;
+  if(Lp.plates&&Lp.noObs/Lp.plates>.03){const act=LPR.filter(r=>r.den).length,nO=Math.round(Lp.noObs);
+   out.push({id:'infrarrojo',t:'Instalá un iluminador infrarrojo en el ingreso',
+    porque:`Ayer de 21 a 6 h entraron ${num(nN)} autos y <b>${num(nO)} quedaron NO OBSERVABLES</b> por falta de luz: de noche la lista de fugas no protege. En 24 h la patente fue legible en el ${pcu(Lp.legible/Lp.plates)} de los autos${Lg&&Lg.tr.ok?` (${Lg.tr.dir==='estable'?'estable en 28 días':Lg.tr.dir==='baja'?'en baja':'en suba'})`:''}${dayR!=null?`; de 6 a 21 h, en el ${pcu(dayR)}`:''}.`,
+    impacto:`Unos <b>${num(nO*30)} autos por mes</b> entran sin que se pueda comparar su patente (${num(nO)} de ayer × 30). La lista tiene ${cdC1_pl(act,'patente','patentes')} con denuncia activa.`,
+    conf:'alta',prio:'alta',
+    medir:'Patentes legibles de 21 a 6 h, hora por hora: objetivo 90 %, como de día; los NO OBSERVABLES por luz tienen que bajar casi a cero.'})}
+  // 4. mezcla con muchas camionetas que suelen cargar diésel y poco diésel premium (controlador) → ofrecer premium en la isla
+  const P=A.S.pick,pk=P&&P.y[P.y.length-1],hv=D.hist[D.hist.length-1].v,dsl=hv.diesel+hv.dpremium,md=cdC1_mg('diesel'),mdp=cdC1_mg('dpremium');
+  if(P&&P.tr.ok&&P.tr.dir!=='baja'&&pk>=.3&&dsl&&hv.dpremium/dsl<.35&&mdp>md&&man){const n=Math.round(man*pk),dm=Math.round(mdp-md),m1=n*.01*CAR_L*dm*30;
+   out.push({id:'premium',t:'Ofrecé diésel premium a camionetas y utilitarios en la isla',
+    porque:`Camionetas, utilitarios y camiones son el <b>${pcu(pk)}</b> de los que entran (${P.tr.dir==='estable'?'estable en 28 días':'en suba'}) y suelen cargar diésel. Ayer el diésel premium fue solo el <b>${pcu(hv.dpremium/dsl)}</b> del diésel vendido (controlador) y deja ${ars(dm)} más de margen por litro que el común (Parámetros).`,
+    impacto:`Cada 1 % de esos ${num(n)} vehículos por día (camionetas, utilitarios y camiones) que pase a diésel premium suma <b>${ars(m1)} de margen por mes</b>: ${num(n)} × 1 % × ${CAR_L} L × ${ars(dm)} × 30 días.`,
+    conf:'media',prio:'media',
+    medir:'C1 sigue el porcentaje de camionetas, utilitarios y camiones que entran y el controlador, la parte de diésel premium en el diésel de cada día; se compara con las 2 semanas anteriores.'})}
+  const rk={alta:0,media:1,baja:2};return out.sort((x,y)=>rk[x.prio]-rk[y.prio])}
+};
+/* <<< cámara C1 */
+/* >>> cámara C2 */
+/* ---------- C2 · Tienda: quién entra, cuánto espera y si pasa por la caja ----------
+   Números de ayer: D.store del módulo Tienda (ppl, tk, conv, look, wc, ab, walk, dwell, hrs[h].q = espera por hora de tiendaQueue, la curva de «Espera en la caja»).
+   Clip real: media/deteccion.js (cams.C2), zonas «fila» y «mostrador» y la regla fila_caja de vision/zonas.demo.json. */
+const cdC2_FILA={umbral:4,min_s:5};  // regla fila_caja de C2 en vision/zonas.demo.json (acortada para el clip de 8 s; en la estación, 60 s)
+const cdC2_CORTO=1;                  // segundos: un track más corto que esto es un parpadeo del detector o la misma persona detectada dos veces
+const cdC2_DOBLE=.4;                 // superposición media (intersección ÷ unión) con la caja del otro track más cercana en el tiempo (±0,5 s) desde la que son la misma persona
+const cdC2_PERS=.6;                  // fracción del track dentro de la zona «mostrador» (detrás del mostrador) para decir que es personal
+const cdC2_COBRO=50;                 // muestra de ayer (supuesto de la demo, se mide en el piloto): segundos de un cobro
+const cdC2_p=t=>t.p<.001?'p &lt; 0,001':'p = '+t.p.toFixed(3).replace('.',',');
+const cdC2_y=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' y '+a[a.length-1];
+const cdC2_pp=(n,uno,varios)=>{const r=Math.round(n);return r<1?`nadie ${uno}`:r===1?`una persona ${uno}`:`unas ${num(n)} personas ${varios}`};
+const cdC2_cap=t=>t?t[0].toUpperCase()+t.slice(1):t;
+/* espera media en la caja de ayer, en segundos: la espera de cada hora (D.store.hrs[h].q, minutos) pesada por los tickets de esa hora
+   = lo que esperó, en promedio, quien pasó por la caja y pagó: Σ(q × tickets) ÷ Σ tickets × 60 */
+const cdC2_espera=hrs=>{const t=sum(hrs.map(x=>x.tk));return t?sum(hrs.map(x=>x.q*x.tk))/t*60:null};
+
+/* ---------- el clip real ---------- */
+function cdC2_boxes(R){const b={};R.f.forEach(([t,obs])=>obs.forEach(([id,,x1,y1,x2,y2])=>{(b[id]??=[]).push({t,b:[x1,y1,x2,y2],a:[(x1+x2)/2,y2]})}));return b}
+const cdC2_iou=(p,q)=>{const ix=Math.max(0,Math.min(p[2],q[2])-Math.max(p[0],q[0])),iy=Math.max(0,Math.min(p[3],q[3])-Math.max(p[1],q[1])),i=ix*iy,u=(p[2]-p[0])*(p[3]-p[1])+(q[2]-q[0])*(q[3]-q[1])-i;return u>0?i/u:0};
+const cdC2_bb=z=>z?{x0:Math.min(...z.poligono.map(p=>p[0])),x1:Math.max(...z.poligono.map(p=>p[0])),y0:Math.min(...z.poligono.map(p=>p[1])),y1:Math.max(...z.poligono.map(p=>p[1]))}:null;
+const cdC2_med=a=>{const s=a.slice().sort((x,y)=>x-y);return s[s.length>>1]};
+/* qué es cada track: en la fila, frente al mostrador (lugar de cobro), al fondo tapado, personal, o no se cuenta (parpadeo o doble detección) */
+function cdC2_roles(J,R){const B=cdC2_boxes(R),Z=Object.fromEntries((R.zonas||[]).map(z=>[z.id,cdC2_bb(z)])),F=Z.fila,M=Z.mostrador,pp=J.filter(j=>j.k==='p'),out={};
+ pp.forEach(j=>{const zf=j.zt.fila||0,zm=j.zt.mostrador||0,P=B[j.id]||[];
+  if(j.dur<cdC2_CORTO){let tw=null,best=0;pp.forEach(a=>{if(a===j||a.dur<cdC2_CORTO)return;const A=B[a.id]||[],io=P.map(p=>{let q=null,d=.5;A.forEach(x=>{const e=Math.abs(x.t-p.t);if(e<=d){d=e;q=x}});return q?cdC2_iou(p.b,q.b):0});const m=io.length?cdAvg(io):0;if(m>best){best=m;tw=a}});
+   out[j.id]=best>=cdC2_DOBLE?{r:'doble',tw:tw.id,io:best}:{r:'parpadeo'};return}
+  if(zm>=cdC2_PERS*j.dur&&zf<1){out[j.id]={r:'personal',sh:j.dur?zm/j.dur:1};return}
+  if(zf>=1){out[j.id]={r:'fila'};return}
+  const mx=cdC2_med(P.map(p=>p.a[0])),my=cdC2_med(P.map(p=>p.a[1]));
+  if(F&&M&&mx>F.x1&&mx<M.x0&&my>=F.y0){out[j.id]={r:'frente'};return}
+  if(F&&mx>=F.x0&&mx<=F.x1&&my<F.y0&&F.y0-my<=.1){out[j.id]={r:'fondo',gap:F.y0-my};return}
+  out[j.id]={r:'fuera'}});
+ // personal retomado: un track de personal que arranca hasta 2 s después de que se perdió otro de personal es, probablemente, la misma persona
+ const st=pp.filter(j=>out[j.id].r==='personal');st.forEach(j=>{const pv=st.filter(a=>a!==j&&a.t1<=j.t0&&j.t0-a.t1<=2).sort((a,b)=>b.t1-a.t1)[0];if(pv)Object.assign(out[j.id],{prev:pv.id,gap:j.t0-pv.t1})});
+ return out}
+function cdC2_clip(J,R){const pp=J.filter(j=>j.k==='p'),RO=cdC2_roles(J,R),fz=(R.zonas||[]).find(z=>z.id==='fila'),dur=R.res.hasta-R.res.desde;
+ const ROL={fila:'En la fila',frente:'Frente al mostrador',fondo:'Al fondo, tapado',personal:'Personal',doble:'<span class="muted">No se cuenta</span>',parpadeo:'<span class="muted">No se cuenta</span>',fuera:'Fuera de las zonas'};
+ const lee=j=>{const o=RO[j.id],zf=j.zt.fila||0;switch(o.r){
+  case'fila':return j.desdeInicio&&j.hastaFinal?`En la fila todo el clip: ya estaba al empezar y seguía al terminar. Su espera es más larga que ${num(zf,1)} s: en vivo el motor la mide desde que entra a la zona hasta que llega al mostrador.`
+   :!j.hastaFinal?`Sale de la fila en el segundo ${num(j.t1,1)} sin llegar al mostrador: candidato a «dejó la fila». Se confirma con el POS por franja, nunca con su ticket.`
+   :`Entra a la fila en el segundo ${num(j.t0,1)} y seguía al terminar el clip.`;
+  case'frente':return `Todo el clip con los pies entre la fila y el mostrador: el lugar de quien está pagando. Si pagó: <span class="muted">sin dato</span>, este clip no tiene dibujada una zona «cobro» (se agrega al instalar).`;
+  case'fondo':return `Al fondo de la fila: los de adelante le tapan las piernas y el punto de apoyo queda un ${pcu(o.gap)} del alto de la imagen por encima del borde de la zona, así que el motor no lo suma a la fila. Es un punto ciego del dibujo: se corrige estirando la zona «fila» hacia el fondo.`;
+  case'personal':return `Pasa el ${pcu(o.sh)} de su tiempo detrás del mostrador: es personal, no cliente. No suma a la fila ni a las entradas.${o.prev?` Arranca ${num(o.gap,1)} s después de que se perdió <b>${o.prev}</b>, también detrás del mostrador: probablemente la misma persona, retomada con otro número.`:''}`;
+  case'doble':return `Aparece ${num(j.dur,1)} s sobre <b>${o.tw}</b> (las cajas coinciden en un ${pcu(o.io)}): es la misma persona, detectada dos veces o retomada un instante con otro número.`;
+  case'parpadeo':return `Track de ${num(j.dur,1)} s que no se vuelve a ver: un parpadeo del detector.`;
+  default:return 'Fuera de las zonas de la caja.'}};
+ const rows=pp.map(j=>{const zf=j.zt.fila||0,zm=j.zt.mostrador||0,cut=j.desdeInicio&&j.hastaFinal;
+  return[`<b>${j.id}</b><div class="sub" style="white-space:nowrap">${num(j.t0,1)} a ${num(j.t1,1)} s</div>`,ROL[RO[j.id].r],zf?`${num(zf,1)} s${cut&&RO[j.id].r==='fila'?'<div class="sub">cortado por el clip</div>':''}`:'<span class="muted">no</span>',zm?`${num(zm,1)} s`:'<span class="muted">no</span>',lee(j)]});
+ const by=r=>pp.filter(j=>RO[j.id].r===r),nF=by('fila').length,nFr=by('frente').length,nFo=by('fondo').length,stf=by('personal'),nSt=stf.filter(j=>!RO[j.id].prev).length,no=pp.filter(j=>['doble','parpadeo'].includes(RO[j.id].r));
+ // máximo a la vez en la fila sin los que no se cuentan (mismo punto de apoyo que el motor)
+ const cnt=new Set(by('fila').map(j=>j.id)),mx=fz?Math.max(0,...R.f.map(([,obs])=>obs.filter(o=>cnt.has(o[0])&&cdIn([(o[2]+o[4])/2,o[5]],fz.poligono)).length)):0;
+ const zr=R.res.zonas&&R.res.zonas.fila,mMax=zr?zr.maximo_simultaneo:null,ev=(R.res.eventos||[]).filter(e=>e.regla==='fila_caja'),ev0=ev[0],sal=by('fila').filter(j=>!j.hastaFinal).length;
+ const ys=no.filter(j=>RO[j.id].r==='doble').map(j=>`${j.id} era ${RO[j.id].tw}`);
+ return{cols:['Track','Qué es','Fila','Mostrador','Qué se puede decir'],rows,
+  resumen:`<b>Fila de la caja</b>: <b>${nF} ${nF===1?'persona':'personas'} en la zona</b> (hasta ${mx} a la vez), medido por el motor.${nFo||nFr?` Por posición, sin que el motor lo mida (inferido): ${[nFo?`${nFo} más al fondo que la zona no alcanza`:'',nFr?`${nFr} frente al mostrador`:''].filter(Boolean).join(' y ')}, así que serían ${nF+nFo+nFr} esperando o pagando.`:''} ${ev0?`La regla de fila (en el clip, ${cdC2_FILA.umbral} o más personas durante ${cdC2_FILA.min_s} s) dio <b>${ev0.estado.replace('_',' ')}</b> en el segundo ${num(ev0.t,1)}: «${esc(ev0.detalle)}».`:'La regla de fila no saltó en este clip.'} <b>Personal</b>: ${nSt?`${nSt} ${nSt===1?'persona':'personas'} detrás del mostrador (${stf.length===1?'track':'tracks'} ${cdC2_y(stf.map(j=>j.id))})`:'nadie detrás del mostrador'}. ${sal?`${sal} ${sal===1?'dejó':'dejaron'} la fila antes de terminar el clip.`:`Nadie salió de la fila${nFr&&by('frente').every(j=>j.hastaFinal)?' ni del lugar de cobro':''} en estos ${num(dur,0)} s; si alguien pagó: <span class="muted">sin dato</span>.`}`,
+  nota:`${mMax!=null&&mMax>mx&&ys.length?`El motor llegó a contar ${mMax} en la fila en un cuadro: ${cdC2_y(ys)}, ${ys.length===1?'la misma persona detectada dos veces: por eso acá no se cuenta':'cada uno la misma persona detectada dos veces: por eso acá no se cuentan'}. `:''}La espera de cada uno queda cortada por lo que dura el clip; en vivo se mide completa. Si alguien pagó lo ve la cámara por su comportamiento (se queda en el lugar de cobro lo que dura un cobro), nunca por su ticket: el POS se cruza por franja de 15 minutos.`}}
+
+/* ---------- ayer, persona por persona (ejemplo) ----------
+   La franja: las horas en que la espera de ayer pasó 5 min (D.store.hrs[h].q, la curva de «Espera en la caja»; si ninguna, las 2 de más espera).
+   Si en esa franja entran menos de 10, se suma la hora vecina de más espera. */
+function cdC2_franja(){const H=D.store.hrs;let W=H.filter(x=>x.q>5);if(!W.length)W=H.slice().sort((a,b)=>b.q-a.q).slice(0,2);W=W.slice().sort((a,b)=>a.h-b.h);
+ while(sum(W.map(x=>x.ppl))<9.5){const nb=H.filter(x=>!W.includes(x)&&(x.h===W[0].h-1||x.h===W[W.length-1].h+1)).sort((a,b)=>b.q-a.q)[0];if(!nb)break;W.push(nb);W.sort((a,b)=>a.h-b.h)}
+ return W}
+function cdC2_ayer(){const s=D.store,g=RNG(9210),W=cdC2_franja(),wp=sum(W.map(x=>x.ppl)),wtk=sum(W.map(x=>x.tk)),wab=sum(W.map(x=>x.ab)),wwk=sum(W.map(x=>x.walk)),wwc=sum(W.map(x=>x.wc));
+ const tot=Math.round(wp),N=Math.min(14,Math.max(10,tot)),hs=W.map(x=>x.h),rg=hourRanges(hs).join(' y '),qx=Math.max(...W.map(x=>x.q)),w5=W.every(x=>x.q>5);
+ // cuántos de cada resultado: las proporciones de la franja en el módulo Tienda (tickets ÷ entradas y abandono ÷ entradas de esas horas)
+ const nT=Math.min(N,Math.round(N*wtk/wp)),nA=Math.min(N-nT,Math.round(N*wab/wp)),nO=N-nT-nA;
+ // personas por hora (proporcional a las entradas de cada hora) y minuto de entrada
+ const per=tiendaSplit(N,W.map(x=>x.ppl/wp)),P=[];
+ W.forEach((x,k)=>[...Array(Math.max(0,per[k]))].map(()=>Math.floor(g.u()*60)).sort((a,b)=>a-b).forEach(m=>P.push({h:x.h,m,x,res:'paga'})));
+ // dejan la fila: en las horas con más abandono ÷ entradas; no pasan por la caja: en las horas con menos tickets ÷ entradas
+ P.map(p=>({p,r:-p.x.ab/p.x.ppl-.02*g.u()})).sort((a,b)=>a.r-b.r).slice(0,nA).forEach(o=>{o.p.res='deja'});
+ P.filter(p=>p.res==='paga').map(p=>({p,r:p.x.tk/p.x.ppl+.2*g.u()})).sort((a,b)=>a.r-b.r).slice(0,nO).forEach(o=>{o.p.res='no'});
+ P.forEach(p=>{if(p.res==='paga'){p.fila=p.x.q*60*Math.exp(.25*g.n());p.caja=Math.round(cdC2_COBRO*Math.exp(.3*g.n()))}
+  else if(p.res==='deja')p.fila=Math.round(Math.max(20,p.x.q*60*(.35+.3*g.u())))});
+ // la fila de quien paga se reescala para que su promedio sea la espera media de esas horas (misma fórmula que la serie: Σ(q × tickets) ÷ Σ tickets)
+ const pg=P.filter(p=>p.res==='paga'),meta=cdC2_espera(W),f=pg.length&&meta?meta*pg.length/sum(pg.map(p=>p.fila)):1;pg.forEach(p=>{p.fila=Math.round(p.fila*f)});
+ const base=Math.round(sum(s.hrs.filter(x=>x.h<W[0].h).map(x=>x.ppl)));P.forEach((p,i)=>{p.id='p'+(base+1+Math.floor(i*Math.max(tot,N)/N))});
+ // C2 ve la puerta, la fila y la caja; las góndolas y el baño quedan fuera de cuadro. El tracker cierra un track que no ve más de 3 s
+ // (vision/gota_vision/tracker.py, max_age): quien sale de cuadro vuelve con otro número y su recorrido puerta a puerta no se puede medir.
+ const RES={paga:['p-ok','pasó por la caja y pagó'],deja:['p-bad','dejó la fila sin pagar'],no:['p-mute','no pasó por la caja']},fila=v=>v>300?`<b class="badc">${mmss(v)}</b>`:mmss(v);
+ const sale='puerta → sale de cuadro <span class="muted">(góndolas o baño)</span> · vuelve con otro número →',pp=`<span class="muted">sin dato</span><div class="sub">salió de cuadro: 2 tracks sin unir</div>`;
+ const rows=P.map(p=>[`<b>${p.id}</b><div class="sub">${p.h}:${pad(p.m)}</div>`,
+  p.res==='paga'?`${sale} fila → caja → puerta`:p.res==='deja'?`${sale} fila → <b>sale sin pasar por la caja</b>`:`${sale} puerta`,
+  p.fila!=null?`${fila(p.fila)}${p.res==='deja'?'<div class="sub">y se fue</div>':''}`:'<span class="muted">no hizo fila</span>',p.caja?mmss(p.caja):'<span class="muted">no</span>',pp,pill(...RES[p.res])]);
+ // abandono de ayer: qué parte cae en las horas en que se fue media persona o más (las barras rojas de «Permanencia y abandono de la fila»)
+ const abH=s.hrs.filter(x=>x.ab>=.5),abS=s.ab?sum(abH.map(x=>x.ab))/s.ab:null,mf=pg.length?cdAvg(pg.map(p=>p.fila)):null;
+ return{cols:['Persona · entró','Lo que ve la cámara','Fila de la caja','En la caja','Puerta a puerta, mismo track','Resultado'],rows,minW:900,
+  resumen:`Ayer entraron <b>${num(s.ppl)} personas</b> (${num(s.walk)} de a pie o en moto, estimado por franja) y hubo <b>${num(s.tk)} tickets</b>: ${num(s.conv*100)} por cada 100 que entran. ${cdC2_cap(cdC2_pp(s.look,'entró y no compró','entraron y no compraron'))} y <b>${cdC2_pp(s.ab,'dejó la fila sin pagar','dejaron la fila sin pagar')}</b> (estimado)${abH.length&&Math.round(s.ab)>1?`, ${abS>=.7?'casi todas':`el ${pcu(abS)} de ellas`} ${hourRanges(abH.map(x=>x.h)).join(' y ')}`:''}. El módulo Tienda estima que quien compra se queda ${mmss(s.dwell.buy)} y quien no, ${mmss(s.dwell.no)} (medianas de los recorridos que llegaron completos). Abajo, ${N<tot?`${N} de las ${num(tot)} personas que`:'todas las personas que'} entraron <b>${rg}</b>, ${w5?'la franja en que la espera pasó de 5 min':'la franja de más espera'} (hasta ${num(qx,1)} min): entraron ${num(wp)}, hubo ${num(wtk)} tickets y ${cdC2_pp(wab,'dejó la fila','dejaron la fila')}.`,
+  nota:`Muestra de ${N} recorridos con las proporciones de esa franja: ${nT} pasaron por la caja y pagaron, ${nA} ${nA===1?'dejó':'dejaron'} la fila y ${nO} no ${nO===1?'pasó':'pasaron'} por la caja (el módulo estima que unas ${num(wwc,1)} fueron solo al baño). ${mf!=null?`Quien pagó hizo ${mmss(mf)} de fila en promedio (la espera de esas horas en el módulo Tienda). `:''}«Pagó» es lo que ve la cámara: se quedó en la caja lo que dura un cobro; nunca se mira su ticket. Las góndolas y el baño quedan fuera de cuadro: el tracker cierra un track que no ve más de 3 s, así que quien va a buscar algo vuelve con otro número y su tiempo puerta a puerta queda sin dato (no se une a nadie por su aspecto ni con C5). Si llegó de la playa o de a pie no se sabe por persona: en la franja, ${pcu(wwk/wp)} de las entradas vienen de a pie o en moto (estimado). La fila y la caja de cada persona son de ejemplo, con la espera por hora del módulo.`}}
+
+CAMDET.C2={
+ titulo:'quién entra, cuánto espera y si pasa por la caja',
+ modulo:'tienda',
+ modelo:'Corren en el equipo de la estación: YOLOv8n detecta personas en cada cuadro y el tracker GOTA le da a cada una un número anónimo que dura lo que dura la visita. Con el punto de apoyo (los pies) cuenta los cruces de la línea de la puerta y suma segundos en la zona «fila» y en la zona «mostrador» (detrás, donde atiende el personal). La regla «fila en la caja» avisa cuando hay demasiada gente en la fila durante un rato. En piloto: una zona «cobro» frente al mostrador, calibrada contra los tickets del POS por franja. Sin caras, sin seguir a nadie entre cámaras y sin unir a nadie con su ticket.',
+ objetivos:[
+  {q:'Cuántas personas entran y a qué hora',como:'Línea dibujada en la puerta: cada track que la cruza hacia adentro suma una entrada en su hora. El personal no se cuenta. En el clip de la demo la puerta queda al fondo, detrás de la fila, y no tiene línea: ahí este conteo es sin dato.',estado:'medido',conf:'alta'},
+  {q:'Si llegan de la playa o de a pie',como:'Por franja de 15 minutos: entradas por la puerta menos las personas que bajan de los autos atendidos en la playa (C4). Por persona no se sabe: no se sigue a nadie entre cámaras.',estado:'estimado',conf:'media'},
+  {q:'Cuánto espera cada persona en la fila de la caja',como:'Zona «fila»: segundos que los pies de cada track pasan dentro, de que entra a que llega al mostrador. La regla «fila en la caja» avisa cuando la fila se alarga. Si los de adelante tapan a alguien al fondo, ese tramo no se cuenta.',estado:'medido',conf:'alta'},
+  {q:'Quién deja la fila sin pagar',como:'El track entra a la fila, se queda 20 s o más y sale hacia la puerta sin llegar al mostrador. Se valida contra el POS por franja de 15 minutos (personas que llegaron al mostrador contra tickets de la franja), nunca persona por persona.',estado:'estimado',conf:'media'},
+  {q:'Quién pasa por la caja y paga',como:'Comportamiento visto: el track llega al frente del mostrador y se queda lo que dura un cobro. Nunca se mira su ticket. La zona «cobro» se calibra en el piloto con los tickets del POS por franja.',estado:'piloto',conf:'media'},
+  {q:'Cuántos entran y no compran',como:'Entradas menos tickets del POS de la misma franja, menos los que van solo al baño (estimado). Un grupo de dos hace un solo ticket: por eso se habla de tickets por cada 100 que entran, no de «% que compra».',estado:'estimado',conf:'media'},
+  {q:'Cuánto se queda cada persona, puerta a puerta',como:'El mismo track entre el cruce de entrada y el de salida por la línea de la puerta. Solo se mide si el recorrido queda dentro de cuadro: las góndolas y el baño no se ven desde C2 y el tracker cierra un track que no ve más de 3 s, así que quien va a buscar algo vuelve con otro número y ese recorrido se excluye (no se une a nadie por su aspecto). Se informa qué parte llegó completa.',estado:'estimado',conf:'baja'},
+  {q:'Quién atiende y quién es cliente',como:'Quien pasa su tiempo en la zona «mostrador» (detrás) es personal: no suma a la fila ni a las entradas. Si el tracker lo pierde y lo retoma con otro número, se une por lugar y tiempo.',estado:'medido',conf:'alta'}],
+ clip:cdC2_clip,
+ ayerTitulo:'Ayer en la franja de más espera, persona por persona',
+ ayer:cdC2_ayer,
+ series:()=>{const s=D.store;return[
+  // personas que entran por la puerta = D.store.ppl (stat «Entraron a la tienda ayer»); acompaña al tránsito, estable (igual que C5)
+  {id:'entran',n:'Personas que entran a la tienda',fmt:'num',mejor:'sube',...cdSerie({ayer:s.ppl,seed:9200,motor:'autos',drift:0,ruido:.05})},
+  // tickets por cada 100 que entran = D.store.conv × 100 (stat «Tickets por cada 100 que entran»); deriva leve a la baja, coherente con la suba de «entran y no compran» de C5
+  {id:'conv',n:'Tickets por cada 100 que entran',fmt:'dec',mejor:'sube',...cdSerie({ayer:(s.conv||0)*100,seed:9201,drift:-.007,ruido:.02,min:0,max:100})},
+  // espera media en la fila de la caja, en segundos = Σ(D.store.hrs[h].q × tickets de la hora) ÷ tickets × 60 (cdC2_espera); sube: el hallazgo de esta cámara
+  {id:'espera',n:'Espera media en la fila de la caja',fmt:'min',mejor:'baja',...cdSerie({ayer:cdC2_espera(s.hrs),seed:9202,drift:.05,ruido:.04,min:0})},
+  // personas que dejan la fila sin pagar = D.store.ab (panel «Permanencia y abandono de la fila»); acompaña al tránsito y sube más rápido que la espera
+  {id:'abandono',n:'Personas que dejan la fila sin pagar (estimado)',fmt:'dec',mejor:'baja',...cdSerie({ayer:s.ab,seed:9203,motor:'autos',drift:.08,ruido:.05,min:0})}]},
+ // perfil por hora de ayer: personas que entran (D.store.hrs)
+ horas:()=>({n:'Personas que entran a la tienda',u:'visitantes',hrs:D.store.hrs.map(x=>[x.h,x.ppl])}),
+ recos:A=>{const s=D.store,H=s.hrs,E=A.S.espera,AB=A.S.abandono,CV=A.S.conv,pk=A.pk,out=[];
+  const eAy=E?E.y[E.y.length-1]:null,eMan=E&&E.hw?E.hw.fc[1].v:null,k=eAy&&eMan>0?eMan/eAy:null;
+  // abandono ÷ entradas de ayer según la espera de la hora: más de 5 min y de 3 a 5 min (D.store.hrs)
+  const rate=a=>{const p=sum(a.map(x=>x.ppl));return p?sum(a.map(x=>x.ab))/p:null},r5=rate(H.filter(x=>x.q>5)),r35=rate(H.filter(x=>x.q>3&&x.q<=5));
+  const manH=h=>{const z=A.hh&&A.hh.find(x=>x[0]===h);return z?z[1]:(H.find(x=>x.h===h)||{ppl:0}).ppl};
+  // 1 · mañana: espera de cada hora = la de ayer × (espera media pronosticada ÷ la de ayer); las horas que pasan de 5 min, segunda caja
+  if(k){const qm=H.map(x=>({h:x.h,q:x.q*k})),ov=qm.filter(x=>x.q>5),rg=hourRanges(ov.map(x=>x.h)).join(' y ');
+   if(ov.length){const pm=sum(ov.map(x=>manH(x.h))),sv=r5!=null&&r35!=null?pm*(r5-r35):null,qpk=pk?(qm.find(x=>x.h===pk[0])||{q:0}).q:null,enPk=pk&&ov.some(x=>x.h===pk[0]),mx=Math.max(...ov.map(x=>x.q));
+    out.push({id:'segunda_caja',t:`Abrí la segunda caja mañana ${rg}`,
+     porque:`Mañana la espera media en la caja sería de <b>${mmss(eMan)}</b> (pronóstico; ayer ${mmss(eAy)}). Con la forma por hora de ayer, <b>${rg} pasaría de 5 minutos</b> (hasta ${num(mx,1)} min).${r5!=null&&r35!=null?` Ayer, con más de 5 min de espera, dejó la fila el ${pcu(r5,1)} de los que entraron; con 3 a 5 min, el ${pcu(r35,1)}.`:''}${pk?enPk?` Y coincide con el pico de entradas de mañana: unas ${num(pk[1])} personas de ${pk[0]} a ${pk[0]+1} h (pronóstico).`:` El pico de entradas de mañana es otro: de ${pk[0]} a ${pk[0]+1} h, unas ${num(pk[1])} personas (pronóstico), con ${num(qpk,1)} min de espera${qpk>=3.5?': cerca del objetivo de 5 min, que alguien esté listo para abrir la segunda caja si salta el aviso de fila':': la caja sola alcanza'}. La fila más larga no llega cuando más gente entra.`:''}`,
+     impacto:sv!=null&&sv>0?`${cdC2_cap(rg)} entrarían unas ${num(pm)} personas (pronóstico) × (${pcu(r5,1)} − ${pcu(r35,1)}) = ${num(sv,1)} personas menos que dejan la fila × ${ars(s.tkp)} de ticket promedio = ${ars(sv*s.tkp)} de venta mañana; × ${pcu(TIENDA_MG)} de margen = <b>${ars(sv*s.tkp*TIENDA_MG)}</b>. Si se repite todos los días: <b>${ars(sv*s.tkp*TIENDA_MG*30)} por mes</b>.`:null,
+     conf:E.hw.mape==null?'baja':E.hw.mape<.08?'alta':E.hw.mape<.15?'media':'baja',prio:'alta',
+     medir:`C2: minutos de espera y personas que dejan la fila ${rg}, con la segunda caja abierta, contra los mismos días de las 2 semanas anteriores. POS: tickets por franja de 15 minutos, nunca por persona.`})}}
+  // 2 · la espera o el abandono suben semana a semana: que el aviso de fila de C2 llame a la segunda caja (regla «fila» de D.cv.rules, precisión de cvQ)
+  const eS=E&&E.tr.ok&&E.tr.dir==='sube',aS=AB&&AB.tr.ok&&AB.tr.dir==='sube';
+  if(eS||aS){const R0=(D.cv.rules||[]).find(r=>r.id==='fila'),q=R0&&typeof cvQ==='function'?cvQ(R0):null,f7=AB?cdAvg(AB.y.slice(0,7)):null,rec=AB&&AB.tr.ok?AB.tr.l7-f7:0;
+   out.push({id:'aviso_fila',t:'Conectá el aviso de fila con la segunda caja',
+    porque:`${eS?`La espera media en la caja <b>sube ${pcu(Math.abs(E.tr.pct),1)} por semana</b> (${cdC2_p(E.tr)}): ${mmss(E.tr.p7)} la semana anterior, ${mmss(E.tr.l7)} la última. `:''}${aS?`Los que dejan la fila sin pagar <b>suben ${pcu(Math.abs(AB.tr.pct),1)} por semana</b> (${cdC2_p(AB.tr)}): ${num(AB.tr.p7,1)} por día la semana anterior, ${num(AB.tr.l7,1)} la última. `:''}${CV&&CV.tr.ok?CV.tr.dir==='estable'?`Los tickets por cada 100 que entran todavía no lo muestran (estables, ${num(CV.y[CV.y.length-1],1)} ayer): la fila avisa antes que la caja registradora. `:CV.tr.dir==='baja'?`Y los tickets por cada 100 que entran ya bajan ${pcu(Math.abs(CV.tr.pct),1)} por semana. `:'':''}${R0?`La regla «${R0.n}» saltó ${R0.det} ${R0.det===1?'vez':'veces'} ayer${q&&q.p!=null?` y acierta el ${pcu(q.p)} de las veces ${q.win}${q.p>=.8?': es confiable para mover a alguien a la caja sin mirar la pantalla':''}`:q?`; con ${q.n} revisiones ${q.win} todavía no hay precisión publicada`:''}.`:''}`,
+    impacto:rec>0?`Volver al abandono de hace 4 semanas (${num(f7,1)} por día): ${num(rec,1)} personas menos por día × ${ars(s.tkp)} de ticket promedio × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(rec*s.tkp*TIENDA_MG*30)} por mes</b>. Ayer la fila dejó ir unos ${ars(s.ab*s.tkp)} de venta (módulo Tienda, al ticket promedio).`:null,
+    conf:(!eS||E.tr.p<.01)&&(!aS||AB.tr.p<.01)?'alta':'media',prio:eS&&E.tr.p<.01?'alta':'media',
+    medir:'C2: espera media y personas que dejan la fila, por hora, 2 semanas antes y después; cuántas veces saltó el aviso y cuántos minutos tardó en abrirse la segunda caja. POS: tickets por franja de 15 minutos.'})}
+  // 3 · horas de oportunidad del módulo Tienda (D.store.opp: se visita mucho y se compra poco) con mayoría que llega de a pie (D.store.hrs[h].walk)
+  const op=H.filter(x=>s.opp.includes(x.h)),pin=sum(op.map(x=>x.ppl)),pw=sum(op.map(x=>x.walk)),ptk=sum(op.map(x=>x.tk)),rest=H.filter(x=>!s.opp.includes(x.h)),rc=sum(rest.map(x=>x.tk))/Math.max(1,sum(rest.map(x=>x.ppl)));
+  if(op.length&&pin&&pw/pin>=.5&&ptk/pin<rc){const hr=hourRanges(s.opp).join(' y '),fi=tiendaFrOf(op[0].h),fr=TIENDA_FR[fi+1],ex=(rc-ptk/pin)*pin,al=fi===1?'Al mediodía':`A la ${fr.n.toLowerCase()}`;
+   // las categorías que más importe dejan en esa franja, igual que el panel «Qué compra la gente» del módulo (storeCatRows, ordenadas por importe; sin las de menos de TIENDA_MIN tickets)
+   const top=storeCatRows(fr.id).filter(r=>r.ok).sort((a,b)=>b.imp-a.imp).slice(0,3).map(r=>`«${r.n}»`);
+   out.push({id:'noche_apie',t:top.length?`Poné ${top[0]} a la vista de la puerta ${hr}`:`Revisá qué se ve desde la puerta ${hr}`,
+    porque:`${cdC2_cap(hr)} entran unas ${num(pin)} personas y <b>${num(pw/pin*100)} de cada 100 llegan de a pie o en moto</b> (estimado por franja; en el día, ${num(s.walk/s.ppl*100)}). Compran poco: <b>${num(ptk/pin*100)} tickets por cada 100 que entran</b>, contra ${num(rc*100)} el resto del día. La prueba es si, con lo que más importe deja a esa hora a la vista desde la puerta, más de los que entran terminan comprando.${top.length?` ${al}, lo que más importe deja en el POS es ${cdC2_y(top)} (panel «Qué compra la gente», franja ${fr.n.toLowerCase()}).`:` ${al} hay muy pocos tickets por categoría: <span class="muted">sin dato por pocos casos</span>.`}`,
+    impacto:ex>0?`Si esas horas compraran como el resto del día: ${num(ex,1)} tickets más por día × ${ars(s.tkp)} de ticket promedio × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(ex*s.tkp*TIENDA_MG*30)} por mes</b>.`:null,
+    conf:'media',prio:'media',medir:`C2: tickets por cada 100 que entran ${hr} y qué parte llega de a pie o en moto, 2 semanas antes y después. POS: ${top.length?`tickets de ${cdC2_y(top)}`:'tickets'} por franja de 15 minutos, nunca por persona.`})}
+  return out.slice(0,4)}
+};
+/* <<< cámara C2 */
+/* >>> cámara C3 */
+/* ---------- C3 · Isla 2: cuánto tarda la atención en la isla 2 (surtidores 3 y 4) ----------
+   Números de «ayer» iguales a Playa e islas: autos y espera de la isla 2 (D.playa.cells['2:dia'], fila «Día completo» del panel «Espera hasta ser atendido,
+   por isla y por turno»), carga y cobro y salida (D.cv.fill y D.cv.out, panel «Tiempo en la isla por etapa»), carga del controlador y cobro
+   (D.playa.carga y D.playa.cobro) y las reglas de C3 (D.cv.rules: celular y bidón). La manguera lenta es la de Mantenimiento (D.playa.hose).
+   Clip real: media/deteccion.js (cams.C3), zona «isla2» de vision/zonas.demo.json; el playero se reconoce por el color del uniforme. */
+const cdC3_ESPERA=90;   // s: umbral de la regla «sin_atender» de C3 (vision/zonas.demo.json) y de «Auto esperando sin atención más de 90 s»
+const cdC3_CEL_S=3;     // s: la regla «celular_carga» pide ver el celular junto al auto al menos 3 s seguidos (vision/zonas.demo.json)
+const cdC3_BID_S=5;     // s: la regla «bidon» pide ver el bidón 5 s seguidos (vision/zonas.demo.json)
+const cdC3_QUIETO=.01;  // fracción de la imagen: un track que en todo el clip se mueve menos que esto está quieto
+// objetos fijos del cuadro de C3, marcados a mano sobre este clip de la demo (punto de apoyo, coordenadas normalizadas); NO están en
+// vision/zonas.demo.json y el motor no los usa. Un track quieto encima de uno es una falsa detección probable según esta revisión de la demo.
+const cdC3_FIJOS=[{n:'el poste rojo de protección del surtidor',a:[.638,.512],r:.03},{n:'los arbustos del fondo',a:[.143,.2],r:.04}];
+const cdC3_p=t=>t.p<.001?'p &lt; 0,001':'p = '+t.p.toFixed(3).replace('.',',');
+const cdC3_pl=(n,a,b)=>`${num(n)} ${Math.round(n)===1?a:b}`;
+// reparto entero de n casos según pesos (mayores restos) y mezcla determinista: la muestra respeta las proporciones del día
+const cdC3_quota=(w,n)=>{const t=sum(w)||1,raw=w.map(x=>x/t*n),q=raw.map(Math.floor);raw.map((x,i)=>[x-q[i],i]).sort((x,y)=>y[0]-x[0]).slice(0,n-sum(q)).forEach(([,i])=>q[i]++);return q};
+const cdC3_rep=(q,vals)=>q.flatMap((k,i)=>Array(k).fill(vals[i]));
+const cdC3_shuf=(g,a)=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(g.u()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+// autos de la isla 2 que vio la C3 ayer, en orden de llegada (las horas NO OBSERVABLE no entran: ni cero ni promedio relleno)
+const cdC3_i2=()=>D.playa.cars.filter(c=>c.isla===2&&c.obs);
+const cdC3_cell=()=>D.playa.cells['2:dia'];
+const cdC3_n90=()=>cdC3_i2().filter(c=>c.wait>cdC3_ESPERA).length;
+const cdC3_rule=id=>D.cv.rules.find(r=>r.id===id)||{det:0,ok:0,fp:0};
+// margen por litro ponderado por volumen: la misma fórmula que Calle y acceso
+const cdC3_mgL=()=>sum(PRODS.map(p=>S.P.p[p.id].vol*(S.P.p[p.id].precio-S.P.p[p.id].costo)))/sum(PRODS.map(p=>S.P.p[p.id].vol));
+// la manguera lenta de Playa e islas y Mantenimiento, solo si está en esta isla (surtidores 3 y 4)
+const cdC3_hose=()=>{const h=D.playa.hose,x=h&&D.hoses.find(y=>y.id===h.id);return x&&(h.s===3||h.s===4)?{...h,pid:x.pid}:null};
+// en qué parte de los autos alguien entra a la tienda: la misma cuenta que el panel «De la playa a la caja» de Tienda (funnelHtml)
+const cdC3_tienda=()=>D.store&&D.cv.cars?sum(D.store.hrs.map(x=>x.ppl-x.walk))/D.cv.cars:null;
+// parte de los autos que va a la isla 2 según cuántos playeros hay (1 o 2): reparto real de ayer en D.playa.cars
+const cdC3_share=k=>{const a=D.playa.cars.filter(c=>STAFF_NOW(c.h)===k);return a.length?a.filter(c=>c.isla===2).length/a.length:0};
+// isla 2 a una hora: esperas de ayer de los autos observados
+const cdC3_hora=h=>{const w=cdC3_i2().filter(c=>c.h===h).map(c=>c.wait);return{n:w.length,med:w.length>=5?playaQ(w,.5):null,p90:w.length>=5?playaQ(w,.9):null,mean:w.length?cdAvg(w):null,m90:w.filter(x=>x>cdC3_ESPERA).length}};
+
+/* el clip real: punto de apoyo al empezar y al terminar, extremos del recorrido, cuándo entra a la isla y la última caja de cada track */
+function cdC3_pts(R){const z=(R.zonas||[]).find(z=>z.id==='isla2'),o={};
+ R.f.forEach(([t,obs])=>obs.forEach(([id,,x1,y1,x2,y2])=>{const a=[(x1+x2)/2,y2],e=o[id]??={a0:a,mn:a.slice(),mx:a.slice(),tin:null};
+  e.a1=a;e.t1=t;e.box=[x1,y1,x2,y2];e.mn=[Math.min(e.mn[0],a[0]),Math.min(e.mn[1],a[1])];e.mx=[Math.max(e.mx[0],a[0]),Math.max(e.mx[1],a[1])];
+  if(z&&e.tin==null&&cdIn(a,z.poligono))e.tin=t}));
+ Object.values(o).forEach(e=>{e.mov=Math.hypot(e.mx[0]-e.mn[0],e.mx[1]-e.mn[1])});return o}
+/* caja de un track en el primer cuadro posterior a t (para saber quién pasó delante de quién) */
+const cdC3_boxAfter=(R,id,t)=>{for(const[tt,obs]of R.f){if(tt<=t)continue;const o=obs.find(x=>x[0]===id);if(o)return o.slice(2)}return null};
+
+function cdC3_clip(J,R){const P=cdC3_pts(R),rg=(R.res&&R.res.reglas)||{},sa=rg.sin_atender||{},cel=rg.celular_carga||{},bid=rg.bidon||{};
+ const col=(window.GOTA_DET&&window.GOTA_DET.uniforme&&window.GOTA_DET.uniforme.colores)||[],uni=col.length?` (${col.join(' y ')})`:'';
+ const fijo=j=>{const e=P[j.id];return e&&e.mov<cdC3_QUIETO?cdC3_FIJOS.find(f=>Math.hypot(e.a0[0]-f.a[0],e.a0[1]-f.a[1])<f.r)||null:null};
+ const play=J.filter(j=>j.k==='a'&&P[j.id]&&P[j.id].tin!=null).sort((a,b)=>P[a.id].tin-P[b.id].tin);
+ const enIsla=j=>j.zt.isla2||0,tinOf=j=>P[j.id]?P[j.id].tin:null;
+ // espera de cada auto: como el motor (metrics.esperas): desde que entra a la isla hasta que entra a la isla el primer playero que coincide con él
+ const espera=v=>{const tv=tinOf(v);if(tv==null)return null;const pl=play.find(a=>P[a.id].tin<=v.t1&&a.t1>=tv);return pl?{pl,s:Math.max(P[pl.id].tin,tv)-tv}:null};
+ const tapado=(j,f)=>!j.hastaFinal&&J.some(o=>o.k==='a'&&(()=>{const b=cdC3_boxAfter(R,o.id,j.t1),e=P[j.id];return b&&e&&b[0]<=e.box[2]&&b[2]>=e.box[0]})());
+ let nf=0;
+ const rows=J.map(j=>{const f=fijo(j),zt=enIsla(j),en=zt?`<b>${num(zt,1)} s</b>${j.desdeInicio?'<div class="sub">ya estaba al empezar</div>':''}${j.hastaFinal?'<div class="sub">seguía al terminar</div>':''}`:'<span class="muted">fuera de la isla</span>';
+  if(f){nf++;return[`<b>${j.id}</b>`,`<span class="warnc">Probable falsa detección</span><div class="sub">revisión de la demo, no del motor</div><div class="sub">el detector dijo ${(CD_K[j.k]||[j.k])[0]}</div>`,en,
+   `Quieto los ${num(j.dur,1)} s que se lo vio, justo sobre ${f.n}: no es ${j.k==='v'?'un auto':'un cliente'}.${tapado(j,f)?` Deja de verse a los ${num(j.t1,1)} s, cuando el playero pasa delante.`:''}${zt?'':' Está fuera de la isla y no cuenta para ninguna medida.'} Se corrige marcando ese objeto como fijo al calibrar la cámara.`,'<span class="muted">no aplica</span>']}
+  if(j.k==='v'&&zt){const e=espera(j);
+   return[`<b>${j.id}</b>`,e?'<b>Auto atendido</b>':'<b>Auto en la isla</b>',en,
+    e?`El playero <b>${e.pl.id}</b> llegó a su lado a los ${num(P[e.pl.id].tin,1)} s: esperó ${j.desdeInicio?'<b>al menos ':'<b>'}${num(e.s,1)} s</b>${j.desdeInicio?' (ya estaba detenido en el surtidor al empezar el clip)':''}. Carga, cobro y salida: <span class="muted">sin dato</span>: el motor todavía no los mide; la carga y el cobro van a salir del controlador de surtidores (piloto).`
+     :`Ninguna persona con uniforme llegó mientras se lo vio: ${num(zt,1)} s sin atención (la regla avisa a los ${cdC3_ESPERA} s).`,
+    `Celular: ${num(cel.detectados||0)} avisos · bidón: ${num(bid.detectados||0)}`]}
+  if(j.k==='v')return[`<b>${j.id}</b>`,'Auto fuera de la isla 2',en,`Pasó ${num(j.dur,1)} s en cuadro sin entrar a la isla: no cuenta para la espera.`,'<span class="muted">no aplica</span>'];
+  if(j.k==='a'){const ti=tinOf(j);
+   return[`<b>${j.id}</b>`,`<b>Playero</b><div class="sub">por el uniforme${uni}</div>`,en,
+    ti!=null?`${j.desdeInicio&&!(P[j.id].a0&&cdIn(P[j.id].a0,(R.zonas.find(z=>z.id==='isla2')||{poligono:[]}).poligono))?'Al empezar estaba lejos de la isla; caminó':'Caminó'} hasta el auto y entró a la isla a los <b>${num(ti,1)} s</b>${j.hastaFinal?'; seguía atendiendo al terminar el clip':''}.`
+     :`Se lo vio ${num(j.dur,1)} s fuera de la isla.`,'<span class="muted">no aplica</span>']}
+  if(j.k==='p'){const q=P[j.id];
+   return[`<b>${j.id}</b>`,'<b>Cliente</b>',en,
+    `${q&&q.mov<.05&&zt?`Se quedó junto al auto, en el surtidor, los ${num(zt,1)} s.`:`Caminó ${zt?'por la isla':'fuera de la isla'}.`} ¿Fue a la tienda? <span class="muted">sin dato</span>: ${j.hastaFinal?'seguía en la isla al terminar':'en esta cámara falta dibujar la línea «hacia la tienda»'}.`,
+    cel.detectados?`<b>Celular junto al auto: ${num(cel.detectados)} ${cel.detectados===1?'aviso':'avisos'}</b>`:`No se vio un celular ${cdC3_CEL_S} s seguidos: sin aviso`]}
+  const kk=(CD_K[j.k]||[j.k])[0];return[`<b>${j.id}</b>`,`<b>${kk[0].toUpperCase()+kk.slice(1)}</b>`,en,`Visto ${num(j.dur,1)} s${zt?' en la isla':''}.`,j.k==='c'||j.k==='b'?'<b>aviso</b>':'<span class="muted">no aplica</span>']});
+ const v=J.find(j=>j.k==='v'&&enIsla(j)&&!fijo(j)),e=v&&espera(v),pl=e?e.pl:play[0];
+ return{cols:['Track','Qué es','En la isla 2','Qué pasó','Celular · bidón'],rows,
+  resumen:`${v?`Auto en la isla: <b>${v.id}</b>. `:'Ningún auto se detuvo en la isla. '}${pl?`El playero (<b>${pl.id}</b>, reconocido por el uniforme) llegó a la isla a los <b>${num(P[pl.id].tin,1)} s</b>. `:''}${sa.atendidos!=null?`El motor midió ${cdC3_pl(sa.atendidos,'auto atendido','autos atendidos')}${sa.espera_media_s!=null?` y una espera hasta el playero de <b>${num(sa.espera_media_s,1)} s</b>${v&&v.desdeInicio?' (como mínimo: el auto ya estaba al empezar el clip)':''}`:''}. `:''}Avisos: más de 1:30 sin atención, ${num(sa.detectados||0)}; celular, ${num(cel.detectados||0)}; bidón, ${num(bid.detectados||0)}.${nf?` ${nf} de los ${J.length} tracks son probables falsas detecciones de objetos fijos (revisión de la demo, no del motor).`:''}`,
+  nota:`La carga, el cobro y la salida el motor todavía no los mide, con un clip corto o largo: la carga y el cobro van a salir del exporte de despachos del controlador de surtidores (piloto). Si en el video parece que alguien usa el celular: el aviso sale solo cuando el detector ve el celular ${cdC3_CEL_S} s seguidos junto al auto; a esta distancia ocupa pocos píxeles, por eso una persona revisa cada aviso (el VLM puede confirmarlo sobre la grabación, todavía no en vivo). Los objetos fijos (poste y arbustos) se marcaron a mano sobre este clip: el motor todavía no tiene máscara de objetos fijos.`}}
+
+/* ayer, auto por auto (ejemplo): N autos de la isla 2 repartidos a lo largo del día, con la hora y la espera que tienen en Playa e islas (D.playa.cars).
+   Surtidor según PUMP_W (3 y 4), producto según los despachos del día (D.playa.prods), carga del controlador (la manguera lenta, si es de esta isla),
+   cobro y salida de los promedios del día (D.playa.cobro, D.cv.hrs.out). Celular, bidón y tienda con las proporciones de ayer. Determinista. */
+function cdC3_rows(){const g=RNG(9310),P=D.playa,cv=D.cv,A2=cdC3_i2(),n=A2.length,N=Math.min(13,n);if(!N)return[];
+ const off=.2+.6*g.u(),ks=[...A2.keys()],lar=ks.filter(k=>A2[k].wait>cdC3_ESPERA),cor=ks.filter(k=>A2[k].wait<=cdC3_ESPERA),nL=Math.min(lar.length,Math.round(N*lar.length/n));
+ // muestra estratificada: tantos autos de más de 1:30 como la proporción del día, el resto parejo a lo largo del día
+ const pick=(a,m)=>[...Array(m)].map((_,i)=>a[Math.min(a.length-1,Math.floor((i+off)*a.length/m))]),idx=[...pick(lar,nL),...pick(cor,N-nL)].sort((x,y)=>x-y);
+ const sur=cdC3_shuf(g,cdC3_rep(cdC3_quota([PUMP_W[2],PUMP_W[3]],N),[3,4])),pr=cdC3_shuf(g,cdC3_rep(cdC3_quota(P.prods.map(p=>p.desp),N),P.prods));
+ const tr=cdC3_tienda(),nCel=Math.round(N*cdC3_rule('celular').det/n),nBid=Math.round(N*cdC3_rule('bidon').det/n),nTi=tr==null?0:Math.round(N*tr);
+ const ord=cdC3_shuf(g,[...Array(N).keys()]),cel=new Set(ord.slice(0,nCel)),bid=new Set(ord.slice(nCel,nCel+nBid)),ti=new Set(cdC3_shuf(g,[...Array(N).keys()]).slice(0,nTi)),hose=cdC3_hose();
+ return idx.map((k,i)=>{const c=A2[k],same=A2.filter(x=>x.h===c.h),m=Math.min(59,Math.floor((same.indexOf(c)+g.u())/same.length*60)),p=pr[i],s=sur[i];
+  const lenta=!!hose&&p.id===hose.pid&&s===hose.s,base=hose&&p.id===hose.pid?(lenta?hose.t:hose.tRef):p.carga,cvh=cv.hrs.find(x=>x.h===c.h);
+  return{id:'v'+(k+1),h:c.h,m,wait:c.wait,s,p,lenta,carga:base*Math.exp(.12*g.n()),cobro:P.cobro*Math.exp(.3*g.n()),out:(cvh?cvh.out:cv.out)*(.85+.3*g.u()),cel:cel.has(i),bid:bid.has(i),ti:tr==null?null:ti.has(i)}})}
+function cdC3_ayer(){const P=D.playa,cv=D.cv,c=cdC3_cell(),rows=cdC3_rows(),A2=cdC3_i2(),n90=A2.filter(x=>x.wait>cdC3_ESPERA).length,ce=cdC3_rule('celular'),bi=cdC3_rule('bidon'),tr=cdC3_tienda(),hose=cdC3_hose();
+ const h3=(cv.health||[]).find(x=>x[0]==='C3'),noobs=h3&&h3[1]<1?h3[2].charAt(0).toLowerCase()+h3[2].slice(1):null;
+ const nC=rows.filter(r=>r.cel).length,nB=rows.filter(r=>r.bid).length,nT=rows.filter(r=>r.ti).length,nL=rows.filter(r=>r.wait>cdC3_ESPERA).length;
+ return{cols:['Auto · llegada','Esperó al playero','Carga · controlador','Cobro','Salida','En la isla','Durante la carga','¿Fue a la tienda?'],minW:980,
+  rows:rows.map(r=>[`<b>${r.id}</b><div class="sub">${r.h}:${pad(r.m)} · surtidor ${r.s}</div>`,
+   r.wait>cdC3_ESPERA?`<b class="badc">${mmss(r.wait)}</b><div class="sub">más de 1:30: aviso</div>`:`<b>${mmss(r.wait)}</b>`,
+   `${mmss(r.carga)}<div class="sub">${r.p.n}${r.lenta?` · manguera ${hose.id}, lenta`:''}</div>`,mmss(r.cobro),mmss(r.out),`<b>${mmss(r.wait+r.carga+r.cobro+r.out)}</b>`,
+   r.cel?pill('p-warn','celular junto al auto: aviso'):r.bid?pill('p-warn','bidón: aviso'):'<span class="muted">nada para avisar</span>',
+   r.ti==null?'<span class="muted">sin dato</span>':r.ti?pill('p-info','sí · según Tienda'):'<span class="muted">no</span>']),
+  resumen:`Ayer la isla 2 atendió <b>${num(c.n)} autos</b> con la C3 mirando${noobs?` (${noobs}: esa hora queda sin dato)`:''}. Esperaron al playero <b>${mmss(c.med)}</b> de mediana y uno de cada diez, más de ${mmss(c.p90)}; más de 1:30, <b>${cdC3_pl(n90,'auto','autos')}</b> (${pcu(n90/c.n,1)}). En toda la playa la espera promedio fue ${mmss(cv.wait)}; la carga y el cobro, <b>${mmss(cv.fill)}</b> por auto (${mmss(P.carga)} de carga según el controlador y ${mmss(P.cobro)} de cobro) y la salida, ${mmss(cv.out)}. Avisos de la C3: celular durante la carga, <b>${num(ce.det)}</b> (${cdC3_pl(ce.ok,'confirmado','confirmados')} por una persona); bidón, ${num(bi.det)} (${cdC3_pl(bi.ok,'confirmado','confirmados')}).${tr!=null?` Según el panel «De la playa a la caja» de Tienda, en el ${pcu(tr)} de los autos alguien entra a la tienda (esta cámara todavía no lo mide).`:''}`,
+  nota:`Muestra de ${rows.length} autos de la isla 2 repartidos a lo largo del día: la hora y la espera de cada uno son las de los datos de ayer de Playa e islas (${nL} de ${rows.length} pasan de 1:30). La carga sale del controlador según el producto${hose?`; la manguera ${hose.id} (${hose.prod}, surtidor ${hose.s}) carga más lento y ya tiene orden de trabajo en Mantenimiento`:''}. Cobro y salida, de los promedios del día. Celular, bidón y tienda, con las proporciones de ayer: ${nC} con celular, ${nB} con bidón, ${nT} a la tienda. «Fue a la tienda» reparte la proporción del panel «De la playa a la caja» de Tienda: esta cámara todavía no tiene dibujada la línea hacia la tienda y no ve la puerta; no se la sigue con otra cámara ni se mira su ticket.`}}
+
+// avisos de celular por día (enteros): cdSerie con suba, y los 6 días anteriores a ayer reescalados (mayores restos) para que los últimos 7
+// sumen los avisos de 7 días de Seguridad (D.sec.week); los días previos se escalan igual para no inventar un salto. Sin ese dato, la serie tal cual.
+function cdC3_celSerie(){const ay=cdC3_rule('celular').det,o=cdSerie({ayer:ay,seed:9304,motor:'autos',drift:.06,ruido:.05,min:0}),y=o.y,n=y.length;
+ const w=D.sec&&D.sec.week&&D.sec.week.find(x=>x.id==='celular'),rest=w?w.avisos-ay:null;
+ if(rest==null||rest<0)return{...o,y:y.map(Math.round)};
+ const last6=y.slice(n-7,n-1),k=rest/(sum(last6)||1),q=cdC3_quota(last6.map(v=>v*k),rest);
+ return{...o,y:y.map((v,i)=>i===n-1?ay:i>=n-7?q[i-(n-7)]:Math.max(0,Math.round(v*k)))}}
+
+CAMDET.C3={
+ titulo:'cuánto tarda la atención en la isla 2',
+ modulo:'playa',
+ modelo:'Corren en el equipo de la estación: YOLOv8n detecta autos y personas en cada cuadro analizado y el tracker GOTA le da a cada uno un número anónimo que dura lo que dura la visita. El playero se reconoce por el color del uniforme (se configura por bandera): en cada cuadro la persona vota según cuánto de su ropa cae en esos colores y el track entero se decide por mayoría; el umbral de color todavía no está calibrado con imágenes de la estación. Un auditor de vocabulario abierto (OWLv2, sin entrenar) mira un cuadro cada 2 a 3 s para lo que el detector no trae, como un bidón. Un VLM (Qwen2.5-VL-7B) puede preguntar una vez por persona si tiene un celular en la mano, pero solo sobre la grabación: todavía no corre en vivo. En el piloto se suma el exporte de despachos del controlador de surtidores (inicio y fin de cada carga). Sin caras, sin nombres y sin seguir a nadie a otra cámara.',
+ objetivos:[
+  {q:'Cuánto espera cada auto hasta que llega el playero',como:'Zona «isla2» dibujada sobre los surtidores 3 y 4. El reloj arranca cuando el auto entra a la zona y para cuando entra una persona con el uniforme de la estación. Si ya había un playero en la isla, la espera es cero. Pasados 90 s sin atención, avisa al encargado. El reconocimiento del uniforme se calibra en el piloto.',estado:'medido',conf:'media'},
+  {q:'Si el conductor usa el celular durante la carga',como:'Regla de copresencia: un celular visible junto al auto en la isla durante 3 s seguidos. El celular es un objeto chico: la precisión se mide en el piloto y una persona revisa cada aviso antes de contarlo. El VLM puede confirmarlo sobre la grabación (todavía no en vivo).',estado:'medido',conf:'media'},
+  {q:'Cuántos autos atiende la isla 2 por hora',como:'Cada auto que entra a la zona suma uno, una sola vez por track. Las horas con la lente sucia o con reflejo quedan NO OBSERVABLE: sin dato, nunca cero.',estado:'medido',conf:'alta'},
+  {q:'Si un auto queda ocupando el surtidor',como:'Permanencia: un auto más de 7 min en la zona (por ejemplo, el conductor lo dejó en el surtidor y se fue a la tienda) da aviso: es un surtidor que no atiende a nadie.',estado:'medido',conf:'alta'},
+  {q:'Cuánto duran la carga y el cobro',como:'En piloto: cuando se conecte el exporte de despachos del controlador, la carga sale de su inicio y su fin; el cobro, del tiempo que el playero sigue con el auto después de la carga (relojes sincronizados; más de 5 s de desvío: sin dato). El motor de visión todavía no los mide.',estado:'piloto',conf:'media'},
+  {q:'Cuánto tarda en irse después de pagar',como:'En piloto: desde que el playero se aleja del auto hasta que el auto deja la zona de la isla, separando la demora por autos de adelante. El motor de visión todavía no lo calcula.',estado:'piloto',conf:'baja'},
+  {q:'Si cargan combustible en un bidón',como:'El auditor sin entrenar busca «jerrycan or fuel container» un cuadro cada 2 a 3 s; si el bidón queda 5 s junto al auto en la isla, avisa. Confunde bidones con baldes y cajas: una persona confirma cada aviso. Para medirlo bien hace falta entrenar un detector propio con imágenes de la estación.',estado:'estimado',conf:'baja'},
+  {q:'Si el conductor va a la tienda mientras tanto',como:'En piloto: hace falta dibujar en esta cámara la línea «hacia la tienda» para contar a la persona que baja del auto y sale de la isla por ese lado. Esta cámara no ve la puerta y no se sigue a nadie entre cámaras: el total se contrasta por franja con las entradas que cuenta C2. Mientras tanto, la proporción es la de Tienda.',estado:'piloto',conf:'baja'}],
+ clip:cdC3_clip,
+ ayerTitulo:'Autos de ayer en la isla 2, uno por uno',
+ ayer:cdC3_ayer,
+ series:()=>{const c=cdC3_cell(),cv=D.cv;return[
+  // ayer = autos de la isla 2 que vio la C3 = «N autos» de la celda Isla 2 · Día completo de Playa e islas (D.playa.cells['2:dia'].n); acompaña al tránsito, estable.
+  // Es el conteo con la C3 mirando: la hora NO OBSERVABLE no entra, y horas() usa la misma base.
+  {id:'autos',n:'Autos de la isla 2, con la C3 mirando',fmt:'num',mejor:'sube',...cdSerie({ayer:c.n,seed:9300,motor:'autos',drift:0,ruido:.04,entero:true})},
+  // ayer = «Espera hasta ser atendido» de Playa e islas (D.cv.wait: promedio por auto de toda la playa, cámaras C3 y C4); sube
+  {id:'espera',n:'Espera hasta que llega el playero, promedio de toda la playa',fmt:'min',mejor:'baja',...cdSerie({ayer:cv.wait,seed:9301,drift:.035,ruido:.04,min:0})},
+  // ayer = autos de la isla 2 que esperaron más de 90 s ÷ autos de la isla 2 observados por la C3:
+  //   D.playa.cars.filter(c=>c.isla===2&&c.obs&&c.wait>90).length / D.playa.cells['2:dia'].n (autos de D.cv.hrs con la espera de cada uno); sube
+  {id:'mas90',n:'Autos de la isla 2 que esperan más de 1:30',fmt:'pct',mejor:'baja',...cdSerie({ayer:cdC3_n90()/c.n,seed:9302,drift:.05,ruido:.05,min:0,max:1})},
+  // ayer = «Carga y cobro» del panel «Tiempo en la isla por etapa» de Playa e islas (D.cv.fill, promedio por auto de toda la playa); sube
+  {id:'carga',n:'Carga y cobro por auto, promedio de toda la playa',fmt:'min',mejor:'baja',...cdSerie({ayer:cv.fill,seed:9303,drift:.025,ruido:.025,min:0})},
+  // ayer = «Celular durante la carga», columna Ayer de las reglas de Cámaras en vivo (D.cv.rules, id celular, cámara C3); acompaña al tránsito y sube.
+  // Los últimos 7 días suman lo mismo que «Siete días por regla» de Seguridad (D.sec.week, id celular): cdC3_celSerie.
+  {id:'celular',n:'Avisos de celular durante la carga',fmt:'num',mejor:'baja',...cdC3_celSerie()}]},
+ // perfil por hora de ayer: autos de la playa por hora (D.cv.hrs) × parte que fue a la isla 2 con 2 playeros o con 1 (reparto real de D.playa.cars).
+ // Misma base que la serie principal: sin las horas NO OBSERVABLE de la C3 (PLAYA_NOOBS.C3, de 7 a 8 h la lente tuvo gotas): esa hora no es cero, es sin dato.
+ horas:()=>{const s={1:cdC3_share(1),2:cdC3_share(2)};return{n:'Autos en la isla 2, con la C3 mirando',u:'autos',hrs:D.cv.hrs.filter(x=>!PLAYA_NOOBS.C3.includes(x.h)).map(x=>[x.h,x.cars*s[STAFF_NOW(x.h)===1?1:2]])}},
+ recos:A=>{const out=[],c=cdC3_cell(),cv=D.cv,P=D.playa,es=A.S.espera,ca=A.S.carga,ce=A.S.celular,pk=A.pk,f7=s=>cdAvg(s.y.slice(0,7));
+  const m9=A.S.mas90,esSube=es&&es.tr.ok&&es.tr.dir==='sube',m9Sube=m9&&m9.tr.ok&&m9.tr.dir==='sube';
+  const esTxt=esSube?` Y va a peor: la espera promedio de la playa <b>sube ${pc(es.tr.pct)} por semana</b> (${cdC3_p(es.tr)}), de ${mmss(f7(es))} hace 4 semanas a ${mmss(es.tr.l7)} la última${m9Sube?`, y los autos de la isla 2 que pasan de 1:30, de ${pcu(f7(m9),1)} a ${pcu(m9.tr.l7,1)}`:''}.`:'';
+  // 1 · el pico de mañana con espera de más de 1:30: reasignar un playero a la isla 2. Plata = autos que se dejan de ir sin cargar a esa hora (D.cv.hrs.ab).
+  if(pk){const h=pk[0],cvh=cv.hrs.find(x=>x.h===h),i2=cdC3_hora(h),ph=P.hrs.find(x=>x.h===h);
+   if(cvh&&(cvh.wait>cdC3_ESPERA||(i2.p90!=null&&i2.p90>cdC3_ESPERA))){
+    // horas de referencia: las otras horas con al menos 5 autos y espera por debajo del promedio del día (D.cv.wait); tasa ponderada = Σ se fueron ÷ Σ autos (toda la playa)
+    const calm=cv.hrs.filter(x=>x.h!==h&&x.cars>=5&&x.wait<=cv.wait),rc=calm.length?sum(calm.map(x=>x.ab))/sum(calm.map(x=>x.cars)):0,rp=cvh.cars?cvh.ab/cvh.cars:0,ab=pk[1]*Math.max(0,rp-rc),mg=cdC3_mgL();
+    const dm=cdAvg(cdC3_i2().map(x=>x.wait)),min=i2.mean!=null&&dm!=null?pk[1]*Math.max(0,i2.mean-dm)/60:0,falta=ph&&ph.vis!=null&&ph.vis<ph.prog-.4;
+    out.push({id:'playero_pico',t:`Reasigná un playero a la isla 2 de ${h} a ${h+1} h`,
+     porque:`Mañana el pico de la isla 2 es de ${h} a ${h+1} h, con unos <b>${num(pk[1],1)} autos</b> (pronóstico). Ayer a esa hora ${i2.n?`esperaron más de 1:30 <b>${num(i2.m90)} de ${num(i2.n)} autos</b> de la isla 2${i2.med!=null?` (mediana ${mmss(i2.med)}, contra ${mmss(c.med)} de la isla 2 en todo el día)`:''}`:'la C3 no tuvo autos observados'} y en toda la playa la espera promedio fue <b>${mmss(cvh.wait)}</b>.${falta?` La C4 vio ${num(ph.vis,1)} playeros de los ${num(ph.prog)} de la grilla: el que falta puede estar en la descarga o en la tienda; revisalo con el encargado antes de mover a alguien.`:''}${esTxt}`,
+     impacto:ab>0?`A esa hora se fue sin cargar el ${pcu(rp,1)} de los autos, contra ${pcu(rc,1)} en las horas con espera por debajo del promedio del día (${mmss(cv.wait)}; tasas de toda la playa, aplicadas a la isla 2): ${num(pk[1],1)} autos × ${fa((rp-rc)*100,1)} puntos × ${num(CAR_L)} L × ${ars(mg)} de margen por litro × 30 días = <b>${ars(ab*CAR_L*mg*30)} por mes</b>.${min>=1?` Además, unos ${num(min)} minutos menos de espera por día en la isla 2 (${num(pk[1],1)} autos × la diferencia entre ${mmss(i2.mean)} de espera promedio a esa hora y ${mmss(dm)} de promedio en la isla 2 en todo el día, si esa hora se atiende como el resto).`:''}`:null,
+     conf:'media',prio:'alta',medir:`C3: espera hasta que llega el playero y autos que pasan de 1:30 en la isla 2 de ${h} a ${h+1} h, dos semanas antes y dos después. C4: playeros visibles y autos que se van sin cargar a esa hora.`})}}
+  // 2 · carga y cobro en suba: cobrar en el surtidor con QR o tarjeta. Plata = tiempo de playero que vuelve a atender autos (HR_PLAY, supuesto de Personal).
+  if(ca&&ca.tr.ok&&ca.tr.dir==='sube'){const up=ca.tr.l7-f7(ca),hose=cdC3_hose(),mins=Math.max(0,up)*c.n/60;
+   out.push({id:'cobro_qr',t:'Cobro con QR o tarjeta en el surtidor de la isla 2',
+    porque:`La carga y el cobro <b>suben ${pc(ca.tr.pct)} por semana</b> (${cdC3_p(ca.tr)}): ${mmss(f7(ca))} por auto hace 4 semanas, ${mmss(ca.tr.l7)} la última. De los ${mmss(cv.fill)} de ayer, ${mmss(P.carga)} son la carga que mide el controlador y ${mmss(P.cobro)}, el cobro. Mientras cobra, el playero no atiende al auto que espera: cobrar en el surtidor recorta el cobro sin tocar la carga.${esSube?` Y la espera promedio de la playa sube al mismo tiempo (${pc(es.tr.pct)} por semana): el tiempo que el playero pasa cobrando es tiempo que el auto siguiente espera.`:''}${hose?` Aparte, la manguera ${hose.id} (${hose.prod}, surtidor ${hose.s}, en esta isla) despacha a ${num(hose.flow,1)} L/min contra ${num(hose.ref,1)} las otras: ${mmss(hose.t-hose.tRef)} más en cada una de sus ${num(hose.desp)} cargas por día; ya tiene orden de trabajo en Mantenimiento.`:''}`,
+    impacto:up>0?`Volver al nivel de hace 4 semanas (supuesto: el QR recupera toda la suba, que es de toda la playa y no sabemos si viene de la carga o del cobro): ${num(up)} s menos por auto × ${num(c.n)} autos por día en la isla 2 = ${num(mins)} minutos de playero por día; × ${ars(HR_PLAY)} la hora de un playero ÷ 60 × 30 días = <b>${ars(mins/60*HR_PLAY*30)} por mes</b> de tiempo que vuelve a atender autos.`:null,
+    conf:'media',prio:ca.tr.p<.01?'alta':'media',medir:'C3: espera hasta que llega el playero en la isla 2, dos semanas antes y dos después. Carga y cobro por auto: con el exporte de despachos del controlador (piloto), que separa la carga del cobro; la cámara sola todavía no los mide.'})}
+  // 3 · avisos de celular en suba: cartel y pedido del playero. Es seguridad: sin monto.
+  if(ce&&ce.tr.ok&&ce.tr.dir==='sube'){const r=cdC3_rule('celular'),q=typeof cvQ==='function'?cvQ(r):null,wk=D.sec&&D.sec.week?D.sec.week.find(x=>x.id==='celular'):null;
+   out.push({id:'cartel_celular',t:'Cartel de celular guardado en la isla 2, y que el playero lo pida',
+    porque:`Los avisos de celular durante la carga <b>suben ${pc(ce.tr.pct)} por semana</b> (${cdC3_p(ce.tr)}): ${num(f7(ce),1)} por día hace 4 semanas, ${num(ce.tr.l7,1)} la última${wk?` (${num(wk.avisos)} avisos en 7 días, los mismos de Seguridad)`:''}. Ayer fueron ${num(r.det)} (${num(r.ok)} confirmados por una persona, ${cdC3_pl(r.fp,'falsa alarma','falsas alarmas')}).${q&&q.p!=null?` ${q.win==='ayer'?'Ayer':'En los últimos 7 días'}, la regla acertó el ${pcu(q.p)} de las veces (${num(q.ok)} confirmados de ${num(q.n)} revisados): no es ruido del detector.`:''} Es una norma de seguridad de la playa: el aviso es para que el playero lo pida, no para sancionar a nadie.`,
+    impacto:null,conf:'media',prio:'media',medir:'C3: avisos de celular cada 100 autos atendidos en la isla 2, dos semanas antes y dos después del cartel; una persona sigue revisando cada aviso.'})}
+  return out.slice(0,4)}
+};
+/* <<< cámara C3 */
+/* >>> cámara C4 */
+/* ---------- C4 · Playa: cómo se ocupa la playa y quién se va sin cargar ----------
+   Números de «ayer» iguales a Playa e islas: autos atendidos (D.cv.cars, tarjeta «Autos atendidos ayer»), se fueron sin cargar (D.cv.ab redondeado,
+   tarjeta «Se fueron sin cargar»), tiempo total en la isla (D.cv.wait + D.cv.fill + D.cv.out, tarjeta «Tiempo total en la isla»), ocupación del
+   surtidor más cargado (máximo de D.cv.hrs[].occ, columna «Pico» del panel «Ocupación de cada surtidor») y playeros visibles en la hora de más autos
+   (D.playa.hrs[].vis, panel «Playeros visibles y autos atendidos, por hora»). Isla 1 = surtidores 1 y 2 (la mide C4); isla 2 = surtidores 3 y 4 (C3).
+   Clip real: media/deteccion.js (cams.C4), zonas acceso, isla1, isla2 e isla3 de vision/zonas.demo.json; regla «se_fue» (abandono). */
+const cdC4_MIN_ISLA=3;   // s: la regla «se_fue» de C4 pide que el auto no se quede al menos 3 s en ninguna isla (vision/zonas.demo.json, min_s)
+const cdC4_QUIETO=.012;  // fracción de la imagen: si el punto de apoyo se mueve menos que esto, el auto está detenido
+const cdC4_ISLAS=['isla1','isla2','isla3'];
+const cdC4_ESPERA_OK=70; // s: en buildCV una hora con espera promedio de hasta 70 s tiene la tasa base de abandono (0,8 %); arriba de 70 s sube a 3 % y arriba de 95 s, a 7 %
+const cdC4_p=t=>t.p<.001?'p &lt; 0,001':'p = '+t.p.toFixed(3).replace('.',',');
+const cdC4_pl=(n,a,b)=>`${num(n)} ${Math.round(n)===1?a:b}`;
+const cdC4_quota=(w,n)=>{const t=sum(w)||1,raw=w.map(x=>x/t*n),q=raw.map(Math.floor);raw.map((x,i)=>[x-q[i],i]).sort((x,y)=>y[0]-x[0]).slice(0,n-sum(q)).forEach(([,i])=>q[i]++);return q};
+// margen por litro ponderado por volumen: la misma fórmula que Calle y acceso
+const cdC4_mgL=()=>sum(PRODS.map(p=>S.P.p[p.id].vol*(S.P.p[p.id].precio-S.P.p[p.id].costo)))/sum(PRODS.map(p=>S.P.p[p.id].vol));
+const cdC4_rule=id=>D.cv.rules.find(r=>r.id===id)||{det:0,ok:0,fp:0};
+// horas en que la C4 estuvo NO OBSERVABLE ayer (reflejo de sol): ni cero ni promedio relleno
+const cdC4_noobs=()=>(typeof PLAYA_NOOBS!=='undefined'&&PLAYA_NOOBS.C4)||[];
+// la hora de más autos de ayer con la C4 mirando (fila de Playa e islas)
+const cdC4_pico=()=>{const ob=D.playa.hrs.filter(x=>x.obs);return ob.reduce((a,b)=>b.cars>a.cars?b:a)};
+// ocupación del surtidor más cargado en su hora pico: el mayor valor de la columna «Pico» del mapa de ocupación
+const cdC4_occ=()=>{let best={v:-1};D.cv.hrs.forEach(x=>x.occ.forEach((v,i)=>{if(v>best.v)best={v,h:x.h,s:i+1}}));return best};
+// autos que esperaron más de 1:30 por isla (datos de ayer, solo con la cámara mirando)
+const cdC4_largas=isla=>D.playa.cars.filter(c=>c.obs&&c.isla===isla&&c.wait>90).length;
+
+/* ---------- el clip real ---------- */
+/* puntos de cada track (punto de apoyo y caja), en orden */
+function cdC4_pts(R){const o={};R.f.forEach(([t,obs])=>obs.forEach(([id,,x1,y1,x2,y2])=>{(o[id]??=[]).push({t,a:[(x1+x2)/2,y2],box:[x1,y1,x2,y2]})}));return o}
+/* el tramo más largo en que el auto estuvo detenido (el punto de apoyo no se aleja más de cdC4_QUIETO del comienzo del tramo) */
+function cdC4_quieto(P,zs){let s=0,best=null;const close=(i,j)=>{const d=P[j].t-P[i].t;if(!best||d>best.d)best={d,t0:P[i].t,t1:P[j].t,a:P[j].a}};
+ for(let i=1;i<P.length;i++)if(Math.hypot(P[i].a[0]-P[s].a[0],P[i].a[1]-P[s].a[1])>cdC4_QUIETO){close(s,i-1);s=i}
+ close(s,P.length-1);if(!best||best.d<1)return null;best.z=(zs.find(z=>cdIn(best.a,z.poligono))||{}).id||null;return best}
+/* por qué borde dejó el cuadro (solo si dejó de verse antes del final) */
+const cdC4_borde=a=>a[0]<.06?'por el borde izquierdo':a[0]>.94?'por el borde derecho':a[1]>.94?'por abajo':a[1]<.06?'por el fondo':'dentro del cuadro (el detector lo perdió)';
+const cdC4_zn=z=>DET_Z[z]||z;
+/* cuánto se movió el punto de apoyo en el medio segundo que termina en t (fracción de la imagen; null si no hay dos puntos) */
+const cdC4_mov=(P,t)=>{const a=P.filter(x=>x.t>=t-.5-1e-6&&x.t<=t+1e-6);return a.length>1?Math.hypot(a[a.length-1].a[0]-a[0].a[0],a[a.length-1].a[1]-a[0].a[1]):null};
+/* ¿venía frenando al final? compara el último medio segundo con el medio segundo de más avance de antes */
+function cdC4_frena(P){if(P.length<2)return null;const t1=P[P.length-1].t,t0=P[0].t,last=cdC4_mov(P,t1);let mx=null;
+ for(let t=t1-.5;t-.5>=t0-1e-6;t-=.5){const d=cdC4_mov(P,t);if(d!=null&&(!mx||d>mx.d))mx={d,t0:t-.5,t1:t}}
+ return last!=null&&mx?{last,mx,frena:last<.5*mx.d}:null}
+/* visitas por zona según clase, a partir de los recorridos (para desglosar las visitas del motor) */
+const cdC4_porClase=(J,z)=>Object.entries(J.filter(j=>j.seq.includes(z)).reduce((a,j)=>(a[j.k]=(a[j.k]||0)+1,a),{})).map(([k,n])=>`${n} ${(CD_K[k]||[k,k])[n===1?0:1]}`);
+const cdC4_y=a=>a.length>1?a.slice(0,-1).join(', ')+' y '+a[a.length-1]:a.join('');
+
+function cdC4_clip(J,R){const P=cdC4_pts(R),zs=R.zonas||[],rz=(R.res&&R.res.zonas)||{},rg=(R.res&&R.res.reglas)||{},sf=rg.se_fue||{},sa=rg.sin_atender||{},hz=R.hz||0;
+ const isla=j=>cdC4_ISLAS.filter(z=>j.zt[z]).sort((a,b)=>j.zt[b]-j.zt[a]),tIsla=j=>sum(cdC4_ISLAS.map(z=>j.zt[z]||0));
+ const reco=j=>j.seq.length?j.seq.map(z=>`${cdC4_zn(z)} ${num(j.zt[z]||0,1)} s`).join(' → '):'<span class="muted">fuera de las zonas</span>';
+ const roza=s=>`menos de ${s<.5?'medio segundo':'un segundo'}`;
+ const veh=J.filter(j=>j.k==='v'),pers=J.filter(j=>j.k==='p'||j.k==='a'),info={};
+ // persona o playero que apareció pegado a un auto (las cajas se superponen en el primer cuadro de la persona)
+ const cerca={},junto={};pers.forEach(j=>{const a0=(P[j.id]||[])[0],b=a0?a0.box:[0,0,0,0],v=veh.find(v=>{const pv=(P[v.id]||[]).find(x=>Math.abs(x.t-j.t0)<.2);return pv&&pv.box[0]<=b[2]&&pv.box[2]>=b[0]&&pv.box[1]<=b[3]&&pv.box[3]>=b[1]});if(v){junto[j.id]=v;(cerca[v.id]??=[]).push(j)}});
+ const atendido=v=>{const c=cerca[v.id]||[],a=c.find(x=>x.k==='a');
+  return a?`Se vio un playero (${a.id}) a su lado ${num(a.dur,1)} s.`:c.length?`${c.length===1?'Una persona':`${num(c.length)} personas`} (${c.map(x=>x.id).join(', ')}) ${c.length===1?'estuvo':'estuvieron'} a su lado ${num(c[0].dur,1)} s y el motor no ${c.length===1?'la':'las'} reconoció como playero: si lo atendieron, <span class="muted">sin dato</span>.`:'No se vio a nadie a su lado: si lo atendieron, <span class="muted">sin dato</span>.'};
+ const rows=J.map(j=>{const p=P[j.id]||[],a0=p[0],a1=p[p.length-1],q=j.k==='v'?cdC4_quieto(p,zs):null,acc=(j.zt.acceso||0)>0,ti=tIsla(j),is=isla(j);
+  const fin=j.hastaFinal?'seguía en cuadro al terminar el clip':`dejó de verse a los ${num(j.t1,1)} s, ${cdC4_borde(a1.a)}`;
+  if(j.k==='v'){
+   let que,ab;const lejos=a0&&(a0.box[2]-a0.box[0])<.06,ult=j.seq[j.seq.length-1],quedo=j.hastaFinal&&cdC4_ISLAS.includes(ult);
+   const ini=acc?'Entró por el acceso':`El motor lo vio por primera vez a los ${num(j.t0,1)} s, ya dentro de la playa a la altura de la ${cdC4_zn(j.seq[0]).toLowerCase()}`;
+   if(q&&q.z&&cdC4_ISLAS.includes(q.z)){info[j.id]={z:q.z,t:q.t0};
+    que=`${acc?`Entró por el acceso y avanzó hasta la ${cdC4_zn(q.z).toLowerCase()}`:ini}. <b>Se detuvo en la ${cdC4_zn(q.z).toLowerCase()} a los ${num(q.t0,1)} s</b> y siguió quieto ${num(q.t1-q.t0,1)} s${j.hastaFinal&&q.t1>=j.t1-.2?' hasta el final del clip':''}: está cargando o esperando al playero; cuál de las dos, <span class="muted">sin dato</span>. ${atendido(j)}`}
+   else if(ti>0&&lejos&&!acc)que=`Auto lejano: el motor lo vio ${num(j.dur,1)} s al fondo del cuadro, rozó la zona de la ${cdC4_zn(is[0]).toLowerCase()} ${roza(ti)} sin detenerse y ${fin}. No pasó por el acceso: no es un auto que entró a cargar.`;
+   else if(ti>0&&quedo){const prev=j.seq.slice(0,-1).filter(z=>cdC4_ISLAS.includes(z)&&z!==ult),fr=cdC4_frena(p);
+    que=`${ini}${prev.length?`; pasó por ${cdC4_y(prev.map(z=>`la ${cdC4_zn(z).toLowerCase()} (${num(j.zt[z],1)} s)`))} sin detenerse y`:' y'} entró a la ${cdC4_zn(ult).toLowerCase()}, donde seguía al terminar el clip${fr?fr.frena?`, <b>frenando</b>: en el último medio segundo casi no se movió (${pcu(fr.last,1)} de la imagen, contra ${pcu(fr.mx.d,1)} entre ${num(fr.mx.t0,1)} y ${num(fr.mx.t1,1)} s)`:', todavía en movimiento':''}. Si se detiene a cargar: <span class="muted">sin dato</span>, el clip termina antes.`}
+   else if(ti>0)que=`${ini} y cruzó ${cdC4_y(j.seq.filter(z=>cdC4_ISLAS.includes(z)).map(z=>`la ${cdC4_zn(z).toLowerCase()} (${num(j.zt[z],1)} s)`))} sin detenerse; ${fin}.${j.hastaFinal?' Si se queda a cargar o sale de la playa: <span class="muted">sin dato</span>, el clip termina antes.':''}`;
+   else que=`${acc?'Pasó por el acceso':'Circuló'} sin entrar a ninguna isla; ${fin}.`;
+   if(!acc)ab=`<span class="muted">no aplica</span><div class="sub">no pasó por el acceso en el clip</div>`;
+   else if(ti>=cdC4_MIN_ISLA)ab=`<b class="okc">No</b><div class="sub">${num(ti,1)} s en ${is.map(z=>'la '+cdC4_zn(z).toLowerCase()).join(' y ')}</div>`;
+   else if(j.hastaFinal)ab=`<span class="muted">sin dato</span><div class="sub">seguía en cuadro al terminar</div>`;
+   else ab=`<b class="badc">Sí: se fue sin cargar</b><div class="sub">menos de ${cdC4_MIN_ISLA} s en una isla</div>`;
+   return[`<b>${j.id}</b>`,`<b>Auto</b>${lejos?'<div class="sub">lejos, al fondo del cuadro</div>':''}`,reco(j),que,ab]}
+  if(j.k==='p'||j.k==='a'){const near=junto[j.id];
+   const rol=j.k==='a'?'<b>Playero</b><div class="sub">por el uniforme</div>':'<b>Persona</b><div class="sub">no se la reconoció como playero</div>';
+   return[`<b>${j.id}</b>`,rol,reco(j),`Se la vio solo ${num(j.dur,1)} s (${cdC4_pl(j.n,'cuadro','cuadros')})${near?` junto al auto ${near.id}`:''}${is.length?`, en la ${cdC4_zn(is[0]).toLowerCase()}`:''}; ${j.hastaFinal?'seguía en cuadro al terminar el clip':`después el detector la perdió${near?', probablemente tapada por el auto o el surtidor':''}`}. ${j.k==='a'?'':'Si era el playero: <span class="muted">sin dato</span>.'}`,'<span class="muted">no aplica</span>']}
+  const kk=(CD_K[j.k]||[j.k])[0];return[`<b>${j.id}</b>`,`<b>${kk[0].toUpperCase()+kk.slice(1)}</b>`,reco(j),`Visto ${num(j.dur,1)} s; ${fin}.`,'<span class="muted">no aplica</span>']});
+ const vz=z=>{if(!rz[z])return `${cdC4_zn(z)}: sin visitas`;const pc=cdC4_porClase(J,z),nJ=J.filter(j=>j.seq.includes(z)).length;
+  return `${cdC4_zn(z)}: ${cdC4_pl(rz[z].visitas,'visita','visitas')}${nJ===rz[z].visitas&&pc.length?` (${cdC4_y(pc)})`:''}${rz[z].ocupacion!=null?`, ocupada ${pcu(rz[z].ocupacion)} del clip`:''}`};
+ const det=Object.entries(info),porAcc=veh.filter(j=>(j.zt.acceso||0)>0),sinIsla=porAcc.filter(j=>tIsla(j)<cdC4_MIN_ISLA&&!j.hastaFinal),play=J.filter(j=>j.k==='a').length,roce=veh.filter(j=>!info[j.id]&&!(j.zt.acceso>0)&&tIsla(j)>0&&tIsla(j)<1);
+ const corto=pers.filter(j=>!j.hastaFinal&&j.dur<1);
+ return{cols:['Track','Qué es','Recorrido por zonas','Qué pasó','¿Se fue sin cargar?'],rows,
+  resumen:`${det.length?`Se ${det.length===1?'detuvo un auto':`detuvieron ${num(det.length)} autos`} en una isla: ${det.map(([id,x])=>`<b>${id}</b> en la ${cdC4_zn(x.z).toLowerCase()}`).join(', ')}. `:'Ningún auto se detuvo en una isla. '}${porAcc.length?`Por el acceso ${porAcc.length===1?'pasó 1 auto':`pasaron ${num(porAcc.length)} autos`} y ${sinIsla.length?`<b>${num(sinIsla.length)} se ${sinIsla.length===1?'fue':'fueron'} sin quedarse en una isla</b>`:'<b>ninguno se fue sin quedarse en una isla</b>'}: la regla «se fue sin cargar» dio ${num(sf.detectados||0)} ${sf.detectados===1?'aviso':'avisos'}. `:'Ningún auto pasó por el acceso. '}Visitas que contó el motor: ${['acceso',...cdC4_ISLAS].map(vz).join(' · ')}.${roce.length?` ${roce.map(j=>`La visita a la ${cdC4_zn(isla(j)[0]).toLowerCase()} es ${j.id}, que rozó la zona ${roza(tIsla(j))} sin detenerse`).join('; ')}: no es un auto cargando.`:''} Playeros reconocidos por el uniforme: ${num(play)}${sa.atendidos!=null?`; autos atendidos por un playero: ${num(sa.atendidos)}, espera <span class="muted">${sa.espera_media_s!=null?num(sa.espera_media_s,1)+' s':'sin dato'}</span>`:''}.`,
+  nota:`El motor analizó ${hz?num(hz)+' cuadros por segundo':'el clip'}. Límites de este clip: el playero de lejos no se detecta de forma estable${corto.length?` y acá ${corto.length===1?`la única persona (${corto[0].id}) se siguió solo ${cdC4_pl(corto[0].n,'cuadro','cuadros')} (${num(corto[0].dur,1)} s)${junto[corto[0].id]?', probablemente tapada por el auto o el surtidor':''}`:`las personas se siguieron menos de un segundo cada una`}`:''}, por eso la espera hasta el playero queda sin dato; en vivo la mide de cerca la C3 en la isla 2 y la C4 cuenta playeros como promedio por hora. En ${num(R.res.hasta-R.res.desde,0)} s no se ve una visita completa: «se fue sin cargar» necesita ver al auto salir de la playa. La zona de tanques no está en el cuadro del video: el merodeo queda sin dato. En el video se dibujaron tres islas; los números de ayer son de la estación demo, con dos islas y cuatro surtidores.`}}
+
+/* ---------- ayer, auto por auto (ejemplo) ----------
+   Muestra estratificada y declarada: autos atendidos repartidos por isla (cuota según el reparto de D.playa.cars observados) y, dentro de cada isla,
+   a lo largo del día, con la hora, la isla y la espera que tienen en Playa e islas (solo horas con cámara), más TODOS los que se fueron sin cargar
+   ayer (Math.round(D.cv.ab)), ubicados en las horas con más abandono (D.cv.hrs[].ab, sin la hora NO OBSERVABLE de C4). Surtidor según PUMP_W dentro
+   de la isla; carga y cobro y salida de los promedios de esa hora (D.cv.hrs[].fill y .out); playeros a la vista y fila de esa hora, de D.playa.hrs.
+   Ids de track con un solo contador por orden de llegada: atendidos (D.playa.cars, cronológico) y los que se fueron, intercalados por hora y minuto.
+   Determinista (semilla 9400). */
+function cdC4_rows(){const g=RNG(9400),cv=D.cv,no=cdC4_noobs(),A=D.playa.cars.filter(c=>c.obs&&!no.includes(c.h)),nAb=Math.round(cv.ab),NS=Math.max(0,Math.min(A.length,13-nAb));
+ const nh=h=>Math.max(1,Math.round((cv.hrs.find(x=>x.h===h)||{cars:1}).cars));
+ const AI=[1,2].map(i=>A.filter(c=>c.isla===i)),qi=cdC4_quota(AI.map(a=>a.length),NS),off=.15+.7*g.u();
+ const pick=AI.flatMap((a,k)=>[...Array(qi[k])].map((_,i)=>a[Math.min(a.length-1,Math.floor((i+off)*a.length/qi[k]))])).sort((x,y)=>D.playa.cars.indexOf(x)-D.playa.cars.indexOf(y));
+ const hs=cv.hrs.filter(x=>!no.includes(x.h)),qa=cdC4_quota(hs.map(x=>x.ab),nAb),abH=hs.flatMap((x,i)=>Array(qa[i]).fill(x.h));
+ const mn=(h,k)=>Math.min(59,Math.floor((k+g.u())*60/nh(h)));
+ const at=pick.map(c=>{const w=c.isla===1?[PUMP_W[0],PUMP_W[1]]:[PUMP_W[2],PUMP_W[3]],s=(c.isla===1?1:3)+(g.u()<w[0]/(w[0]+w[1])?0:1),x=cv.hrs.find(y=>y.h===c.h);
+  const same=A.filter(y=>y.h===c.h);return{c,h:c.h,m:mn(c.h,same.indexOf(c)),isla:c.isla,s,wait:c.wait,fill:x.fill*Math.exp(.1*g.n()),out:x.out*(.85+.3*g.u()),ab:false}});
+ const ab=abH.map(h=>{const x=cv.hrs.find(y=>y.h===h);return{h,m:Math.floor(g.u()*60),isla:null,acc:x.wait*(1.1+.7*g.u()),ab:true}});
+ // contador común de tracks: cada auto del día (con la C4 mirando) en orden de llegada; los que no están en la muestra, en el centro de su lugar dentro de la hora
+ const tm=new Map(at.map(r=>[r.c,r.h*60+r.m])),k={},ev=D.playa.cars.filter(c=>!no.includes(c.h)).map(c=>{const i=k[c.h]=(k[c.h]??-1)+1;return{o:c,t:tm.has(c)?tm.get(c):c.h*60+Math.min(59.5,(i+.5)*60/nh(c.h))}});
+ ab.forEach(r=>ev.push({o:r,t:r.h*60+r.m}));ev.sort((x,y)=>x.t-y.t);const id=new Map(ev.map((e,i)=>[e.o,i+1]));
+ return at.map(r=>({...r,n:id.get(r.c)})).concat(ab.map(r=>({...r,n:id.get(r)}))).sort((x,y)=>x.n-y.n).map(r=>({...r,id:'v'+r.n}))}
+function cdC4_ayer(){const cv=D.cv,P=D.playa,rows=cdC4_rows(),nAb=Math.round(cv.ab),ent=Math.round(cv.cars)+nAb,r=cdC4_rule('abandono'),c1=P.cells['1:dia'],c2=P.cells['2:dia'],oc=cdC4_occ(),pk=cdC4_pico();
+ const h4=(cv.health||[]).find(x=>x[0]==='C4'),no=cdC4_noobs(),fila=P.hrs.filter(x=>x.fila>15),nS=rows.filter(x=>!x.ab).length,i1=rows.filter(x=>x.isla===1).length;
+ const hora=h=>{const x=P.hrs.find(y=>y.h===h);return x&&x.obs?`${num(x.vis,1)} de ${x.prog}<div class="sub">${x.fila?`fila ${x.fila} min · hasta ${cdC4_pl(x.qmax,'auto','autos')}`:'sin fila'}</div>`:'<span class="muted">sin dato (C4 no observable)</span>'};
+ const ll=x=>`<b>${x.id}</b><div class="sub">${x.h}:${pad(x.m)}</div>`;
+ return{cols:['Auto · llegada','Isla · surtidor','Esperó<br>al playero','Carga y cobro<br>· salida','Tiempo total<br>en la isla','Playeros a la vista<br>· fila en la playa','Resultado'],minW:900,
+  rows:rows.map(x=>x.ab
+   ?[ll(x),'<span class="muted">ninguna</span>','<span class="muted">no llegó a una isla</span>','<span class="muted">no cargó</span>','<span class="muted">no aplica</span>',hora(x.h),`${pill('p-bad','se fue sin cargar')}<div class="sub">estuvo <b class="badc">${mmss(x.acc)}</b> en la playa sin llegar a una isla</div>`]
+   :[ll(x),`Isla ${x.isla}<div class="sub">surtidor ${x.s}${x.isla===2?' · espera medida por C3':''}</div>`,x.wait>90?`<b class="badc">${mmss(x.wait)}</b><div class="sub">más de 1:30: aviso</div>`:`<b>${mmss(x.wait)}</b>`,`${mmss(x.fill)}<div class="sub">salida ${mmss(x.out)}</div>`,`<b>${mmss(x.wait+x.fill+x.out)}</b>`,hora(x.h),pill('p-ok','cargó')]),
+  resumen:`Ayer se atendieron <b>${num(cv.cars)} autos</b> y ${nAb?`${nAb===1?'otro <b>se fue':`otros <b>${num(nAb)} se fueron`} sin cargar</b> (${pcu(nAb/ent,1)} de los ${num(ent)} que entraron)`:'ninguno se fue sin cargar'}: la regla dio ${num(r.det)} ${r.det===1?'aviso':'avisos'} y una persona confirmó ${num(r.ok)} (${cdC4_pl(r.fp,'falsa alarma','falsas alarmas')}). Tiempo total en la isla: <b>${mmss(cv.wait+cv.fill+cv.out)}</b> por auto (espera ${mmss(cv.wait)}, carga y cobro ${mmss(cv.fill)}, salida ${mmss(cv.out)}). La isla 1 (surtidores 1 y 2, cerca de la entrada) atendió ${num(c1.n)} autos observados con espera mediana de <b>${mmss(c1.med)}</b>; la isla 2, ${num(c2.n)} con ${mmss(c2.med)}. El surtidor más cargado fue el ${oc.s}: <b>${pcu(oc.v)} ocupado</b> de ${oc.h} a ${oc.h+1} h. ${fila.length?`Hubo fila en la playa ${hourRanges(fila.map(x=>x.h)).join(' y ')} (${num(P.filaMin)} minutos con autos esperando una isla en todo el día). `:''}En la hora de más autos (${pk.h} a ${pk.h+1} h) se vieron ${num(pk.vis,1)} de los ${pk.prog} playeros de la grilla.${h4&&h4[1]<1?` La C4 estuvo observable el ${pcu(h4[1])} del día: ${h4[2].charAt(0).toLowerCase()+h4[2].slice(1)}, esa hora queda sin dato.`:''}`,
+  nota:`Muestra de ${nS} autos atendidos repartidos por isla como en el día (${num(i1)} en la isla 1 y ${num(nS-i1)} en la isla 2) y a lo largo de las horas, con la hora, la isla y la espera que tienen en los datos de ayer de Playa e islas, más los ${cdC4_pl(nAb,'auto que se fue','autos que se fueron')} sin cargar (${nAb===1?'el único':'todos'} los de ayer), en las horas con más abandono: por eso en esta tabla los que se van pesan más que en el día (${pcu(nAb/ent,1)}). El número de track sigue el orden de llegada de todos los autos del día. Carga y cobro y salida, de los promedios de esa hora; playeros y fila, de la hora completa. Las horas en que la C4 no vio${no.length?` (${no.map(h=>`${h} a ${h+1} h`).join(', ')})`:''} no entran.`}}
+
+CAMDET.C4={
+ titulo:'cómo se ocupa la playa y quién se va sin cargar',
+ modulo:'playa',
+ modelo:'Corren en el equipo de la estación: YOLOv8n detecta autos y personas en cada cuadro analizado y el tracker GOTA le da a cada uno un número anónimo que dura lo que dura la visita. Cada track se ubica por su punto de apoyo (el centro del borde de abajo de la caja) en las zonas dibujadas: acceso, una por isla y la zona de tanques. Las reglas de abandono, espera y permanencia corren sobre esos recorridos. Los playeros se cuentan por el color del uniforme (votación por cuadro y mayoría por track). El controlador de surtidores aporta el inicio y el fin de cada despacho para separar la carga del cobro. Sin caras, sin patentes (las lee solo C1) y sin seguir a nadie a otra cámara.',
+ // getter: el objetivo de permanencia cita las revisiones de la regla «ocupa» (cvQ: 7 días de Seguridad, o ayer sin ese módulo)
+ get objetivos(){const r=cdC4_rule('ocupa'),q=typeof cvQ==='function'?cvQ(r):{ok:r.ok,fp:r.fp,n:r.ok+r.fp,win:'ayer'};return[
+  {q:'Cuántos autos entran a la playa y cuántos cargan',como:'Zona «acceso» a la entrada y una zona por isla. Cada track de auto suma una sola vez: entra si su punto de apoyo pisa el acceso; carga si se detiene en una isla. El total se contrasta con los despachos del controlador (quien carga dos productos suma dos despachos).',estado:'medido',conf:'alta'},
+  {q:'Qué autos entran y se van sin cargar',como:`Regla de abandono: el auto pasó por el acceso, no se quedó al menos ${cdC4_MIN_ISLA} s en ninguna isla y salió de la playa. Puede confundirse con quien entra a inflar las ruedas o a estacionar para la tienda: una persona confirma cada aviso.`,estado:'medido',conf:'media'},
+  {q:'Cómo se ocupa cada isla y cada surtidor durante el día',como:'Segundos con un auto detenido en cada zona de isla, por hora, divididos por 3.600. Se asigna el surtidor por el lado de la isla en que se detiene el auto. Una hora con reflejo o lente sucia queda NO OBSERVABLE: sin dato, nunca cero.',estado:'medido',conf:'alta'},
+  {q:'Si se arma fila en la playa',como:'Autos detenidos en el acceso esperando una isla mientras las islas están ocupadas: minutos con fila por hora y cuántos autos a la vez. Una fila de más de 15 minutos en la hora marca el pico.',estado:'medido',conf:'media'},
+  {q:'Cuánto tiempo pasa cada auto en la isla',como:'Desde que el auto se detiene en la isla hasta que la deja: espera hasta que llega el playero, carga y cobro (el controlador separa la carga) y salida. Se mide por auto anónimo, sin identificar a nadie, y se informa como promedio por hora e isla.',estado:'medido',conf:'media'},
+  {q:'Cuántos playeros hay a la vista en cada hora',como:'Personas con el uniforme de la estación dentro de la playa, promedio por hora, contra la grilla de turnos. De lejos, o tapado por un auto o el surtidor, el track de una persona se corta: por eso se informa promedio por hora y no minuto a minuto. Sin nombres: no sirve para controlar a nadie.',estado:'estimado',conf:'media'},
+  {q:'Si alguien merodea la zona de tanques',como:'Zona «tanques» sobre las bocas de descarga: una persona más de 3 min adentro da aviso. Todavía no distingue al playero que mide los tanques ni al chofer de la descarga: por eso está en prueba y cada aviso lo revisa una persona.',estado:'piloto',conf:'baja'},
+  {q:'Si un auto queda ocupando un surtidor',como:`Permanencia: un auto más de 7 min detenido en una isla (por ejemplo, el conductor lo dejó y se fue a la tienda) da aviso: es un surtidor que no atiende a nadie. Una persona confirma cada aviso: ${q.win} hubo ${num(q.fp)} ${q.fp===1?'falsa alarma':'falsas alarmas'} de ${num(q.n)} revisados.`,estado:'medido',conf:'media'}]},
+ clip:cdC4_clip,
+ ayerTitulo:'Autos de ayer en la playa, uno por uno',
+ ayer:cdC4_ayer,
+ series:()=>{const cv=D.cv,pk=cdC4_pico();return[
+  // ayer = «Autos atendidos ayer» de Playa e islas: num(D.cv.cars) → Math.round(D.cv.cars); acompaña al tránsito, estable
+  {id:'autos',n:'Autos atendidos por día',fmt:'num',mejor:'sube',...cdSerie({ayer:Math.round(cv.cars),seed:9400,motor:'autos',drift:0,ruido:.04,entero:true})},
+  // ayer = «Se fueron sin cargar» de Playa e islas: num(D.cv.ab) → Math.round(D.cv.ab); acompaña al tránsito y sube (mala). Decimal: los promedios de 7 días de pocos autos no son enteros
+  {id:'abandono',n:'Autos que se fueron sin cargar',fmt:'dec',mejor:'baja',...cdSerie({ayer:Math.round(cv.ab),seed:9401,motor:'autos',drift:.08,ruido:.05,min:0})},
+  // ayer = «Tiempo total en la isla» de Playa e islas: D.cv.wait + D.cv.fill + D.cv.out (promedio por auto); sube
+  {id:'tiempo',n:'Tiempo total en la isla: espera, carga y salida',fmt:'min',mejor:'baja',...cdSerie({ayer:cv.wait+cv.fill+cv.out,seed:9402,drift:.03,ruido:.025,min:0})},
+  // ayer = el mayor «Pico» del panel «Ocupación de cada surtidor»: Math.max de D.cv.hrs[].occ[] (surtidor y hora en cdC4_occ); sube con el tiempo total
+  {id:'ocupacion',n:'Surtidor más cargado: ocupación en su hora pico',fmt:'pct',mejor:'baja',...cdSerie({ayer:cdC4_occ().v,seed:9403,drift:.03,ruido:.03,min:0,max:.98})},
+  // ayer = «Playeros visibles» de la hora de más autos con la C4 mirando (D.playa.hrs[].vis, la fila de esa hora); estable
+  {id:'playeros',n:`Playeros a la vista en la hora de más autos (${pk.h} a ${pk.h+1} h)`,fmt:'dec',mejor:'sube',...cdSerie({ayer:pk.vis,seed:9404,drift:0,ruido:.04,min:0,max:pk.prog})}]},
+ // perfil por hora de ayer: autos atendidos por hora (D.cv.hrs[].cars, los mismos de «Tiempo en la isla por etapa»); suma D.cv.cars
+ horas:()=>({n:'Autos atendidos',u:'autos',hrs:D.cv.hrs.map(x=>[x.h,x.cars])}),
+ recos:A=>{const out=[],cv=D.cv,P=D.playa,pk=A.pk,ab=A.S.abandono,ti=A.S.tiempo,oc=A.S.ocupacion,mg=cdC4_mgL(),f7=s=>cdAvg(s.y.slice(0,7));
+  const tiSube=ti&&ti.tr.ok&&ti.tr.dir==='sube',ocSube=oc&&oc.tr.ok&&oc.tr.dir==='sube';
+  // 1 · el pico de mañana con menos playeros a la vista de los que hacen falta: que estén los de la grilla, o un refuerzo.
+  //     Plata = autos que se dejan de ir sin cargar a esa hora (D.cv.hrs[].ab ÷ cars contra el promedio ponderado de las demás horas con espera de hasta cdC4_ESPERA_OK, sin la hora NO OBSERVABLE) contra el costo de una hora de playero (HR_PLAY).
+  if(pk){const h=pk[0],ph=P.hrs.find(x=>x.h===h),cvh=cv.hrs.find(x=>x.h===h);
+   if(ph&&ph.obs&&cvh&&ph.perStaff>ATT){const falta=ph.vis<ph.prog-.4,no=cdC4_noobs(),calm=cv.hrs.filter(x=>x.h!==h&&!no.includes(x.h)&&x.cars>=5&&x.wait<=cdC4_ESPERA_OK),rc=calm.length?sum(calm.map(x=>x.ab))/sum(calm.map(x=>x.cars)):null,rp=cvh.cars?cvh.ab/cvh.cars:0,dAb=rc==null?0:pk[1]*Math.max(0,rp-rc),gan=dAb*CAR_L*mg*30,cost=HR_PLAY*30;
+    out.push({id:'playero_pico',t:falta?`Que los ${ph.prog} playeros estén en la playa de ${h} a ${h+1} h`:`Sumá un playero de refuerzo de ${h} a ${h+1} h`,
+     porque:`Mañana el pico es de ${h} a ${h+1} h, con unos <b>${num(pk[1])} autos</b> (pronóstico). Ayer a esa hora la C4 vio <b>${num(ph.vis,1)} playeros</b> de los ${ph.prog} de la grilla: ${num(ph.perStaff)} autos por playero, contra los ${ATT} que supone Personal. La espera promedio fue ${mmss(cvh.wait)}, hubo ${ph.fila} minutos de fila en la playa y el surtidor ${cvh.occ.indexOf(Math.max(...cvh.occ))+1} llegó al ${pcu(Math.max(...cvh.occ))} de ocupación.${falta?' El que falta está en la grilla pero no al lado de los autos: puede estar en la descarga o en la tienda; revisalo con el encargado antes de tocar la grilla.':''}${tiSube?` Y el tiempo total en la isla <b>sube ${pc(ti.tr.pct)} por semana</b> (${cdC4_p(ti.tr)}).`:''}`,
+     impacto:dAb>0?`A esa hora se fue sin cargar el ${pcu(rp,1)} de los autos, contra ${pcu(rc,1)} en las demás horas con espera de hasta ${mmss(cdC4_ESPERA_OK)}: ${num(pk[1],1)} autos × ${fa((rp-rc)*100,1)} puntos × ${num(CAR_L)} L × ${ars(mg,1)} de margen por litro × 30 días = <b>${ars(gan)} por mes</b>.${falta?' Sin costo extra si el playero vuelve a la playa;':''} un refuerzo de una hora cuesta ${ars(HR_PLAY)} × 30 días = ${ars(cost)} por mes (supuesto de Personal)${gan<cost&&!falta?': solo lo paga si además baja la espera de los que sí cargan':''}.`:null,
+     conf:'media',prio:'alta',medir:`C4: playeros a la vista, minutos de fila en la playa y autos que se van sin cargar de ${h} a ${h+1} h, dos semanas antes y dos después. C3: espera hasta que llega el playero en la isla 2 a esa hora.`})}}
+  // 2 · abandono en suba con un surtidor libre mientras hay fila: revisar la isla 1 (la que acumula la espera larga) y señalizar el surtidor 4.
+  //     Plata = volver al abandono de hace 4 semanas.
+  if(ab&&ab.tr.ok&&ab.tr.dir==='sube'){const l1=cdC4_largas(1),l2=cdC4_largas(2),w=l1>=l2?1:2,c=P.cells[w+':dia'],co=P.cells[(3-w)+':dia'],up=Math.max(0,ab.tr.l7-f7(ab)),libre=P.free4!=null&&P.free4>=.5;
+   out.push({id:'isla_abandono',t:`Revisá la isla ${w}: ahí se arma la espera que hace irse a los autos`,
+    porque:`Los autos que se van sin cargar <b>suben ${pc(ab.tr.pct)} por semana</b> (${cdC4_p(ab.tr)}): ${num(f7(ab),1)} por día hace 4 semanas, ${num(ab.tr.l7,1)} la última. Un auto se va cuando la isla a la que apunta está trabada: ayer la isla ${w} acumuló <b>${num(w===1?l1:l2)} de los ${num(l1+l2)} autos</b> que esperaron más de 1:30 (mediana ${mmss(c.med)} contra ${mmss(co.med)} en la isla ${3-w}).${libre?` Mientras hubo fila en la playa, el surtidor 4 estuvo libre el <b>${pcu(P.free4)}</b> del tiempo: la fila es de señalización, no de capacidad.`:''}${ocSube?` La ocupación del surtidor más cargado en su pico también sube (${cdFmtD(oc.tr.sem,'pct')} por semana).`:''}`,
+    impacto:up>0?`Volver al nivel de hace 4 semanas: ${num(up,1)} autos por día × ${num(CAR_L)} L × ${ars(mg,1)} de margen por litro × 30 días = <b>${ars(up*CAR_L*mg*30)} por mes</b>.`:null,
+    conf:'media',prio:ab.tr.p<.01?'alta':'media',medir:`C4: autos que se van sin cargar, espera por isla y uso del surtidor 4 mientras hay fila, dos semanas antes y dos después de ${libre?'señalizar el surtidor 4 y que el playero de la isla 2 llame a los autos':'reordenar la entrada a las islas'}.`})}
+  // 3 · el aviso de merodeo en la zona de tanques casi nunca se confirma: recalibrar la zona antes de que el encargado deje de mirarlo. Sin monto: no hay un dato de minutos de trabajo por aviso
+  //     (D.sec.week[].med es la mediana hasta que el aviso se resuelve, no minutos del encargado), así que impacto queda en null.
+  {const r=cdC4_rule('merodeo'),w=D.sec&&D.sec.week?D.sec.week.find(x=>x.id==='merodeo'):null,q=typeof cvQ==='function'?cvQ(r):{ok:r.ok,fp:r.fp,n:r.ok+r.fp,win:'ayer'};
+   if(q.n>=3&&q.ok/q.n<.5){
+    out.push({id:'tanques_merodeo',t:'Recalibrá la zona de tanques: el aviso de merodeo casi nunca se confirma',
+     porque:`Ayer la regla «persona más de 3 min en la zona de tanques» dio ${num(r.det)} avisos y una persona confirmó ${num(r.ok)}. ${q.win==='ayer'?'':`En 7 días: <b>${num(q.ok)} confirmados y ${num(q.fp)} falsas alarmas</b>${w?`, ${num(w.noche)} de los ${num(w.avisos)} avisos de madrugada y ${num(w.pend)} todavía sin revisar${w.med!=null?`; cada aviso de esta regla tarda ${num(w.med)} min de mediana en resolverse`:''}`:''}. `}La regla todavía no distingue al playero que mide los tanques ni al chofer de la descarga, que pasan ahí más de 3 min por trabajo. Un aviso que siempre es falso termina ignorado, y es el que importa de noche.`,
+     impacto:null,
+     conf:'alta',prio:'media',medir:'C4: avisos de merodeo y cuántos confirma una persona, dos semanas antes y dos después de excluir al personal con uniforme y los horarios de descarga del remito.'})}}
+  return out.slice(0,4)}
+};
+/* <<< cámara C4 */
+/* >>> cámara C5 */
+/* ---------- C5 · Góndolas: qué hace cada cliente frente a las góndolas ----------
+   Números de ayer: tabla GOND (pasan p, segundos s, toman t, compran c, por góndola) y D.store del módulo Tienda.
+   Clip real: media/deteccion.js (cams.C5), zonas golosinas, pasillo, bebidas y caja de vision/zonas.demo.json. */
+const cdC5_GOL='Golosinas y alfajores',cdC5_CAF='Café y panadería';
+const cdC5_SH={'Golosinas y alfajores':'Golosinas','Café y panadería':'Café','Bebidas frías':'Bebidas','Snacks salados':'Snacks','Lácteos':'Lácteos','Limpieza del auto':'Limpieza del auto','Lubricantes':'Lubricantes','Revistas y regalos':'Revistas'};
+const cdC5_n=n=>cdC5_SH[n]||n;
+const cdC5_G=n=>GOND.find(x=>x.n===n);
+const cdC5_PARADA=3;   // segundos: menos que esto en una zona no alcanza para decir que se detuvo
+// ¿un track retoma a otro que el tracker perdió? Sí, si arranca a una distancia que se camina en el hueco: distancia ≤ cdC5_VEL × segundos de hueco + cdC5_SALTO.
+// cdC5_VEL (fracción de la imagen por segundo): un poco más que lo que caminan los pies de los clientes medidos en este clip (p3 y p4: 0,06 a 0,07 por segundo).
+// cdC5_SALTO: lo que salta el punto de apoyo cuando la góndola tapa los pies y la caja de la detección cambia de alto.
+const cdC5_VEL=.08,cdC5_SALTO=.03;
+const cdC5_GYF=.9;     // supuesto de la muestra de ayer: góndolas + fila ocupan como mucho el 90 % de la permanencia puerta a puerta; el resto es caminar y pagar
+const cdC5_MAS=.1;     // escenario de la regla «mover»: cuántos clientes más de cada uno pasan frente a la góndola movida
+const cdC5_p=t=>t.p<.001?'p &lt; 0,001':'p = '+t.p.toFixed(3).replace('.',',');
+const cdC5_y=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' y '+a[a.length-1];
+
+/* pies (centro del borde de abajo, como el motor) al empezar y al terminar cada track del clip */
+function cdC5_ends(R){const e={};R.f.forEach(([t,obs])=>obs.forEach(([id,,x1,,x2,y2])=>{const a=[(x1+x2)/2,y2],o=e[id]??={t0:t,a0:a};o.t1=t;o.a1=a}));return e}
+
+/* el clip real: por track, segundos por zona, si llegó a la caja; lo que tomó no lo mide el motor todavía */
+function cdC5_clip(J,R){const zn=z=>DET_Z[z]||z,E=cdC5_ends(R),pp=J.filter(j=>j.k==='p');
+ // en orden de aparición, cada track retoma al track perdido MÁS RECIENTE que sea alcanzable caminando (y cada track se retoma una sola vez).
+ // Contra el video: p1 → p3 → p5 es el cliente que va de la heladera a la caja y p2 → p4 el del fondo, junto a las heladeras.
+ const PV={},usado=new Set(),dd=(a,b)=>Math.hypot(E[a.id].a1[0]-E[b.id].a0[0],E[a.id].a1[1]-E[b.id].a0[1]);
+ pp.forEach(j=>{if(!E[j.id])return;const c=pp.filter(a=>a!==j&&E[a.id]&&!usado.has(a.id)&&E[a.id].t1<E[j.id].t0&&dd(a,j)<=cdC5_VEL*(E[j.id].t0-E[a.id].t1)+cdC5_SALTO).sort((x,y)=>E[y.id].t1-E[x.id].t1)[0];
+  if(c){PV[j.id]=c;usado.add(c.id)}});
+ const ult=a=>{const z=a.seq[a.seq.length-1];return z?zn(z):'fuera de las zonas'};
+ const mismo=p=>j=>`Puede ser <b>${p.id}</b> retomado: terminó en ${ult(p)} ${num(j.t0-E[p.id].t1,1)} s antes, a una distancia que se camina en ese tiempo: probablemente la misma persona, que el tracker perdió y siguió con otro número.`;
+ const rows=pp.map(j=>{const zs=j.seq.filter((z,i,a)=>a.indexOf(z)===i),caja=j.zt.caja,p=PV[j.id],tot=sum(Object.values(j.zt));
+  const lect=caja?`Estuvo en la zona de caja${j.desdeInicio||j.seq[0]==='caja'?' (ya aparece ahí)':''}${j.hastaFinal?' y seguía en cuadro al terminar el clip':''}.${p?' '+mismo(p)(j):''} Si pagó lo dice el POS por franja, no este track.`
+   :p?mismo(p)(j)
+   :j.dur<cdC5_PARADA?`Track corto (${num(j.dur,1)} s): no alcanza para decir si se detuvo.`
+   :`Se detuvo ${num(tot,1)} s en ${cdC5_y(zs.map(zn))}.`;
+  return[`<b>${j.id}</b><div class="sub">${num(j.t0,1)} a ${num(j.t1,1)} s</div>`,
+   zs.length?zs.map(z=>`${zn(z)} ${num(j.zt[z]||0,1)} s`).join(' · '):'<span class="muted">fuera de las zonas</span>',
+   caja?`<b>Sí</b> · ${num(caja,1)} s en la zona`:'No, en este clip',
+   '<span class="muted">sin dato</span>',lect]});
+ const Z=(R.zonas||[]).map(z=>z.id),en=z=>pp.filter(j=>j.seq.includes(z)),vac=Z.filter(z=>!en(z).length),con=Z.filter(z=>en(z).length);
+ const durs=pp.map(j=>j.dur),golVacia=Z.includes('golosinas')&&!en('golosinas').length,nU=pp.filter(j=>PV[j.id]).length;
+ return{cols:['Track','Segundos por zona','¿Pasó por la zona de caja?','Tomó o devolvió','Qué se puede decir'],rows,
+  resumen:`${con.map(z=>{const t=en(z);return `<b>${zn(z)}</b>: ${t.length} ${t.length===1?'track':'tracks'}, ${num(sum(t.map(j=>j.zt[z]||0)),1)} s entre todos`}).join(' · ')}.${vac.length?` Sin detecciones: ${cdC5_y(vac.map(z=>zn(z)+(z==='golosinas'&&golVacia?' (punto ciego, ver nota)':'')))}.`:''}${nU?` ${nU} de los ${pp.length} tracks ${nU===1?'retoma':'retoman'} a otro que el tracker perdió: serían unas ${pp.length-nU} personas${golVacia?', más el cliente que tapa la góndola de golosinas':''}.`:''}`,
+  nota:`${golVacia?'Golosinas figura sin visitas, pero en el pasillo de la izquierda hay un cliente: la góndola lo tapa casi entero y el motor no lo detecta. Es un punto ciego, no «nadie»: se corrige subiendo la cámara o sumando una al fondo del pasillo. ':''}«Tomó o devolvió»: sin dato, el motor todavía no detecta la mano tomando un producto (pose + VLM, en piloto).${pp.length?` En este clip los tracks duran de ${num(Math.min(...durs),1)} a ${num(Math.max(...durs),1)} s: el clip es corto y las góndolas cortan tracks; en vivo llega completo el ${pcu(D.store.dwell.full)} de los recorridos.`:''}`}}
+
+/* ayer, cliente por cliente (ejemplo): muestra armada con las proporciones de ayer (GOND y D.store), determinista */
+function cdC5_ayer(){const s=D.store,dw=s.dwell,g=RNG(9510),N=13,vis=s.ppl-s.wc,hw=s.hrs.map(x=>x.ppl-x.wc),tot=sum(hw),G=cdC5_G(cdC5_GOL),gl=s.gain.find(x=>x.n===cdC5_GOL);
+ // se van sin comprar: misma proporción que ayer = entran y no compran ÷ (entran − solo al baño)
+ const nNo=Math.min(N-1,Math.max(1,Math.round(N*s.look/vis)));
+ // horarios: N puntos repartidos según el perfil por hora de ayer (una visita cada tot/N personas)
+ const C=[...Array(N)].map((_,i)=>{let u=(i+.15+.7*g.u())/N*tot,k=0;while(k<hw.length-1&&u>hw[k]){u-=hw[k];k++}const fr=Math.min(.99,Math.max(0,u/hw[k])),x=s.hrs[k];
+  return{i,h:x.h,m:Math.floor(fr*60),cum:sum(hw.slice(0,k))+fr*hw[k],cv:x.ppl?x.tk/x.ppl:1,sec:{},lleva:[],dev:[],res:'compra'}});
+ // quienes se van sin comprar caen en las horas con menos tickets por persona (como en el módulo Tienda); se alternan «devolvió todo» y «solo miró»
+ C.slice().sort((a,b)=>a.cv-b.cv||a.i-b.i).slice(0,nNo).forEach((c,k)=>{c.res=k%2?'miro':'devolvio'});
+ const pick=(arr,n,sc)=>arr.map(c=>({c,r:sc(c)+g.u()*.5})).sort((a,b)=>a.r-b.r).slice(0,Math.max(0,n)).map(x=>x.c);
+ // por góndola: pasan round(N·p), compran round(pasan·c), toman round(pasan·t); toman − compran = lo devuelven a la góndola
+ GOND.forEach(X=>{const kp=Math.min(N,Math.round(N*X.p)),kt=Math.min(kp,Math.round(kp*X.t)),kb=Math.min(kt,Math.round(kp*X.c));
+  const buy=pick(C.filter(c=>c.res==='compra'),kb,c=>c.lleva.length);buy.forEach(c=>c.lleva.push(X.n));
+  const ret=pick(C.filter(c=>c.res!=='miro'&&!buy.includes(c)),kt-kb,c=>c.res==='devolvio'?(c.dev.length?2:-10):0);ret.forEach(c=>c.dev.push(X.n));
+  const tk=buy.concat(ret),pas=tk.concat(pick(C.filter(c=>!tk.includes(c)),kp-tk.length,c=>c.res==='miro'?-.25:0));
+  // segundos frente a la góndola: quien toma y devuelve se queda más; se reescala para que el promedio sea el de GOND (X.s)
+  const raw=pas.map(c=>X.s*Math.exp(.35*g.n())*(c.dev.includes(X.n)?1.6:c.lleva.includes(X.n)?1.2:.7)),f=raw.length?X.s*raw.length/sum(raw):1;
+  pas.forEach((c,k)=>{c.sec[X.n]=Math.max(3,Math.round(raw[k]*f))})});
+ // fila de la caja: la curva de espera del módulo Tienda (tiendaQueue, minutos) a esa hora
+ const B=C.filter(c=>c.res==='compra'),gs=c=>sum(Object.values(c.sec));B.forEach(c=>{c.fila=tiendaQueue(c.h+c.m/60)*60*(.75+.5*g.u())});
+ // y acotada a la permanencia puerta a puerta del módulo Tienda: góndolas + fila con mediana ≤ cdC5_GYF × D.store.dwell.buy (un solo factor para todas las filas,
+ // así se mantiene la forma por hora) y nadie por encima de cdC5_GYF × D.store.dwell.p90. Se achica la fila, no los segundos frente a góndolas (que son los de GOND).
+ const tB=cdC5_GYF*(dw.buy||Infinity),tP=cdC5_GYF*(dw.p90||Infinity),med=k=>{const a=B.map(c=>gs(c)+k*c.fila).sort((x,y)=>x-y),m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2};
+ let kf=1;if(B.length&&med(1)>tB){let lo=0,hi=1;for(let it=0;it<30;it++){const mid=(lo+hi)/2;if(med(mid)>tB)hi=mid;else lo=mid}kf=lo}
+ B.forEach(c=>{c.fila=Math.max(0,Math.min(c.fila*kf,tP-gs(c)))});
+ let last=0;C.forEach(c=>{last=Math.max(last+1,Math.floor(c.cum)+1);c.id='p'+last});
+ const L=a=>a.length?a.map(cdC5_n).join(' · '):'<span class="muted">nada</span>',RES={compra:['p-ok','compró'],devolvio:['p-warn','devolvió todo y se fue'],miro:['p-mute','solo miró y se fue']};
+ // góndolas en el orden fijo de GOND (no es el orden en que caminó: eso lo da el recorrido del motor en producción)
+ const rows=C.map(c=>{const ord=GOND.map(X=>X.n).filter(n=>c.sec[n]!=null),tg=sum(Object.values(c.sec)),tomo=ord.filter(n=>c.lleva.includes(n)||c.dev.includes(n));
+  return[`<b>${c.id}</b><div class="sub">${c.h}:${pad(c.m)}</div>`,`${ord.map(n=>`${cdC5_n(n)} ${c.sec[n]} s`).join(' · ')}<div class="sub">${mmss(tg)} frente a góndolas</div>`,
+   L(tomo),L(c.dev),c.res==='compra'?`${c.lleva.length?L(ord.filter(n=>c.lleva.includes(n))):'<span class="muted">nada de góndola</span>'}<div class="sub">${mmss(c.fila)} en la fila</div>`:'No',pill(...RES[c.res])]});
+ const nb=C.filter(c=>c.res==='compra').length,nd=C.filter(c=>c.res==='devolvio').length,nm=N-nb-nd,gt=C.filter(c=>c.lleva.includes(cdC5_GOL)||c.dev.includes(cdC5_GOL)).length,gr=C.filter(c=>c.dev.includes(cdC5_GOL)).length;
+ return{cols:['Cliente','Góndolas · segundos frente a cada una','Tomó','Devolvió a la góndola','Llevó a la caja','Resultado'],rows,minW:900,
+  resumen:`Ayer recorrieron las góndolas unas <b>${num(vis)} personas</b>: las entradas por la puerta (${num(s.ppl)}) sin las que fueron solo al baño (unas ${num(s.wc)}). <b>Golosinas</b>: pasa el ${pcu(G.p)}, se detienen ${num(G.s)} s, toma un producto el ${pcu(G.t)} y compra el ${pcu(G.c)}: de cada 100 que toman una golosina, <b>${num(100-gl.r*100)} la devuelven</b>. Se fueron sin comprar unas <b>${num(s.look)}</b> (${pcu(s.look/s.ppl)} de las entradas).`,
+  nota:`Muestra de ${N} recorridos con esas proporciones: ${nb} compraron, ${nd} ${nd===1?'devolvió':'devolvieron'} todo y se ${nd===1?'fue':'fueron'}, ${nm} solo ${nm===1?'miró':'miraron'}; de ${gt} que tomaron golosinas, ${gr} las ${gr===1?'devolvió':'devolvieron'}. «Tomó» y «devolvió» son del modelo en piloto (pose + VLM, confianza media) y dicen la categoría de la góndola, no la marca. «Compró» es estimado: llegó a la caja y se quedó lo que dura un cobro; nunca se mira su ticket. La fila sigue la espera por hora del módulo Tienda, acotada para que góndolas más fila ocupen como mucho el ${pcu(cdC5_GYF)} de la permanencia puerta a puerta del módulo (mediana de quien compra ${mmss(dw.buy)}; p90 de todas las visitas ${mmss(dw.p90)}): el resto es caminar y pagar.`}}
+
+CAMDET.C5={
+ titulo:'qué hace cada cliente frente a las góndolas',
+ modulo:'tienda',
+ modelo:'Corren en el equipo de la estación: YOLOv8n detecta personas en cada cuadro y el tracker GOTA le da a cada una un número anónimo que suma segundos por zona (una por góndola, el pasillo y la caja). En piloto: un modelo de pose marca cuándo un brazo se estira al estante y vuelve, y un VLM mira solo el recorte de la mano para confirmar si sale con algo. Sin caras, sin marcas y sin unir a nadie con su ticket.',
+ objetivos:[
+  {q:'Cuánto tiempo pasa cada cliente frente a cada góndola',como:'Una zona dibujada por góndola. El tracker suma los segundos que los pies de cada persona quedan dentro de la zona. Si la góndola la tapa, ese tramo no se cuenta.',estado:'medido',conf:'media'},
+  {q:'Qué categoría de producto toma',como:'Pose: el brazo se estira al estante durante una parada; la categoría es la de esa góndola. El VLM confirma con el recorte de la mano. No lee marcas ni precios.',estado:'piloto',conf:'media'},
+  {q:'Si lo devuelve a la góndola o lo lleva a la caja',como:'La mano vuelve al mismo estante y sale vacía antes de dejar la zona (pose + VLM sobre cuadros muestreados). Que llegue a la caja con el producto en la mano también lo confirma el VLM.',estado:'piloto',conf:'media'},
+  {q:'Si llega a la caja',como:'El mismo track entra a la zona «caja». Si pagó no lo dice el track: lo dice el POS por franja.',estado:'medido',conf:'alta'},
+  {q:'Quién recorre y se va sin comprar',como:'Estimado: el track sale sin pasar por la caja o pasa menos de lo que dura un cobro. Nunca se une con el ticket: el total se contrasta con los tickets del POS por franja.',estado:'estimado',conf:'media'},
+  {q:'Por qué pasillos camina y en qué orden',como:'El tracker guarda la secuencia de zonas de cada track (ej. café → golosinas → caja). Si una góndola tapa a la persona, el track se corta y el recorrido queda partido.',estado:'medido',conf:'media'},
+  {q:'Qué góndolas nadie mira',como:'Suma del día: qué parte de los clientes pasa por cada zona y cuántos segundos se detiene. Poco paso y pocos segundos es espacio que no vende. Una zona con punto ciego (ej. el pasillo de golosinas tapado por la góndola) se marca «sin dato», no «nadie».',estado:'medido',conf:'media'},
+  {q:'Faltantes en la góndola',como:'Hace falta un modelo entrenado con fotos de los estantes de esta estación para ver huecos. Hoy: sin dato; el faltante se ve en Stock y en el POS.',estado:'falta'}],
+ clip:cdC5_clip,
+ ayerTitulo:'Clientes de ayer, uno por uno',
+ ayer:cdC5_ayer,
+ series:()=>{const s=D.store,G=cdC5_G(cdC5_GOL),gl=s.gain.find(x=>x.n===cdC5_GOL);return[
+  // clientes frente a las góndolas = entradas por la puerta (C2) − los que van solo al baño = D.store.ppl − D.store.wc; acompaña al tránsito, estable
+  {id:'clientes',n:'Clientes frente a las góndolas',fmt:'num',mejor:'sube',...cdSerie({ayer:s.ppl-s.wc,seed:9500,motor:'autos',drift:0,ruido:.05})},
+  // golosinas: compran ÷ toman = D.store.gain[Golosinas y alfajores].r (= GOND c ÷ t, el «Compran ÷ toman» del panel «Interés sin compra»); el hallazgo central: baja
+  {id:'conv_gol',n:'Golosinas: compran ÷ toman',fmt:'pct',mejor:'sube',...cdSerie({ayer:gl.r,seed:9501,drift:-.035,ruido:.03,min:0,max:1})},
+  // segundos que se detienen frente a golosinas = GOND[Golosinas y alfajores].s; un poco más el fin de semana, sin tendencia
+  {id:'seg_gol',n:'Golosinas: segundos frente a la góndola',fmt:'s',mejor:'sube',...cdSerie({ayer:G.s,seed:9502,drift:0,ruido:.05,dow:[1.1,1,.97,.97,.98,1,1.07]})},
+  // entran y se van sin comprar ÷ entran = D.store.look ÷ D.store.ppl; sube
+  {id:'sin_compra',n:'Entran y se van sin comprar',fmt:'pct',mejor:'baja',...cdSerie({ayer:s.look/s.ppl,seed:9503,drift:.035,ruido:.03,min:0,max:1})}]},
+ // perfil por hora de ayer: entradas − solo al baño (D.store.hrs)
+ horas:()=>({n:'Clientes frente a las góndolas',u:'clientes',hrs:D.store.hrs.map(x=>[x.h,x.ppl-x.wc])}),
+ recos:A=>{const s=D.store,G=cdC5_G(cdC5_GOL),Cf=cdC5_G(cdC5_CAF),gl=s.gain.find(x=>x.n===cdC5_GOL),cg=A.S.conv_gol,sg=A.S.seg_gol,sc=A.S.sin_compra,out=[];
+  const baja=cg&&cg.tr.ok&&cg.tr.dir==='baja',pk=A.pk,rc=Cf&&Cf.t?Cf.c/Cf.t:null;
+  // 1 · golosinas: compran ÷ toman en baja o muy por debajo del promedio de la tienda; plata en juego = D.store.gain
+  if(gl&&gl.mes>0&&(baja||gl.r<s.rbar*.7)){const tom=s.ppl*G.p*G.t,sem=baja?-cg.tr.sem:0,perd=tom*sem*gl.tkc*TIENDA_MG*30;
+   out.push({id:'golosinas',t:`Poné el precio de las golosinas a la vista y llená la góndola${pk?` antes de las ${pk[0]} h`:''}`,
+    porque:`De cada 100 que toman una golosina, compran <b>${num(gl.r*100)}</b>; en toda la tienda, ${num(s.rbar*100)}. ${baja?`Y va para abajo: <b>baja ${fa(sem*100,1)} puntos por semana</b> (${cdC5_p(cg.tr)}), ${cdFmt(cg.tr.p7,'pct')} la semana anterior y ${cdFmt(cg.tr.l7,'pct')} la última. `:''}${sg&&sg.tr.ok&&sg.tr.dir==='estable'?`Los segundos frente a la góndola siguen estables (${num(G.s)} s ayer): el interés no cae, cae la compra. `:''}Hipótesis a probar: precio que no se ve, faltantes o frente desordenado (la cámara todavía no ve faltantes).${pk?` Mañana el pico frente a las góndolas es de ${pk[0]} a ${pk[0]+1} h.`:''}`,
+    impacto:`Si golosinas convirtiera como el promedio de la tienda: ${num(gl.extra,1)} compras más por día × ${ars(gl.tkc)} de ticket de la categoría × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(gl.mes)} por mes</b>.${perd>0?` Si la baja sigue, cada semana resta otros ${ars(perd)} por mes (${num(tom)} personas toman golosinas por día × ${fa(sem*100,1)} puntos × ${ars(gl.tkc)} × ${pcu(TIENDA_MG)} × 30).`:''}`,
+    conf:'media',prio:'alta',medir:'C5: compran ÷ toman y segundos frente a golosinas, dos semanas antes y dos después. POS: tickets con golosinas por franja de 15 minutos, nunca por persona.'})}
+  // 2 · se van sin comprar cada vez más: reforzar caja y góndolas en las horas de menos compra del módulo Tienda (D.store.opp)
+  if(sc&&sc.tr.ok&&sc.tr.dir==='sube'){const f7=cdAvg(sc.y.slice(0,7)),rec=(sc.tr.l7-f7)*s.ppl,op=s.hrs.filter(x=>s.opp.includes(x.h)),pin=sum(op.map(x=>x.ppl)),ptk=sum(op.map(x=>x.tk)),hr=hourRanges(s.opp).join(' y ');
+   if(rec>0)out.push({id:'sin_compra',t:op.length?`Atendé la caja y llená las góndolas ${hr}`:'Atendé la caja y llená las góndolas en las horas flojas',
+    porque:`Los que entran y se van sin comprar <b>suben ${fa(sc.tr.sem*100,1)} puntos por semana</b> (${cdC5_p(sc.tr)}): ${cdFmt(sc.tr.p7,'pct')} de las entradas la semana anterior, ${cdFmt(sc.tr.l7,'pct')} la última. Ayer fueron unas ${num(s.look)} de ${num(s.ppl)}.${op.length&&pin?` La compra cae más ${hr}: ${num(ptk/pin*100)} tickets por cada 100 que entran, contra ${num(s.conv*100)} en el día.`:''}`,
+    impacto:`Volver al nivel de hace 4 semanas (${cdFmt(f7,'pct')}): ${num(rec,1)} compras más por día × ${ars(s.tkp)} de ticket promedio × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(rec*s.tkp*TIENDA_MG*30)} por mes</b>.`,
+    conf:'media',prio:sc.tr.p<.01?'alta':'media',medir:`C5: qué parte de los recorridos sale sin pasar por la caja, por hora, y en qué góndola dejan lo que tomaron. C2 y POS: tickets por cada 100 que entran${op.length?' '+hr:''}.`})}
+  // 3 · combo café + golosina en el pico de mañana: solo si golosinas compran ÷ toman está en baja (dato) y el café convierte por encima del promedio y golosinas por debajo.
+  // Peso de la hora pico = (entradas − solo baño) de esa hora ÷ (entradas − solo baño) del día, con el perfil por hora de ayer (D.store.hrs).
+  const xh=pk&&s.hrs.find(x=>x.h===pk[0]),sh=xh&&s.ppl-s.wc>0?(xh.ppl-xh.wc)/(s.ppl-s.wc):null;
+  if(baja&&pk&&sh>0&&rc!=null&&rc>=s.rbar&&gl&&gl.r<s.rbar&&gl.mes>0){
+   out.push({id:'combo_cafe',t:`Probá un combo café + golosina de ${pk[0]} a ${pk[0]+1} h`,
+    porque:`Mañana el pico frente a las góndolas es de ${pk[0]} a ${pk[0]+1} h, con unos <b>${num(pk[1])} clientes</b> (pronóstico). El café se compra: de cada 100 que lo toman, lo pagan ${num(rc*100)}; las golosinas, ${num(gl.r*100)}, y en baja (${cdC5_p(cg.tr)}). Pasa por café el ${pcu(Cf.p)} de los clientes: el combo pone la golosina en la mano de quien ya va a la caja.`,
+    impacto:`La hora pico pesa el ${pcu(sh)} de los clientes de un día típico (perfil por hora de ayer): ${pcu(sh)} × ${ars(gl.mes)} (lo que golosinas deja de ganar por mes) = <b>${ars(gl.mes*sh)} por mes</b> si en esa hora compran como el promedio. Es parte de los ${ars(gl.mes)} de golosinas: no se suma.`,
+    conf:'media',prio:'media',medir:`C5: de ${pk[0]} a ${pk[0]+1} h, cuántos de los que toman café pasan por golosinas y cuántos llegan a la caja con las dos. POS: tickets con café y golosina juntos en esa franja.`})}
+  // 4 · lo que interesa y casi nadie ve (poco paso, muchos segundos: la misma regla que el panel de góndolas) y lo que nadie mira
+  const hid=GOND.filter(x=>x.p<.3&&x.s>=18).sort((a,b)=>a.p-b.p),nadie=GOND.filter(x=>x.p<.1&&x.s<10);
+  if(hid.length){const it=hid.map(x=>{const c=TIENDA_CAT.find(y=>y.n===x.n),tkc=c?c.pr*c.u:0,ex=s.ppl*cdC5_MAS*x.c;return{x,tkc,ex,mes:ex*tkc*TIENDA_MG*30}}),tot=sum(it.map(i=>i.mes));
+   out.push({id:'mover',t:`Probá ${cdC5_y(hid.map(x=>x.n.toLowerCase()))} cerca de la caja dos semanas`,
+    porque:`${it.map(i=>`<b>${i.x.n}</b>: pasa solo el ${pcu(i.x.p)} de los clientes, pero quien llega mira ${num(i.x.s)} s.`).join(' ')} Interesan, pero casi nadie las ve.${nadie.length?' '+nadie.map(x=>`<b>${x.n}</b>: pasa el ${pcu(x.p)} y miran ${num(x.s)} s: es la góndola que nadie mira, y su lugar puede ser para lo que se mueve.`).join(' '):''}`,
+    impacto:`Por cada ${num(cdC5_MAS*100)} de cada 100 clientes más que pasen frente a cada una (${num(s.ppl)} entradas × ${pcu(cdC5_MAS)} × lo que compra hoy quien pasa): ${it.map(i=>`${i.x.n.toLowerCase()} +${num(i.ex,1)} compras por día × ${ars(i.tkc)}`).join(' y ')}; × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(tot)} por mes</b>.`,
+    conf:'media',prio:'media',medir:'C5: qué parte de los clientes pasa y cuántos segundos mira cada góndola movida, antes y después. POS: tickets de esas categorías por franja.'})}
+  return out.slice(0,4)}
+};
+/* <<< cámara C5 */
+/* >>> cámara C6 */
+/* C6 · Calle: cuántos autos pasan por la avenida, en qué sentido, cuántos entran (captación) y en qué horas y en qué mano se pierden.
+   C6 solo cuenta y da el sentido: no lee patentes ni estima marca o modelo (eso es C1). Números de «ayer» iguales a Calle y acceso (D.street, D.traffic). */
+// margen por litro ponderado por volumen: la misma fórmula que Calle y acceso (streetHtml, calleSentHtml)
+const cdC6_mgL=()=>sum(PRODS.map(p=>S.P.p[p.id].vol*(S.P.p[p.id].precio-S.P.p[p.id].costo)))/sum(PRODS.map(p=>S.P.p[p.id].vol));
+// mano con menos captación en 7 días: la misma elección que el stat «Captación sentido …» de Calle y acceso
+const cdC6_lo=()=>D.traffic.sent.norte.cap>D.traffic.sent.sur.cap?'sur':'norte';
+const cdC6_ayerDia=()=>D.traffic.days[D.traffic.days.length-1];
+// captación de una mano un día de D.traffic: Σ entran ÷ Σ pasan de esa mano en las 4 franjas (la misma cuenta que la tabla por sentido de Calle y acceso)
+const cdC6_capMano=(d,m)=>{const p=sum(d.fz.map(z=>z[m].pass));return p>0?sum(d.fz.map(z=>z[m].enter))/p:null};
+/* ancla los últimos 7 días de una serie (domingo a sábado, terminan ayer) a Calle y acceso: v = valores diarios del módulo para los 6 días antes de ayer
+   (D.traffic.days[0..5]); ayer queda como está. Si el módulo muestra un número de 7 días (m7, promedio por día), esos 6 días se escalan por
+   c = (7·m7 − ayer) ÷ Σv para que el promedio de los 7 sea exactamente ese número; sin m7, c = 1 (se copian tal cual). */
+function cdC6_ancla(P,v,m7,entero){const n=P.y.length,ay=P.y[n-1],c=m7==null?1:(7*m7-ay)/sum(v);v.forEach((x,i)=>P.y[n-1-v.length+i]=entero?Math.round(x*c):x*c);return P}
+const cdC6_pl=(n,a,b)=>`${num(n)} ${n===1?a:b}`;
+const cdC6_ptxt=t=>t.p<.001?'p &lt; 0,001':'p = '+t.p.toFixed(3).replace('.',',');
+// horas de ayer con mucha pasada (al menos la mediana del día) y captación 15 % por debajo del resto del día (el rojo del gráfico de Calle y acceso)
+function cdC6_flojas(){const st=D.street,ps=st.hrs.map(x=>x.pass).sort((a,b)=>a-b),med=(ps[(ps.length-1)>>1]+ps[ps.length>>1])/2;
+ return st.hrs.filter(x=>x.pass>=med&&x.cap<st.base*.85)}
+// reparto entero de n casos según pesos (mayores restos): la muestra respeta las proporciones del día
+const cdC6_quota=(w,n)=>{const t=sum(w)||1,raw=w.map(x=>x/t*n),q=raw.map(Math.floor);raw.map((x,i)=>[x-q[i],i]).sort((x,y)=>y[0]-x[0]).slice(0,n-sum(q)).forEach(([,i])=>q[i]++);return q};
+const cdC6_shuf=(g,a)=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(g.u()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+/* muestra determinista de ayer: 14 vehículos que cruzaron la línea «calle». Cuántos entran: captación del día (D.street). Hora: muestreo sistemático sobre los
+   que pasaron por hora (los que entraron, sobre los que entraron por hora). Sentido: parte norte/sur de esa franja ayer (D.traffic.days[6].fz).
+   Tipo: solo para los que entraron, con el reparto de los que entraron ayer (D.traffic.days[6].mix, C1); a los que pasan de largo C6 todavía no les da tipo (en piloto). Surtidores: espera + carga y cobro + salida de esa hora (D.cv). Ejemplo, no recorridos reales. */
+function cdC6_rows(){const N=14,g=RNG(9650),st=D.street,d=cdC6_ayerDia(),fr=h=>CALLE_F.findIndex(f=>h>=f.h[0]&&h<f.h[1]);
+ const nIn=Math.round(N*st.enter/st.pass),nPa=N-nIn;
+ const pick=(k,n)=>{const tot=sum(st.hrs.map(x=>x[k]));let c=0;const cum=st.hrs.map(x=>[x.h,c+=x[k]]);
+  return[...Array(n)].map((_,i)=>{const h=(cum.find(x=>x[1]>=(i+.5)/n*tot)||cum[cum.length-1])[0];return h*60+Math.floor(g.u()*60)})};
+ const R=[...pick('pass',nPa).map(t=>({t,ent:false})),...pick('enter',nIn).map(t=>({t,ent:true}))].sort((a,b)=>a.t-b.t);
+ R.forEach((r,i)=>{if(i&&r.t<=R[i-1].t)r.t=R[i-1].t+1});
+ // sentido de los que pasan: tantos al norte como la parte norte del día; se eligen con la parte norte de su franja como peso
+ const shN=r=>{const z=d.fz[fr(Math.floor(r.t/60))];return r.ent?z.norte.enter/z.enter:z.norte.pass/z.pass};
+ const pa=R.filter(r=>!r.ent),nN=Math.round(pa.length*sum(d.fz.map(z=>z.norte.pass))/sum(d.fz.map(z=>z.pass)));
+ pa.map(r=>[shN(r)+.6*(g.u()-.5),r]).sort((x,y)=>y[0]-x[0]).forEach(([,r],i)=>r.s=i<nN?'norte':'sur');
+ R.filter(r=>r.ent).forEach(r=>r.s=g.u()<shN(r)?'norte':'sur');
+ const tps=cdC6_shuf(g,cdC6_quota(CALLE_T.map(t=>d.mix[t.id]),nIn).flatMap((k,i)=>Array(k).fill(CALLE_T[i])));let ki=0;
+ return R.map((r,i)=>{const h=Math.floor(r.t/60),sh=st.hrs.find(x=>x.h===h),cvh=D.cv.hrs.find(x=>x.h===h);
+  const nro=Math.round(sum(st.hrs.filter(x=>x.h<h).map(x=>x.pass))+sh.pass*(r.t%60)/60)+1;
+  return{...r,h,sh,nro,tp:r.ent?tps[ki++]:null,surt:r.ent&&cvh?(cvh.wait+cvh.fill+cvh.out)*(.85+.3*g.u()):null}})}
+function cdC6_ayer(){const st=D.street,d=cdC6_ayerDia(),rows=cdC6_rows(),bad=new Set(cdC6_flojas().map(x=>x.h)),pN=sum(d.fz.map(z=>z.norte.pass))/sum(d.fz.map(z=>z.pass));
+ const S6=Object.fromEntries(CALLE_S.map(s=>[s.id,s])),nIn=rows.filter(r=>r.ent).length;
+ const que=r=>r.ent?`<b>Entró a la estación</b>${r.surt!=null?`; ${mmss(r.surt)} en los surtidores`:''}`:`Pasó de largo${bad.has(r.h)?` <span class="badc">· hora de baja captación</span>`:''}`;
+ return{cols:['Vehículo','Cruzó la calle','Sentido','Tipo (al entrar, C1)','Qué hizo','Esa hora en la calle'],
+  rows:rows.map(r=>[`<b>v${r.nro}</b>`,`${pad(r.h)}:${pad(r.t%60)}`,`${S6[r.s].n}<div class="sub">${S6[r.s].sub}</div>`,!r.tp?'<span class="muted">sin dato · en piloto</span>':r.tp.id==='sc'?'<span class="muted">sin clasificar</span>':`${r.tp.n} <span class="muted">· C1</span>`,que(r),
+   `pasaron ${num(r.sh.pass)} · entraron ${num(r.sh.enter)}<div class="sub ${r.sh.cap<st.base*.85?'badc':''}">captación ${pcu(r.sh.cap,1)}</div>`]),
+  resumen:`Ayer pasaron <b>${num(st.pass)} autos</b> por la calle de 6 a 24 h y entraron <b>${num(st.enter)} (${pcu(st.enter/st.pass,1)})</b>: ${pcu(pN)} de los que pasaron iban en sentido norte y ${pcu(1-pN)} en sentido sur. <b>De 17 a 20 h entró el ${pcu(st.pkCap,1)}</b>, contra ${pcu(st.base,1)} el resto del día: unos ${num(st.lost)} autos siguieron de largo por eso (Calle y acceso). En la muestra, ${cdC6_pl(nIn,'auto entró','autos entraron')} de ${rows.length}, como en el día.`,
+  nota:`El sentido sale del lado por el que el vehículo cruza la línea «calle»; qué lado de la imagen es norte se fija al instalar. Tipo: solo de los que entran, como lo clasifica C1 (en esta muestra, con el reparto de los que entraron ayer); a los que pasan de largo C6 todavía no les da tipo: está en piloto, por eso «sin dato». La parte norte y sur sale del reparto por franja de ayer de Calle y acceso. C6 no lee patentes ni estima marca o modelo. Surtidores: espera, carga y cobro de esa hora (Playa e islas).`,minW:860}}
+
+CAMDET.C6={
+ titulo:'cuántos pasan, cuántos entran y cuándo se pierden',
+ modulo:'calle',
+ modelo:`YOLOv8n detecta los vehículos y el tracker GOTA les da un número anónimo que dura lo que el vehículo está en cuadro. Tres líneas cuentan cruces con sentido: «calle», vertical sobre la avenida (hacia la derecha o hacia la izquierda de la imagen), e «ingreso_izq» e «ingreso_der», sobre los dos accesos (entra o sale de la estación). La zona «surtidores» suma segundos del punto de apoyo del vehículo. Confianza media del detector de vehículos: ${num(MOTOR_CONF.C6.c.vehicle,2)} de día y ${num(MOTOR_CONF.C6.c.vehicle*MOTOR_CONF.C6.k,2)} de 22 a 6 h, por falta de luz. C6 no lee patentes ni estima marca, modelo ni antigüedad: eso corre solo en C1.`,
+ objetivos:[
+  {q:'Cuántos autos pasan por la calle, hora por hora',como:'Línea «calle», vertical, dibujada sobre la avenida: cada track de vehículo que la cruza suma uno, una sola vez. Se cuenta por hora y por día. De noche C6 ve el '+pcu(CALLE_COV.noc)+' de lo que pasa: se informa, no se completa.',estado:'medido',conf:'alta de día'},
+  {q:'En qué sentido pasan: norte o sur',como:'El lado por el que el vehículo cruza «calle» (hacia la derecha o hacia la izquierda de la imagen) da la mano. Al instalar se fija qué lado es norte.',estado:'medido',conf:'alta'},
+  {q:'Cuántos de los que pasan entran (captación)',como:'Líneas «ingreso_izq» e «ingreso_der» sobre los dos accesos: cruzarlas hacia adentro es entrar. Captación = entran ÷ pasan, por hora, por franja y por mano. C1 confirma la entrada y clasifica el vehículo.',estado:'medido',conf:'alta'},
+  {q:'En qué horas y en qué mano se pierde captación',como:'Compara la captación de cada hora y franja contra el resto del día y la de cada mano contra la otra; marca las que captan 15 % menos. La espera en las islas (C3 y C4) se muestra al lado como posible causa: la cámara no sabe por qué no entró.',estado:'medido',conf:'alta'},
+  {q:'Qué tipo de vehículos pasan',como:'Clase del detector al cruzar «calle»: auto, camioneta, camión, moto o colectivo; «sin clasificar» se informa aparte. El reparto se valida a mano en el piloto (200 cruces) antes de publicarlo; hoy Calle y acceso muestra el de los que entran (C1).',estado:'piloto',conf:'media'},
+  {q:'Cuánto tiempo están en los surtidores los que entran',como:'Zona «surtidores»: suma los segundos del punto de apoyo del vehículo (centro del borde de abajo) dentro de la zona. Desde la calle se ve de lejos: el detalle por isla lo dan C3 y C4.',estado:'medido',conf:'media'},
+  {q:'Si la cámara se corrió y está contando de menos',como:'El motor compara el fondo con la imagen de referencia de la instalación; si se corre más del '+pcu(MOTOR_MOV)+' del ancho de la imagen, avisa para redibujar las líneas (Motor de visión).',estado:'estimado',conf:'media'}],
+ clip:(J,R)=>{const pos={},L=R.res&&R.res.lineas||{},lado={entra:'hacia la derecha',sale:'hacia la izquierda'},ing={ingreso_izq:'el ingreso izquierdo',ingreso_der:'el ingreso derecho'},zS=R.res&&R.res.zonas&&R.res.zonas.surtidores;
+  R.f.forEach(([,obs])=>obs.forEach(([id,,x1,,x2,y2])=>{const a=[(x1+x2)/2,y2];(pos[id]??={a0:a}).a1=a}));
+  const k={der:0,izq:0,in:0,out:0,surt:0,corte:0,quieto:0,otro:0},seg=[];
+  const rows=J.map(j=>{const cal=j.cr.filter(c=>c.l==='calle'),ig=j.cr.filter(c=>ing[c.l]),e=ig.find(c=>c.sentido==='entra'),s=ig.find(c=>c.sentido==='sale'),p=pos[j.id];
+   const dx=p?p.a1[0]-p.a0[0]:0,mv=p?Math.hypot(dx,p.a1[1]-p.a0[1]):0,su=j.zt.surtidores||0,dir=dx>0?'hacia la derecha':'hacia la izquierda';
+   let q;
+   if(e){q=`<b>Entró a la estación</b> por ${ing[e.l]} a los ${num(e.t,1)} s`;k.in++}
+   else if(s){q=`<b>Salió de la estación</b> por ${ing[s.l]} a los ${num(s.t,1)} s`;k.out++}
+   else if(cal.length){const c=cal[0];q=`<b>Pasó por la calle ${lado[c.sentido]||c.sentido}</b>, sin entrar`;c.sentido==='entra'?k.der++:k.izq++}
+   else if(su){q=`<b>En los surtidores</b>${j.desdeInicio?': ya estaba al empezar el clip, por eso no cruzó un ingreso':''}${j.hastaFinal?'; seguía al terminar':'; después salió del cuadro'}`;k.surt++;seg.push(su)}
+   else if(mv<.03){q='Quieto mientras se lo vio, sin cruzar ninguna línea ni entrar a los surtidores';k.quieto++}
+   else if(j.desdeInicio){q=`Venía de antes del clip y siguió ${dir} sin cruzar «calle» dentro del clip: no se cuenta`;k.corte++}
+   else if(j.hastaFinal){q=`Seguía en cuadro al terminar el clip, sin haber cruzado «calle»: no se cuenta todavía`;k.corte++}
+   else{q='Se movió sin cruzar ninguna línea';k.otro++}
+   const crs=j.cr.map(c=>c.l==='calle'?`«calle» ${lado[c.sentido]||c.sentido} a los ${num(c.t,1)} s`:`«${c.l}» ${c.sentido==='entra'?'hacia adentro':'hacia afuera'} a los ${num(c.t,1)} s`);
+   return[`<b>${j.id}</b>`,`${num(j.t0,1)} a ${num(j.t1,1)} s`,q,crs.length?crs.join('<br>'):'<span class="muted">ninguna</span>',
+    su?`<b>${num(su)} s</b>${j.hastaFinal?'<div class="sub">seguía al terminar el clip</div>':''}`:'<span class="muted">no estuvo</span>','<span class="muted">sin dato</span>']});
+  const pas=k.der+k.izq,parts=[pas?`<b>${cdC6_pl(pas,'vehículo pasó','vehículos pasaron')} por la calle</b> (${num(k.der)} hacia la derecha y ${num(k.izq)} hacia la izquierda de la imagen)`:'nadie pasó por la calle',
+   k.in?`<b>${cdC6_pl(k.in,'entró','entraron')}</b> a la estación`:'nadie cruzó los ingresos hacia adentro',k.out?`${cdC6_pl(k.out,'salió','salieron')}`:'',
+   k.surt?`${cdC6_pl(k.surt,'ya estaba','ya estaban')} en los surtidores (${zS&&zS.permanencia_media_s!=null?`${num(zS.permanencia_media_s)} s de permanencia media según el motor`:seg.map(x=>num(x)+' s').join(', ')})`:'',k.corte?`${cdC6_pl(k.corte,'quedó cortado','quedaron cortados')} por el clip sin cruzar`:'',k.quieto?`${cdC6_pl(k.quieto,'quedó quieto','quedaron quietos')}`:''].filter(Boolean);
+  const Cl=L.calle,ins=['ingreso_izq','ingreso_der'].filter(x=>L[x]),inE=sum(ins.map(x=>L[x].entra)),inS=sum(ins.map(x=>L[x].sale));
+  const igual=Cl&&Cl.entra===k.der&&Cl.sale===k.izq&&inE===k.in&&inS===k.out;
+  const cnt=Cl?` ${igual?'El contador del motor da lo mismo':'El contador del motor da'}: «calle» ${num(Cl.entra)} hacia la derecha y ${num(Cl.sale)} hacia la izquierda; ingresos ${num(inE)} hacia adentro y ${num(inS)} hacia afuera.`:'';
+  return{cols:['Track','En cuadro','Qué hizo','Líneas que cruzó','Surtidores','Tipo'],rows,
+   resumen:`${parts.slice(0,-1).join(', ')}${parts.length>1?' y ':''}${parts[parts.length-1]}.${cnt} Con ${cdC6_pl(pas,'auto','autos')} en ${num(R.res.hasta-R.res.desde,0)} s no se calcula captación: la de ayer, con el día entero, fue ${pcu(D.street.enter/D.street.pass,1)} (Calle y acceso).`,
+   nota:'Qué lado de la imagen es norte se fija al instalar: en el clip el sentido va como derecha o izquierda. Tipo: sin dato, porque el detector de la demo exportó solo «vehículo». Un track cortado por el principio o el final del clip no se cuenta si no llegó a cruzar la línea: el motor cuenta cruces, no recorridos a medias.'}},
+ ayerTitulo:'Autos que cruzaron la calle ayer, uno por uno',
+ ayer:cdC6_ayer,
+ series:()=>{const st=D.street,T=D.traffic,lo=cdC6_lo(),d6=cdC6_ayerDia(),dd=T.days.slice(0,-1),capS=d=>cdC6_capMano(d,lo);return[
+  // ayer = «Pasaron por la calle» del panel «Calle: autos que pasan y autos que entran» (D.street.pass, de 6 a 24 h); sigue la forma de la semana de los litros.
+  // Últimos 7 días con la forma de D.traffic.days, llevada al nivel de D.street: × D.street.pass ÷ D.traffic.days[6].pass. La suma de la semana no da el stat
+  // «Pasaron por la calle, últimos 7 días» (D.traffic.pass) porque buildTraffic escala ayer con los litros del día entero y D.street no: forzarla plantaría una suba falsa
+  {id:'pasan',n:'Autos que pasan por la calle por día',fmt:'num',mejor:'sube',...cdC6_ancla(cdSerie({ayer:st.pass,seed:9600,motor:'autos',ruido:.03,entero:true}),dd.map(d=>d.pass*st.pass/d6.pass),null,true)},
+  // ayer = D.street.enter ÷ D.street.pass, el «(x %)» junto a «Entraron» en el mismo panel. Baja 2 % por semana: el hallazgo de esta cámara.
+  // Últimos 7 días: entran ÷ pasan de cada día de D.traffic.days, con promedio = stat «Entraron: x % de los que pasan» (D.traffic.enter ÷ D.traffic.pass)
+  {id:'captacion',n:'Captación: entran ÷ pasan',fmt:'pct',mejor:'sube',...cdC6_ancla(cdSerie({ayer:st.enter/st.pass,seed:9601,drift:-.02,ruido:.02,min:0,max:1}),dd.map(d=>d.enter/d.pass),T.enter/T.pass)},
+  // ayer = captación de la mano floja el día de ayer: Σ entran ÷ Σ pasan de esa mano en las franjas de D.traffic.days[6] (la tabla «Captación por sentido…» la suma de 7 días).
+  // Serie diaria; últimos 7 días = la de cada día de D.traffic.days, con promedio = stat «Captación sentido …» (D.traffic.sent[mano].cap)
+  {id:'capFloja',n:`Captación del sentido ${lo} por día`,fmt:'pct',mejor:'sube',...cdC6_ancla(cdSerie({ayer:capS(d6),seed:9602,drift:-.03,ruido:.025,min:0,max:1}),dd.map(capS),T.sent[lo].cap)},
+  // ayer = «De 17 a 20 h entra el x %» de Calle y acceso (D.street.pkCap): la caída de la tarde es estructural (fila en las islas), no empeora
+  {id:'capTarde',n:'Captación de 17 a 20 h',fmt:'pct',mejor:'sube',...cdSerie({ayer:st.pkCap,seed:9607,ruido:.03,min:0,max:1})},
+  // ayer = stat «Camionetas y utilitarios» de Calle y acceso con el día de ayer (callePick(D.traffic.days[6])): camionetas, utilitarios, camiones y colectivos entre los que entran.
+  // Forma de la semana = la de D.traffic.days; los últimos 7 días son exactamente los del gráfico por día de «Qué vehículos entraron» (calleMixHtml)
+  {id:'pick',n:'Camionetas y utilitarios, de los que entran',fmt:'pct',mejor:'sube',...cdC6_ancla(cdSerie({ayer:callePick(d6),seed:9605,dow:[0,1,2,3,4,5,6].map(k=>callePick(T.days.find(x=>x.dow===k)||d6)),ruido:.03,min:0,max:1}),dd.map(callePick))}]},
+ // perfil por hora de ayer de los autos que pasan (D.street.hrs, el mismo del gráfico de Calle y acceso)
+ horas:()=>({n:'Autos que pasan por hora',u:'autos',hrs:D.street.hrs.map(x=>[x.h,x.pass])}),
+ recos:A=>{const out=[],st=D.street,T=D.traffic,lo=cdC6_lo(),hi=lo==='sur'?'norte':'sur',Sl=CALLE_S.find(s=>s.id===lo),Lc=T.sent[lo],Hc=T.sent[hi],mgL=cdC6_mgL();
+  // 1. la mano floja capta 15 % menos que la otra (o va en baja) → cartel de precios visible antes para esa mano (la misma propuesta de Calle y acceso)
+  const F=A.S.capFloja,worst=T.franjas.filter(f=>f[lo].cap!=null).sort((a,b)=>a[lo].cap-b[lo].cap)[0];
+  if(Lc.cap!=null&&Hc.cap!=null&&(Lc.cap<Hc.cap*.85||(F&&F.tr.dir==='baja'))){const pd=Lc.pass/7,u1=pd*.01,top=Lc.pass*Math.max(0,Hc.cap-Lc.cap)/7;
+   out.push({id:'cartel',t:`Hacé visible el cartel de precios para el sentido ${lo}`,
+    porque:`En los últimos 7 días entró el <b>${pcu(Lc.cap,1)}</b> de los autos que pasan en sentido ${lo} (${Sl.sub}), contra ${pcu(Hc.cap,1)} en sentido ${hi}. La franja más floja de esa mano es ${worst.a} ${worst.n.toLowerCase()} (${worst.sub}), con ${pcu(worst[lo].cap,1)}.${F&&F.tr.ok&&F.tr.dir==='baja'?` Y viene cayendo: <b>${fa(Math.abs(F.tr.sem)*100,1)} puntos por semana</b> (${cdC6_ptxt(F.tr)}).`:''} Lo que se prueba: que desde esa mano el cartel de precios y el ingreso se vean antes (poda, luz, una señal 100 m antes), como propone Calle y acceso.`,
+    impacto:`Cada punto de captación que gane esa mano son <b>${num(u1)} autos más por día</b> (${num(pd)} pasan por día × 1 %): ${lit(u1*CAR_L)} por día y <b>${ars(u1*CAR_L*mgL*30)} de margen por mes</b> (× ${CAR_L} L por carga × ${ars(mgL,1)} por litro × 30 días). El techo, si captara como el sentido ${hi}: unos ${num(top)} autos por día.`,
+    conf:'media',prio:F&&F.tr.dir==='baja'?'alta':'media',
+    medir:`C6 mide la captación del sentido ${lo} por franja: se comparan las 2 semanas con el cartel contra las 2 anteriores, en la tabla «Captación por sentido de circulación y franja» de Calle y acceso.`})}
+  // 2. horas con mucha pasada y poca captación (D.street.hrs) → promo visible desde la calle en esas horas, cuidando la espera en la isla
+  const fl=cdC6_flojas();
+  if(fl.length){const hs=fl.map(x=>x.h),rg=hourRanges(hs).join(' y '),pa=sum(fl.map(x=>x.pass)),en=sum(fl.map(x=>x.enter)),lost=sum(fl.map(x=>x.pass*Math.max(0,st.base-x.cap)));
+   const cvh=D.cv.hrs.filter(x=>hs.includes(x.h)),wmax=cvh.length?Math.max(...cvh.map(x=>x.wait)):null,pk=A.pk&&hs.includes(A.pk[0]);
+   out.push({id:'promo',t:`Probá una promo visible desde la calle ${rg}`,
+    porque:`Ayer ${rg} pasaron <b>${num(pa)} autos</b> (${pcu(pa/st.pass)} del día) y entró solo el <b>${pcu(en/pa,1)}</b>, contra ${pcu(st.base,1)} fuera de 17 a 20 h (Calle y acceso).${pk?` Mañana el pico de autos que pasan también cae ahí: de ${A.pk[0]} a ${A.pk[0]+1} h, unos ${num(A.pk[1])}.`:''}${wmax!=null?` En esas horas la espera hasta ser atendido llegó a ${num(wmax)} s (C3 y C4): si la promo trae más autos, que haya un playero más (<a href="#personal">Personal</a>).`:''}`,
+    impacto:lost>=1?`Si esas horas captaran como fuera de 17 a 20 h serían <b>${num(lost)} autos más por día</b> (${num(pa)} × la diferencia de captación de cada hora): ${lit(lost*CAR_L)} por día y <b>${ars(lost*CAR_L*mgL*30)} de margen por mes</b> (× ${CAR_L} L × ${ars(mgL,1)} por litro × 30 días), antes del costo de la promo.`:null,
+    conf:'media',prio:'media',
+    medir:`C6 cuenta los que pasan y los que entran ${rg}: la captación de esa franja tiene que acercarse al ${pcu(st.base,1)} que se capta fuera de 17 a 20 h, sin que la espera en la isla pase de 90 s.`})}
+  // 3. la captación del día cae (Mann-Kendall) → mirar precios de la competencia (Precios), antes de descartar que sea la cámara
+  const C=A.S.captacion,M=D.motor&&D.motor.cams.find(x=>x.id==='C6');
+  if(C&&C.tr.ok&&C.tr.dir==='baja'){const ms=PRODS.map(p=>({p,m:priceModel(p.id,'dia')})),caro=ms.filter(x=>x.m.p0>x.m.ref+.5),baja=COMP.filter(c=>c.chg&&c.chg.d<0),sube=COMP.filter(c=>c.chg&&c.chg.d>0),porPrecio=caro.length||baja.length,menos=Math.abs(C.tr.sem)*st.pass;
+   // solo las bajas de la competencia pueden llevarse autos; una suba se informa como lo que es: no explica la caída
+   const cTxt=c=>`${c.name} (a ${num(c.dist,1)} km) ${c.chg.d>0?'subió':'bajó'} ${ars(Math.abs(c.chg.d))} la ${PR[c.chg.pid].short.toLowerCase()} hace ${fDur(c.upd)}`;
+   const pre=caro.length?`Hoy estás por encima del promedio de la zona (ponderado por distancia) en ${caro.map(x=>`${x.p.short} (${arsS(x.m.p0-x.m.ref)})`).join(', ')}.`:`Hoy tus ${num(PRODS.length)} precios están en o por debajo del promedio de la zona (ponderado por distancia): la causa no parece ser el precio.`;
+   const comp=`${baja.length?` ${baja.map(cTxt).join('; ')}: eso sí puede llevarse autos.`:''}${sube.length?` ${sube.map(cTxt).join('; ')}: eso no explica la caída.`:''}`;
+   out.push({id:'precios',t:porPrecio?'Mirá los precios de la competencia: la captación viene cayendo':'La captación viene cayendo: descartá el precio y la cámara antes de actuar',
+    porque:`La captación del día cae <b>${fa(Math.abs(C.tr.sem)*100,1)} puntos por semana</b> (${cdC6_ptxt(C.tr)}): los últimos 7 días promedió ${pcu(C.tr.l7,1)} contra ${pcu(C.tr.p7,1)} la semana anterior. ${pre}${comp} Ver <a href="#precios">Precios</a>.${M&&M.moved?' Antes de decidir, descartá que sea la cámara: ver «Redibujá las líneas de C6».':''}`,
+    impacto:menos>=1?`Cada semana que sigue así son unos <b>${num(menos)} autos menos por día</b> (${num(st.pass)} pasan × ${fa(Math.abs(C.tr.sem)*100,2)} puntos): ${lit(menos*CAR_L)} por día y <b>${ars(menos*CAR_L*mgL*30)} de margen por mes</b> (× ${CAR_L} L × ${ars(mgL,1)} por litro × 30 días).`:null,
+    conf:'media',prio:'alta',
+    medir:porPrecio?'C6 sigue la captación diaria por sentido: si se ajusta un precio, se comparan las 2 semanas siguientes con las 2 anteriores y la tendencia tiene que dejar de bajar.':'C6 sigue la captación diaria por sentido: con las líneas redibujadas, se comparan las 2 semanas siguientes con las 2 anteriores; si la tendencia sigue bajando con la cámara en su lugar, la causa está fuera del precio y de la cámara.'})}
+  // 4. el motor estima que C6 se corrió (D.motor) → redibujar líneas y verificar una hora a mano antes de usar los números de esos días
+  if(M&&M.moved){out.push({id:'recalibrar',t:'Redibujá las líneas de C6: la cámara se corrió',
+    porque:`El Motor de visión estima que la C6 se corrió <b>${pcu(M.mov,1)}</b> respecto de su imagen de referencia desde el ${fWhen(M.since)} (avisa arriba de ${pcu(MOTOR_MOV)}; confianza ${num(M.conf,2)}). Si la línea «calle» o los ingresos quedan fuera del carril, cuentan de menos y la captación de esos días no es confiable. Ver <a href="#motor">Motor de visión</a>.`,
+    impacto:null,conf:M.conf>=.85?'alta':'media',prio:'alta',
+    medir:`Después de redibujar, una hora contada a mano contra el contador de «calle» y de los ingresos: la diferencia tiene que quedar por debajo del ${pcu(MOTOR_DRIFT)}.`})}
+  const rk={alta:0,media:1,baja:2};return out.sort((x,y)=>rk[x.prio]-rk[y.prio])}
+};
+/* <<< cámara C6 */
+/* <<< módulo camdet */
+
 /* ---------- Modo presentación ---------- */
 const TOUR=[
  {v:'inicio',t:'El parte del día',d:'Alertas ordenadas por importancia y el impacto mensual con su cuenta (tocá cada línea). Abajo, el parte que le llega al dueño por WhatsApp.'},
@@ -2348,7 +3417,7 @@ const ACT={
  sampleDoc:()=>runSample(),
  seg:el=>{S.seg=el.dataset.s;render()},
  camp:el=>{const sg=D.segs.find(s=>s.id===el.dataset.s);if(!sg)return;S.appr['camp:'+sg.id]=1;log(`Piloto de 4 semanas programado: ${sg.n}`);render();toast('Piloto programado (simulado).')},
- ev:el=>{S.ev=el.dataset.id;render()},
+ ev:el=>{S.ev=el.dataset.id;const e=D.ev.find(x=>x.id===S.ev);if(e)S.cam=camOf(e);render()},
  evSet:el=>{const e=D.ev.find(x=>x.id===el.dataset.id);if(!e)return;S.appr['ev:'+e.id]=el.dataset.st;log(`${e.type}${e.plate?' '+e.plate:''}: ${el.dataset.st==='ok'?'atendido':'falsa alarma'}`);render();toast(el.dataset.st==='ok'?'Listo: queda registrado quién lo atendió y cuándo.':'Descartado: las falsas alarmas sirven para ajustar el modelo.')},
  hose:el=>{S.hose=el.dataset.h;render()},
  wo:el=>{const h=el.dataset.h;S.appr['mt:'+h]=1;S.wo.unshift({t:h==='agua'?'Revisar boca de descarga y juntas del tanque T3':h==='3B'?'Cambiar el filtro de la manguera 3B (Diésel)':`Revisar pulsador y válvula de la manguera ${h}`,s:'Nueva',when:addD(TODAY,1)});log(`Orden de trabajo creada: ${S.wo[0].t}`);render();toast('Orden de trabajo creada.')},
@@ -2374,12 +3443,13 @@ const ACT={
  convTrain:el=>{const x=CONV[+el.dataset.i];if(!x)return;S.appr['cv:'+el.dataset.i]=1;log(`Práctica «Ofrecer la tienda» asignada a ${x.n}`);render();toast(`Práctica asignada a ${x.n}: escenario de la tienda en Capacitación.`)},
  cvRule:el=>{const id=el.dataset.id,r=D.cv.rules.find(x=>x.id===id);if(!r)return;S.cvOff[id]=!S.cvOff[id];log(`Regla «${r.n}»: ${S.cvOff[id]?'pausada':'activada'}`);render()},
  detMode:()=>{S.det=!S.det;render()},
- camSel:el=>{const id=el.dataset.cam,e=D.ev.filter(x=>camOf(x)===id).sort((a,b)=>b.at-a.at)[0];if(e){S.ev=e.id;render()}}};
+ camSel:el=>{const id=el.dataset.cam,e=D.ev.filter(x=>camOf(x)===id).sort((a,b)=>b.at-a.at)[0];S.cam=id;if(e)S.ev=e.id;render()}};
 Object.assign(ACT,ACT_CALLE);
 Object.assign(ACT,ACT_SEGURIDAD);
 Object.assign(ACT,ACT_PLAYA);
 Object.assign(ACT,ACT_TIENDA);
 Object.assign(ACT,ACT_MOTOR);
+Object.assign(ACT,ACT_CAMDET);
 const IN={pay:el=>{const k=el.dataset.k,[mn,mx]=PAY_LIM[k],v=Number(el.value);if(el.value===''||!Number.isFinite(v)||v<mn||v>mx){el.setAttribute('aria-invalid','true');return}el.removeAttribute('aria-invalid');S.pay[k]=v;const o=$('payOut');if(o)o.innerHTML=payOut()},
  promo:el=>{const k=el.dataset.k,[mn,mx]=PROMO_LIM[k],v=Number(el.value);if(el.value===''||!Number.isFinite(v)||v<mn||v>mx){el.setAttribute('aria-invalid','true');return}el.removeAttribute('aria-invalid');S.promo[k]=k==='dow'?Math.round(v):v;const o=$('promoOut');if(o)o.innerHTML=promoOut(S.prod)},
  tryPrice:el=>{const pid=el.dataset.p,p=Number(el.value);S.tryP={pid,p};const o=$('tryOut');if(o)o.innerHTML=tryOut(priceModel(pid,S.franja),p)}};
@@ -2404,7 +3474,7 @@ window.addEventListener('hashchange',route);
 try{if(localStorage.getItem('gota-bar')==='1')$('demoBar').hidden=true}catch(e){}
 applyTheme();rebuild();route();
 /* acceso para las pruebas automáticas (tests/smoke.mjs) */
-window.GOTA=window.PISTA={buildMotor,storeCatRows,buildStore,buildSec,playaQ,buildPlaya,callePick,buildTraffic,S,promoCalc,payCalc,staffDay,staffWeek,postedRows,complDue,doAsk,ASKQ,TOUR,get D(){return D},priceModel,planOrder,project,fcDay,buildWet,shiftCalc,alerts,impact,SCN,detect,startChat,render};
+window.GOTA=window.PISTA={CAMDET,cdAnalyze,cdJourneys,cdTrend,cdHW,cdCambio,cdSerie,cdMK,cdSen,buildMotor,storeCatRows,buildStore,buildSec,playaQ,buildPlaya,callePick,buildTraffic,S,promoCalc,payCalc,staffDay,staffWeek,postedRows,complDue,doAsk,ASKQ,TOUR,get D(){return D},priceModel,planOrder,project,fcDay,buildWet,shiftCalc,alerts,impact,SCN,detect,startChat,render};
 </script>
 </body>
 </html>
