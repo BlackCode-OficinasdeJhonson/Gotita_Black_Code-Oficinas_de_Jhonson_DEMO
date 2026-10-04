@@ -22,7 +22,7 @@
   --accent:#FFC72C; --accent-ink:#8A5D00; --accent-soft:#FFF3CC; --on-accent:#1E1E1E;
   --red:#E3261B; --red-ink:#B71C13; --on-red:#FFFFFF;
   --side:#FFFFFF; --side-fg:#2A2A2A; --side-muted:#7A7A76; --side-hover:#FFF6D6; --side-active:#FFC72C; --side-line:#ECEAE4;
-  --ok:#2E8753; --ok-soft:#DCEFE3; --warn:#A86F12; --warn-soft:#FAEDD0; --bad:#C62A20; --bad-soft:#F9DCD8; --info:#2462A6; --info-soft:#DCE7F5;
+  --ok:#22703F; --ok-soft:#DCEFE3; --warn:#8A5A0A; --warn-soft:#FAEDD0; --bad:#C62A20; --bad-soft:#F9DCD8; --info:#2462A6; --info-soft:#DCE7F5;
   --l-green-bg:#D5EEDD; --l-green-fg:#1B6A3E; --l-yellow-bg:#FFF0B8; --l-yellow-fg:#735600;
   --l-orange-bg:#FDE0C8; --l-orange-fg:#94470B; --l-red-bg:#F9D7D2; --l-red-fg:#A2271A;
   --l-purple-bg:#E8DCF5; --l-purple-fg:#693E9E; --l-blue-bg:#D7E5F7; --l-blue-fg:#1F569E;
@@ -36,12 +36,13 @@
   --f-body:'Jost',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --f-display:'Jost',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --f-mono:'Jost',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --band:#EFEEEA;
   --r:16px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111111; --surface:#1A1A1A; --surface-2:#202020; --sunken:#0B0B0B; --line:#2C2C2C; --line-strong:#3D3D3D;
   --fg:#F2F2F0; --muted:#A8A8A3; --faint:#707070;
-  --accent-ink:#FFD45C; --accent-soft:#3A2E0A; --red:#FF5247; --red-ink:#FF7A70;
+  --accent-ink:#FFD45C; --accent-soft:#3A2E0A; --red:#D9281D; --red-ink:#FF7A70; --band:#262626;
   --side:#151515; --side-fg:#E8E8E4; --side-muted:#8E8E89; --side-hover:#241F10; --side-line:#262626;
   --ok:#55C58E; --ok-soft:#17301F; --warn:#E3A640; --warn-soft:#352810; --bad:#F07568; --bad-soft:#3A1917; --info:#71A9EA; --info-soft:#16263A;
   --l-green-bg:#173A26; --l-green-fg:#84DBA8; --l-yellow-bg:#383012; --l-yellow-fg:#EBCB63;
@@ -56,7 +57,7 @@
 :root[data-theme="dark"]{
   --bg:#111111; --surface:#1A1A1A; --surface-2:#202020; --sunken:#0B0B0B; --line:#2C2C2C; --line-strong:#3D3D3D;
   --fg:#F2F2F0; --muted:#A8A8A3; --faint:#707070;
-  --accent-ink:#FFD45C; --accent-soft:#3A2E0A; --red:#FF5247; --red-ink:#FF7A70;
+  --accent-ink:#FFD45C; --accent-soft:#3A2E0A; --red:#D9281D; --red-ink:#FF7A70; --band:#262626;
   --side:#151515; --side-fg:#E8E8E4; --side-muted:#8E8E89; --side-hover:#241F10; --side-line:#262626;
   --ok:#55C58E; --ok-soft:#17301F; --warn:#E3A640; --warn-soft:#352810; --bad:#F07568; --bad-soft:#3A1917; --info:#71A9EA; --info-soft:#16263A;
   --l-green-bg:#173A26; --l-green-fg:#84DBA8; --l-yellow-bg:#383012; --l-yellow-fg:#EBCB63;
@@ -121,7 +122,8 @@ p{margin:0}
 .hero{background:var(--grad);color:#fff;border-radius:22px;padding:22px 26px;box-shadow:var(--shadow)}
 .hero p{color:rgba(255,255,255,.9)!important}
 .hero .btn{background:#fff;border-color:#fff;color:#1E1E1E}
-.tour{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100% - 32px));background:var(--surface);border-radius:18px;box-shadow:var(--shadow-lg);z-index:49;overflow:hidden;border:1px solid var(--line)}
+.tour{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100% - 32px));background:var(--surface);border-radius:18px;box-shadow:var(--shadow-lg);z-index:49;overflow:clip;border:1px solid var(--line)}
+body:has(#tour:not([hidden])) .view{padding-bottom:300px} /* con el panel abierto, el final de la vista queda por encima */
 .tour .th{background:var(--accent);color:#1E1E1E;padding:10px 16px;border-bottom:4px solid var(--red);display:flex;align-items:center;gap:8px;font-weight:700}
 .tour .tb{padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:14px}
 .tour .tb b{font-size:16px}
@@ -129,6 +131,7 @@ p{margin:0}
 .tour .dots{display:flex;gap:4px;flex:1}
 .tour .dots i{width:7px;height:7px;border-radius:50%;background:var(--line-strong)}
 .tour .dots i.on{background:var(--red)}
+@media (max-width:520px){.tour{left:8px;right:8px;width:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px))}.tour .dots{display:none}.tour .tb{padding:10px 14px;font-size:13px}.tour .tb b{font-size:15px}.tour .tf{justify-content:flex-end}}
 
 /* ---------- controles ---------- */
 .btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:8px 14px;font-weight:600;font-size:13.5px;white-space:nowrap;text-decoration:none;color:var(--fg)}
@@ -199,7 +202,7 @@ table.tbl.fit{min-width:0}
 .mt{margin-top:16px}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;min-width:0}
 .panel-h{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.panel-h h2{font-size:14px;font-weight:600}
+.panel-h h2{font-size:14px;font-weight:600;flex:1 1 12em;min-width:0}
 .panel-h .n{font:500 11px/1 var(--f-mono);color:var(--muted)}
 .panel-h .grow,.grow{flex:1}
 .pad{padding:14px 16px}
@@ -231,9 +234,9 @@ table.tbl.fit{min-width:0}
 .sw{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none;vertical-align:-1px}
 .bg1{background:var(--c1)} .bg2{background:var(--c2)} .bg3{background:var(--c3)} .bg4{background:var(--c4)} .bgacc{background:var(--accent)}
 .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
-.fld{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fld{display:flex;flex-direction:column;justify-content:flex-end;gap:4px;min-width:0}
 .fld.full{grid-column:1/-1}
-.fld>span{font:500 10.5px/1 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.fld>span{font:500 10.5px/1.25 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .blk h4{margin:0 0 8px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
 .blk h4 .n{font:500 11px/1 var(--f-mono);color:var(--muted)}
 
@@ -250,13 +253,13 @@ table.tbl.fit{min-width:0}
 /* ---------- GOTA: gráficos ---------- */
 .chart{display:block;width:100%;height:auto;overflow:visible}
 .chart text{font:500 10.5px var(--f-mono);fill:var(--muted)}
-.chart text.lab{fill:var(--fg);font-weight:600}
+.chart text.lab{fill:var(--fg);font-weight:600;paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
 .chart .grid{stroke:var(--line)}
 .chart .axis{stroke:var(--line-strong)}
 .chart .ref{stroke:var(--line-strong);stroke-dasharray:4 4}
 .chart .ref-bad{stroke:var(--bad);stroke-dasharray:5 4}
 .chart .ref-acc{stroke:var(--accent);stroke-width:2}
-.chart .band{fill:var(--sunken)}
+.chart .band{fill:var(--band)}
 .chart .band-ok{fill:var(--ok-soft);opacity:.7}
 .chart .ln{fill:none;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
 .chart .ln.thin{stroke-width:1.5}
@@ -296,7 +299,9 @@ table.tbl.fit{min-width:0}
 .kv2{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 10px;font-size:12.5px;margin-top:8px}
 .kv2 span{color:var(--muted)} .kv2 b{font:500 12.5px var(--f-mono);text-align:right}
 .truck{display:flex;gap:4px;align-items:stretch;margin:6px 0 4px}
-.truck .cmp{flex:var(--w);min-height:52px;border-radius:7px;display:flex;flex-direction:column;justify-content:center;align-items:center;font:500 11px/1.25 var(--f-mono);padding:4px;text-align:center;background:color-mix(in srgb,var(--cc) 22%,var(--surface));border:1.5px solid var(--cc);min-width:0;overflow:hidden}
+.truck .cmp{flex:var(--w);min-height:52px;border-radius:7px;display:flex;flex-direction:column;justify-content:center;align-items:center;font:500 11px/1.25 var(--f-mono);padding:4px;text-align:center;background:color-mix(in srgb,var(--cc) 22%,var(--surface));border:1.5px solid var(--cc);min-width:0;overflow:hidden;overflow-wrap:normal}
+.truck .cmp.sm{min-width:min(56px,22%)} /* el compartimento chico no se aplasta: su rótulo («D. Premium») entra entero */
+@media (max-width:620px){.truck .cmp{font-size:10px;padding:4px 1px;letter-spacing:-.02em}}
 .truck .cmp.empty{background:var(--sunken);color:var(--muted);border:1px dashed var(--line-strong)}
 .truck .cab{flex:0 0 30px;border-radius:7px 14px 14px 7px;background:var(--line-strong)}
 .imp details{border-bottom:1px solid var(--line)}
@@ -388,7 +393,7 @@ table.tbl.heat-t{table-layout:fixed;width:100%;min-width:420px} .heat-t td{paddi
 .cam canvas.hud{pointer-events:none}
 .cam-l{position:absolute;left:8px;top:6px;font:600 11px/1 var(--f-body);color:#fff;text-shadow:0 1px 2px #000;letter-spacing:.04em;display:flex;gap:6px;align-items:center}
 .cam-l i{width:7px;height:7px;border-radius:50%;background:#ff3b30;display:inline-block;animation:blink 1.2s infinite}
-.cam-src{position:absolute;right:8px;bottom:6px;font:500 10px/1 var(--f-body);color:rgba(255,255,255,.75);text-shadow:0 1px 2px #000}
+.cam-src{position:absolute;right:8px;top:6px;text-align:right;max-width:55%;font:500 10px/1.2 var(--f-body);color:rgba(255,255,255,.75);text-shadow:0 1px 2px #000}
 .phone{width:min(290px,100%);margin:0 auto;border:10px solid #1E1E1E;border-radius:38px;background:var(--surface);overflow:hidden;box-shadow:var(--shadow-lg)}
 .phone .ph{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 6px;font-size:13px}
 .phone .ph svg{width:24px;height:24px}
@@ -399,14 +404,15 @@ table.tbl.heat-t{table-layout:fixed;width:100%;min-width:420px} .heat-t td{paddi
 .phone .tiles div{display:flex;flex-direction:column;align-items:center;gap:4px}
 .phone .tiles span{width:40px;height:40px;border-radius:12px;background:var(--red);color:#fff;display:grid;place-items:center}
 .phone .promo{margin:8px 12px 14px;border-radius:14px;background:var(--accent);color:#1E1E1E;padding:12px;border-left:6px solid var(--red)}
-.phone .promo b{display:block;font:800 22px/1.05 var(--f-display);color:var(--red-ink)}
+.phone .promo b{display:block;font:800 22px/1.05 var(--f-display);color:#B71C13} /* fondo amarillo fijo en los dos temas */
 .promo-in{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.promo-in.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .promo-out{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
 .promo-out>div{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .promo-out span{display:block;font:600 10.5px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .promo-out b{font:700 17px/1.2 var(--f-body)}
 .promo-out .full{grid-column:1/-1;background:var(--accent-soft);border-color:transparent}
-@media (max-width:820px){.promo-in{grid-template-columns:repeat(2,minmax(0,1fr))}.promo-out{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:820px){.promo-in,.promo-in.c3{grid-template-columns:repeat(2,minmax(0,1fr))}.promo-out{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.cam-l i{animation:none}.drawer{animation:none}.fc .pulse{animation:none;opacity:0}.typing i{animation:none}}
 @media (max-width:1180px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:minmax(0,1fr)}.cap-grid{grid-template-columns:minmax(0,1fr)}.cap-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -437,6 +443,24 @@ table.tbl.heat-t{table-layout:fixed;width:100%;min-width:420px} .heat-t td{paddi
   .hello h2{font-size:26px}
 }
 @media (max-width:520px){.stats{grid-template-columns:minmax(0,1fr)}.src{white-space:normal}.view .btn{white-space:normal;text-align:left}}
+/* tablas: sombra a los costados mientras hay más para deslizar (el fondo «local» tapa la sombra en el borde al que ya se llegó) */
+.tbl-wrap{background:linear-gradient(to right,var(--surface) 30%,transparent) left center/40px 100% no-repeat local,linear-gradient(to left,var(--surface) 30%,transparent) right center/40px 100% no-repeat local,radial-gradient(farthest-side at 0 50%,color-mix(in srgb,var(--fg) 26%,transparent),transparent) left center/16px 100% no-repeat scroll,radial-gradient(farthest-side at 100% 50%,color-mix(in srgb,var(--fg) 26%,transparent),transparent) right center/16px 100% no-repeat scroll;background-color:var(--surface)}
+.cd-btns{display:inline-flex;gap:6px;flex-wrap:nowrap}
+#playaStaff td:first-child{white-space:nowrap}
+@media (max-width:620px){
+  .chart text{font-size:13px}
+  .cam-src{left:8px;right:auto;top:22px;text-align:left;max-width:calc(100% - 16px)} /* en el teléfono la miniatura es chica: debajo del nombre de la cámara */
+  .top{flex-wrap:nowrap;gap:8px}
+  .top .ttl{flex:1 1 0}
+  .top h1{white-space:normal;font-size:18px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .top .eyebrow{line-height:1.3}
+  .top .btn{padding:8px 10px}
+  .item:has(.side-r .btn){flex-wrap:wrap}
+  .item:has(.side-r .btn) .body{flex:1 1 calc(100% - 30px)}
+  .item .side-r:has(.btn){flex:1 0 100%;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;text-align:left;padding-left:20px}
+  .item .side-r:has(.btn) .row{justify-content:flex-start!important}
+  .tbl:not(.heat-t) td:first-child{min-width:9.5em}
+}
 /* >>> css playa */
 /* Playa e islas: fila del turno elegido en la tabla de espera por isla y turno */
 .tbl tr.playa-on td{background:var(--accent-soft)}
@@ -449,7 +473,7 @@ table.tbl.heat-t{table-layout:fixed;width:100%;min-width:420px} .heat-t td{paddi
 .motor-lv.on{border:1.5px solid var(--accent);background:var(--accent-soft)}
 .motor-lv small{font:500 10.5px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .motor-lv b{font-size:13.5px;line-height:1.3}
-.motor-lv .pill{align-self:flex-start}
+.motor-lv .pill{align-self:flex-start;white-space:normal;max-width:100%}
 .motor-lv>svg.i{color:var(--accent-ink)}
 .motor-svg{display:block;width:100%;height:auto;border-radius:12px;background:#0b0e0d}
 .motor-svg text{font:600 11px var(--f-body);fill:#fff;paint-order:stroke;stroke:rgba(0,0,0,.85);stroke-width:3px;stroke-linejoin:round}
@@ -475,7 +499,7 @@ table.tbl.heat-t{table-layout:fixed;width:100%;min-width:420px} .heat-t td{paddi
 .cd-reco{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--surface-2)}
 .cd-reco.off{opacity:.55}
 .cd-pred{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px;align-items:start}
-.cd-trends .cd-tr{grid-template-columns:minmax(0,1fr) 240px}
+@media (min-width:561px){.cd-trends .cd-tr{grid-template-columns:minmax(0,1fr) 240px}}
 @media (min-width:1200px){.cd-trends{display:grid;grid-template-columns:1fr 1fr}.cd-tr:nth-child(2){border-top:0}}
 
 
@@ -516,8 +540,8 @@ const NF=[0,1,2].map(d=>new Intl.NumberFormat('es-AR',{minimumFractionDigits:d,m
 const fa=(n,d)=>NF[d].format(+Math.abs(n).toFixed(d));
 const isNeg=(n,d)=>n<0&&+Math.abs(n).toFixed(d)>0;
 const isPos=(n,d)=>n>0&&+Math.abs(n).toFixed(d)>0;
-const num=(n,d=0)=>(isNeg(n,d)?'−':'')+fa(n,d);
-const ars=(n,d=0)=>(isNeg(n,d)?'−':'')+'$\u00a0'+fa(n,d);
+const num=(n,d=0)=>(isNeg(n,d)?'−\u2060':'')+fa(n,d);
+const ars=(n,d=0)=>(isNeg(n,d)?'−\u2060':'')+'$\u00a0'+fa(n,d);
 const arsS=(n,d=0)=>(isNeg(n,d)?'−':isPos(n,d)?'+':'±')+'$\u00a0'+fa(n,d);
 const lit=(n,d=0)=>num(n,d)+'\u00a0L';
 const pc=(x,d=1)=>(isNeg(x*100,d)?'−':isPos(x*100,d)?'+':'±')+fa(x*100,d)+'%';
@@ -683,18 +707,20 @@ function priceModel(pid,fr){const pp=S.P.p[pid],c=pp.costo,p0=pp.precio;
 
 /* ================= gráficos SVG sin librerías ================= */
 function niceTicks(a,b,n){const span=b-a;if(!(span>0))return[a];const s0=span/n,mag=10**Math.floor(Math.log10(s0)),e=s0/mag,step=(e>=7.5?10:e>=3.5?5:e>=1.5?2:1)*mag,out=[];for(let v=Math.ceil(a/step)*step;v<=b+1e-9;v+=step)out.push(+v.toFixed(10));return out}
-function lineChart(o){const W=o.w||640,Hh=o.h||230,pl=o.pl??48,pr=o.pr??14,pt=o.pt??16,pb=o.pb??26;
+/* en el teléfono el gráfico se dibuja más angosto (420 en vez de 640 unidades) para que los rótulos se lean; el margen izquierdo crece un poco */
+const chartW=()=>innerWidth<=620?420:640,chartPl=pl=>innerWidth<=620?Math.max(pl,56):pl;
+function lineChart(o){const W=o.w||chartW(),Hh=o.h||230,pl=o.w?o.pl??48:chartPl(o.pl??48),pr=o.pr??14,pt=o.pt??16,pb=o.pb??26;
  const X=x=>pl+(x-o.x0)/(o.x1-o.x0)*(W-pl-pr),Y=y=>pt+(1-(y-o.y0)/(o.y1-o.y0))*(Hh-pt-pb),f=v=>v.toFixed(1);
  let s=`<svg class="chart" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="${esc(o.label||'Gráfico')}">`;
  (o.bands||[]).forEach(b=>s+=`<rect class="${b.cls||'band'}" x="${f(X(b.x0))}" y="${pt}" width="${f(Math.max(0,X(b.x1)-X(b.x0)))}" height="${Hh-pt-pb}"/>`);
  (o.yt||[]).forEach(([y,l])=>s+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${f(Y(y))}" y2="${f(Y(y))}"/><text x="${pl-6}" y="${f(Y(y)+3.5)}" text-anchor="end">${esc(l)}</text>`);
- (o.xt||[]).forEach(([x,l])=>s+=`<text x="${f(X(x))}" y="${Hh-7}" text-anchor="middle">${esc(l)}</text>`);
+ (o.xt||[]).forEach(([x,l])=>{const xx=X(x),a=xx>W-pr-24?'end':xx<pl+24?'start':'middle';s+=`<text x="${f(a==='end'?Math.min(xx,W-2):xx)}" y="${Hh-7}" text-anchor="${a}">${esc(l)}</text>`});
  (o.hlines||[]).forEach(h=>s+=`<line class="${h.cls||'ref'}" x1="${pl}" x2="${W-pr}" y1="${f(Y(h.y))}" y2="${f(Y(h.y))}"/>${h.label?`<text x="${W-pr-4}" y="${f(Y(h.y)-5)}" text-anchor="end">${esc(h.label)}</text>`:''}`);
  (o.vlines||[]).forEach(v=>s+=`<line class="${v.cls||'ref'}" x1="${f(X(v.x))}" x2="${f(X(v.x))}" y1="${pt}" y2="${Hh-pb}"/>${v.label?`<text x="${f(X(v.x)+(v.anchor==='end'?-4:4))}" y="${v.bottom?Hh-pb-6-(v.dy||0):pt+9+(v.dy||0)}" text-anchor="${v.anchor||'start'}">${esc(v.label)}</text>`:''}`);
  (o.series||[]).forEach(se=>{const d=se.pts.map((p,i)=>(i?'L':'M')+f(X(p[0]))+' '+f(Y(p[1]))).join('');s+=`<path class="ln ${se.cls}${se.dash?' dash':''}${se.thin?' thin':''}" d="${d}"/>`});
  (o.dots||[]).forEach(p=>s+=`<circle class="dot ${p.cls||''}" cx="${f(X(p.x))}" cy="${f(Y(p.y))}" r="${p.r||5}"/>${p.label?`<text class="lab" x="${f(X(p.x))}" y="${f(Y(p.y)+(p.below?19:-10))}" text-anchor="middle">${esc(p.label)}</text>`:''}`);
  return s+'</svg>'}
-function barChart(o){const W=o.w||640,Hh=o.h||210,pl=o.pl??48,pr=14,pt=14,pb=24,n=o.items.length,bw=(W-pl-pr)/n,f=v=>v.toFixed(1);
+function barChart(o){const W=o.w||chartW(),Hh=o.h||210,pl=o.w?o.pl??48:chartPl(o.pl??48),pr=14,pt=14,pb=24,n=o.items.length,bw=(W-pl-pr)/n,f=v=>v.toFixed(1);
  const Y=y=>pt+(1-(y-o.y0)/(o.y1-o.y0))*(Hh-pt-pb);
  let s=`<svg class="chart" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="${esc(o.label||'Gráfico')}">`;
  (o.hbands||[]).forEach(b=>s+=`<rect class="${b.cls||'band'}" x="${pl}" y="${f(Y(b.y1))}" width="${W-pl-pr}" height="${f(Math.max(0,Y(b.y0)-Y(b.y1)))}"/>`);
@@ -713,7 +739,7 @@ function rebuild(){const P=S.P;D={hist:buildHistory(P)};D.lw=lwDays();
  D.order=planOrder(S.ctx,D.proj);D.projOrd=project(S.ctx,D.order);
  const outs=D.tanks.filter(t=>t.out!=null).sort((a,b)=>a.out-b.out);
  D.next=outs.length?{pid:outs[0].pid,id:outs[0].id,h:outs[0].out,dl:outs[0].out-P.lead}:null;
- D.wet=buildWet(D.hist);D.shifts=buildShifts();D.docs=buildDocs();D.segs=buildSegs();D.street=buildStreet();D.ev=buildEvents();D.hoses=buildHoses();D.maint=buildMaint();D.fleet=buildFleet();D.cv=buildCV();D.traffic=buildTraffic();D.playa=buildPlaya();D.sec=buildSec();D.store=buildStore();D.motor=buildMotor()}
+ D.wet=buildWet(D.hist);D.shifts=buildShifts();D.docs=buildDocs();D.segs=buildSegs();D.street=buildStreet();D.hoses=buildHoses();D.maint=buildMaint();D.fleet=buildFleet();D.cv=buildCV();streetIn();D.ev=buildEvents();D.traffic=buildTraffic();D.playa=buildPlaya();D.sec=buildSec();D.store=buildStore();D.motor=buildMotor()}
 
 /* cierres de turno: venta según el controlador contra lo rendido, con las causas que la explican */
 function buildShifts(){const P=S.P,p=id=>P.p[id].precio,dP=25;
@@ -731,7 +757,7 @@ function buildShifts(){const P=S.P,p=id=>P.p[id].precio,dP=25;
    {id:'prueba',short:'Prueba',t:'Prueba de surtidor devuelta al tanque',v:prueba,conf:.88,ev:'Nota del turno: «prueba 20 L surtidor 2». El controlador registra un despacho de 20,0 L a las 15:31 sin cobro asociado.',act:'Registrar la prueba: 20 L de Súper devueltos al tanque T1.',who:'Isla 1'},
    {id:'lag',short:'Precio',t:'El surtidor 4 tomó el precio nuevo 40 minutos tarde',v:lag,conf:.81,ev:`El aumento de Premium (${arsS(dP)} por litro) entró al controlador a las 18:00 y el surtidor 4 lo aplicó a las 18:40. En ese lapso despachó 85 L al precio anterior.`,act:'Revisar la comunicación del surtidor 4 con el controlador.',who:'Isla 2'},
    {id:'cash',short:'Sin explicar',t:'Faltante de efectivo sin explicar',v:cash,manual:true,conf:null,ev:'Ninguna fuente de datos explica esta diferencia. No se atribuye a nadie sin revisión.',act:'Recontar los sobres y revisar la cámara de la caja entre las 18 y las 22 h.',who:'Isla 2'}],
-  media:[['Efectivo (sobres y caja)',ef,'Planilla del encargado','warn','Incluye el faltante sin explicar'],['Tarjetas · POS 1',pos1,'Cierre de lote N.º 0412','ok','Conciliado'],['Tarjetas · POS 2',0,`Sin cierre de lote · 14 operaciones por ${ars(pos2)}`,'bad','Lote abierto'],['QR y billeteras',qr,'Resumen del procesador','ok','Conciliado'],['Cuenta corriente',cc,'6 vales cargados · 1 en foto sin cargar','warn','Falta 1 vale']],
+  media:[['Efectivo (sobres y caja)',ef,'Planilla del encargado','warn','Con faltante sin explicar'],['Tarjetas · POS 1',pos1,'Cierre de lote N.º 0412','ok','Conciliado'],['Tarjetas · POS 2',0,`Sin cierre de lote · 14 operaciones por ${ars(pos2)}`,'bad','Lote abierto'],['QR y billeteras',qr,'Resumen del procesador','ok','Conciliado'],['Cuenta corriente',cc,'6 vales cargados · 1 en foto sin cargar','warn','Falta 1 vale']],
   staff:[{n:'Carla M.',isla:'Isla 1 · surtidores 1 y 2',share:.55,ex:['vale','prueba'],rest:true},{n:'Diego R.',isla:'Isla 2 · surtidores 3 y 4',share:.45,ex:['pos2','lag','cash']}]};
  /* mañana: una prueba de surtidor sin registrar */
  const Lm={super:2210,premium:560,diesel:1720,dpremium:470},theoM=sum(PRODS.map(x=>Lm[x.id]*p(x.id))),pm=20*p('premium');
@@ -797,15 +823,15 @@ function buildSegs(){return[
 
 /* visión: eventos de cámaras con estado explícito */
 function buildEvents(){return[
- {id:'e1',at:addMin(NOW,-6),cam:'C1 · Ingreso',type:'Patente en la lista de fugas',plate:'ZRT 482',sev:'crit',state:'DETECTADO',conf:.96,txt:'2 fugas registradas en la red; la última hace 19 días, con denuncia.',btn:'Avisar al playero: cobro anticipado',pos:[122,266]},
- {id:'e2',at:addMin(NOW,-14),cam:'C3 · Isla 2',type:'Celular en uso durante la carga',sev:'warn',state:'DETECTADO',conf:.88,txt:'Persona con el celular en la mano junto al surtidor 3, con la manguera colocada.',btn:'Avisar a la isla 2',pos:[168,226]},
- {id:'e4',at:addMin(NOW,-29),cam:'C3 · Isla 2',type:'Verificación de humo',sev:'ok',state:'NO_DETECTADO',conf:.97,txt:'Segunda lectura desde otra cámara y otro ángulo: no hay humo.',pos:[292,170]},
- {id:'e3',at:addMin(NOW,-31),cam:'C4 · Playa',type:'Posible humo',sev:'warn',state:'NO_OBSERVABLE',conf:.41,txt:'Reflejo de sol sobre la lente: la imagen no permite confirmar ni descartar.',btn:'Verificado en persona',pos:[292,170]},
+ {id:'e1',at:addMin(NOW,-6),cam:'C1 · Ingreso',type:'Patente en la lista de fugas',plate:'ZRT 482',sev:'crit',state:'DETECTADO',conf:.96,txt:'2 fugas con denuncia en la lista de la estación (o del mismo titular); la última, hace 19 días.',btn:'Avisar al playero: cobro anticipado',pos:[122,266]},
+ {id:'e2',at:addMin(NOW,-14),cam:'C3 · Isla 2',type:'Celular en uso durante la carga',sev:'warn',state:'DETECTADO',conf:.88,txt:'Celular visible junto al auto en el surtidor 3 durante 3 s, con la manguera colocada.',btn:'Avisar a la isla 2',pos:[168,226]},
+ {id:'e4',at:addMin(NOW,-29),cam:'C3 · Isla 2',type:'Verificación de humo',sev:'ok',state:'NO_DETECTADO',conf:null,txt:'Segunda mirada desde otra cámara y otro ángulo: no se ve humo. La detección de humo está en prueba (requiere entrenamiento): sin precisión medida, lo confirma una persona.',pos:[292,170]},
+ {id:'e3',at:addMin(NOW,-31),cam:'C4 · Playa',type:'Posible humo',sev:'warn',state:'NO_OBSERVABLE',conf:null,txt:'Reflejo de sol sobre la lente: la imagen no permite confirmar ni descartar. La detección de humo está en prueba: verificalo en persona.',btn:'Verificado en persona',pos:[292,170]},
  {id:'e5',at:addMin(NOW,-48),cam:'C2 · Tienda',type:'Fila en caja',sev:'info',state:'DETECTADO',conf:.93,txt:'6 personas en la fila; espera estimada de 7 minutos.',btn:'Abrir la caja 2',pos:[430,72]},
- {id:'e7',at:addMin(NOW,-8),cam:'C5 · Góndolas',type:'Cliente detenido en la góndola',sev:'info',state:'DETECTADO',conf:.91,txt:'Se detuvo 26 s frente a golosinas y alfajores, tomó un producto y lo devolvió. Sin identificar a la persona.',pos:[0,0]},
+ {id:'e7',at:addMin(NOW,-8),cam:'C5 · Góndolas',type:'Cliente detenido en la góndola',sev:'info',state:'DETECTADO',conf:.91,txt:'Se detuvo 26 s frente a golosinas y alfajores. Tomar y devolver: en piloto. Sin identificar a la persona.',pos:[0,0]},
  {id:'e8',at:addMin(NOW,-20),cam:'C6 · Calle',type:'Autos que pasan y que entran',sev:'info',state:'DETECTADO',conf:.95,txt:streetEvTxt(),pos:[0,0]},
- {id:'e6',at:addMin(NOW,-95),cam:'C1 · Ingreso',type:'Patente leída',plate:'ZB 330 KM',sev:'ok',state:'NO_DETECTADO',conf:.9,txt:'No figura en la lista de fugas.',pos:[122,266]}]}
-const LPR=[{plate:'ZRT 482',n:2,last:-19,suc:'Esta estación y Sucursal 2',den:true},{plate:'ZK 551 TR',n:1,last:-41,suc:'Sucursal 3',den:true},{plate:'ZPA 107',n:1,last:-6,suc:'Esta estación',den:false}];
+ {id:'e6',at:addMin(NOW,-95),cam:'C1 · Ingreso',type:'Patente comparada',plate:null,sev:'ok',state:'NO_DETECTADO',conf:.9,txt:'Comparada como hash: no figura en la lista de fugas. La patente no se guarda.',pos:[122,266]}]}
+const LPR=[{plate:'ZRT 482',n:2,last:-19,suc:'Esta estación y otra del mismo titular',den:true},{plate:'ZK 551 TR',n:1,last:-41,suc:'Otra estación del mismo titular',den:true},{plate:'ZPA 107',n:1,last:-6,suc:'Esta estación',den:false}];
 
 /* mantenimiento: caudal y cortes por manguera, desde el controlador */
 function buildHoses(){const g=RNG(515),H=[],map=['super','diesel','premium','dpremium'];
@@ -894,7 +920,7 @@ V.inicio=()=>{const P=S.P,h=D.hist,y=h[h.length-1],w=h[h.length-8];
 /* ---------- Precios ---------- */
 function priceChart(m,lo,hi){const step=Math.max(1,Math.round((hi-lo)/90)),pts=[];for(let p=lo;p<=hi;p+=step)pts.push([p,m.M(p)]);if(pts[pts.length-1][0]!==hi)pts.push([hi,m.M(hi)]);
  const ys=pts.map(p=>p[1]);let y0=Math.min(...ys),y1=Math.max(...ys);const pd=(y1-y0)*.18||1;y0-=pd;y1+=pd*1.6;
- return lineChart({label:`Margen bruto diario esperado según el precio de ${PR[m.pid].short}`,x0:lo,x1:hi,y0,y1,yt:niceTicks(y0,y1,4).map(v=>[v,kfmt(v)]),xt:niceTicks(lo,hi,5).map(v=>[v,'$'+num(v)]),
+ return lineChart({label:`Margen bruto diario esperado según el precio de ${PR[m.pid].short}`,x0:lo,x1:hi,y0,y1,yt:niceTicks(y0,y1,4).map(v=>[v,kfmt(v)]),xt:niceTicks(lo,hi,innerWidth<=620?3:5).map(v=>[v,'$'+num(v)]),
   bands:[{x0:Math.max(lo,m.lo),x1:Math.min(hi,m.hi),cls:'band-ok'}],vlines:[{x:m.mn,label:'mín. zona',anchor:'end',bottom:true},{x:m.ref,label:'prom.',bottom:true,dy:13},{x:m.mx,label:'máx.',bottom:true}],
   series:[{pts,cls:'sfg'}],dots:[{x:m.p0,y:m.M(m.p0),label:'hoy',below:true}].concat(m.d?[{x:m.best,y:m.M(m.best),cls:'acc',label:'sugerido'}]:[])})}
 function tryOut(m,p){const v=m.V(p),mg=m.M(p),v0=m.V(m.p0),m0=m.M(m.p0),out=p<m.lo||p>m.hi;
@@ -940,7 +966,7 @@ function orderHtml(){const o=D.order,nx=D.next;let head;
  else if(nx.dl>0)head=`<b>Pedí antes de ${fWhen(addH(NOW,nx.dl))}</b> para que el ${PR[nx.pid].short.toLowerCase()} no llegue al mínimo.`;
  else head=`<b class="badc">El ${PR[nx.pid].short.toLowerCase()} llega al mínimo antes que un pedido normal.</b> Pedí entrega urgente.`;
  return `<div class="pad"><p style="margin-bottom:10px">${head} Descarga estimada: ${fWhen(o.eta)}.</p>
- <div class="truck" role="img" aria-label="Carga del camión por compartimento">${o.comps.map(c=>c.pid?`<div class="cmp" style="--w:${c.cap};--cc:var(--c${PR[c.pid].k})"><b>${PR[c.pid].short}</b>${num(c.cap/1000)} m³</div>`:`<div class="cmp empty" style="--w:${c.cap}">vacío<br>${num(c.cap/1000)} m³</div>`).join('')}<div class="cab"></div></div>
+ <div class="truck" role="img" aria-label="Carga del camión por compartimento">${o.comps.map(c=>c.pid?`<div class="cmp${c.cap<Math.max(...COMPS)?' sm':''}" style="--w:${c.cap};--cc:var(--c${PR[c.pid].k})"><b>${PR[c.pid].short}</b>${num(c.cap/1000)} m³</div>`:`<div class="cmp empty" style="--w:${c.cap}">vacío<br>${num(c.cap/1000)} m³</div>`).join('')}<div class="cab"></div></div>
  <div class="tbl-wrap" style="border:0;margin-top:8px"><table class="tbl fit"><thead><tr><th>Producto</th><th class="r">Litros</th><th class="r">Alcanza para</th></tr></thead><tbody>${PRODS.map(p=>`<tr><td><span class="sw bg${p.k}"></span> ${p.short}</td><td class="r num">${o.alloc[p.id]?lit(o.alloc[p.id]):'—'}</td><td class="r num">${num(o.cover[p.id],1)} días</td></tr>`).join('')}</tbody></table></div>
  <p class="small muted" style="margin:10px 0">${o.full?`Camión completo: ${lit(o.total)} en ${o.comps.length} compartimentos, sin pasar el 95% de llenado seguro de ningún tanque. «Alcanza para» cuenta desde la descarga.`:`Camión parcial: ${lit(o.total)} de ${lit(sum(COMPS))}. No entra más sin pasar el 95% de llenado seguro.`}</p>
  <div class="row">${S.orderOk?`${pill('p-ok','Pedido confirmado (simulado)')}<button class="btn sm ghost" data-act="order">Deshacer</button>`:`<button class="btn pri" data-act="order">${ic('check')}Confirmar pedido</button><span class="small muted">En producción se envía al proveedor por mail o por su portal.</span>`}</div>${S.orderOk?orderTrack():''}
@@ -965,7 +991,7 @@ V.stock=()=>{const P=S.P,tg=[['lluvia','Lluvia mañana'],['finde','Fin de semana
 function waterfallSvg(sh){const c=shiftCalc(sh),steps=[{l:'Inicial',a:0,b:c.diff,cls:'bad'}];let run=c.diff;
  sh.causes.filter(x=>!x.manual).forEach(x=>{const st=S.appr[sh.id+':'+x.id];if(st==='no')return;steps.push({l:x.short,a:run,b:run+x.v,cls:st==='ok'?'ok':'mute'});run+=x.v});
  steps.push({l:'Queda',a:0,b:run,cls:Math.abs(run)<=S.P.tolCaja?'ok':'warn'});
- const W=640,Hh=240,pl=56,pr=10,pt=22,pb=28,lo=Math.min(c.diff,0,run)*1.12,hi=Math.max(0,c.diff,run)+Math.abs(lo)*.08,n=steps.length,bw=(W-pl-pr)/n,f=v=>v.toFixed(1),Y=y=>pt+(1-(y-lo)/(hi-lo))*(Hh-pt-pb);
+ const W=chartW(),Hh=240,pl=chartPl(56),pr=10,pt=22,pb=28,lo=Math.min(c.diff,0,run)*1.12,hi=Math.max(0,c.diff,run)+Math.abs(lo)*.08,n=steps.length,bw=(W-pl-pr)/n,f=v=>v.toFixed(1),Y=y=>pt+(1-(y-lo)/(hi-lo))*(Hh-pt-pb);
  let s=`<svg class="chart" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Cascada de la diferencia del turno">`;
  niceTicks(lo,hi,4).forEach(v=>s+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${f(Y(v))}" y2="${f(Y(v))}"/><text x="${pl-6}" y="${f(Y(v)+3.5)}" text-anchor="end">${kfmt(v)}</text>`);
  s+=`<line class="axis" x1="${pl}" x2="${W-pr}" y1="${f(Y(0))}" y2="${f(Y(0))}"/>`;
@@ -1028,21 +1054,26 @@ V.fidelizacion=()=>{const sg=D.segs.find(s=>s.id===S.seg)||D.segs[0];
 
 /* ---------- Pista y seguridad ---------- */
 const STC={DETECTADO:'p-bad',NO_DETECTADO:'p-ok',NO_OBSERVABLE:'p-mute'};
-function evItem(e,sel){const st=S.appr['ev:'+e.id],on=e===sel,act=on&&!st&&e.btn;
- return `<div class="item${on?' sel':''}"${act?'':` data-act="ev" data-id="${e.id}" role="button" tabindex="0"`}><span class="evdot ${e.sev}"></span><div class="body"><b>${e.type}${e.plate?` · <span class="mono">${e.plate}</span>`:''}</b><small>${hhmm(e.at)} · ${e.cam} · ${e.txt}</small>${act?`<div class="row" style="margin-top:8px;gap:6px"><button class="btn sm pri" data-act="evSet" data-id="${e.id}" data-st="ok">${e.btn}</button><button class="btn sm ghost" data-act="evSet" data-id="${e.id}" data-st="fp">Falsa alarma</button></div>`:''}</div><div class="side-r"><span class="pill ${e.state==='DETECTADO'?(e.sev==='crit'?'p-bad':e.sev==='warn'?'p-warn':'p-info'):STC[e.state]}">${e.state.replace('_',' ')}</span>${st?`<span class="small ${st==='ok'?'okc':'muted'}">${st==='ok'?'Atendido':'Descartado'}</span>`:`<span class="conf">confianza ${pcu(e.conf)}</span>`}</div></div>`}
+function evItem(e,sel,acts){const st=S.appr['ev:'+e.id],on=e===sel,act=(on||acts)&&!st&&e.btn;
+ return `<div class="item${on?' sel':''}"${act?'':` data-act="ev" data-id="${e.id}" role="button" tabindex="0"`}><span class="evdot ${e.sev}"></span><div class="body"><b>${e.type}${e.plate?` · <span class="mono">${e.plate}</span>`:''}</b><small>${hhmm(e.at)} · ${e.cam} · ${e.txt}</small>${act?`<div class="row" style="margin-top:8px;gap:6px"><button class="btn sm pri" data-act="evSet" data-id="${e.id}" data-st="ok">${e.btn}</button><button class="btn sm ghost" data-act="evSet" data-id="${e.id}" data-st="fp">Falsa alarma</button></div>`:''}</div><div class="side-r"><span class="pill ${e.state==='DETECTADO'?(e.sev==='crit'?'p-bad':e.sev==='warn'?'p-warn':'p-info'):STC[e.state]}">${e.state.replace('_',' ')}</span>${st?`<span class="small ${st==='ok'?'okc':'muted'}">${st==='ok'?'Atendido':'Descartado'}</span>`:e.conf==null?'<span class="conf">en prueba · precisión sin dato</span>':`<span class="conf">confianza ${pcu(e.conf)}</span>`}</div></div>`}
 function queueChart(){const g=RNG(77),pts=[];for(let h=6;h<=22;h++){const b=1+3.4*Math.exp(-((h-8.5)**2)/2)+3.2*Math.exp(-((h-13)**2)/2.5)+4.8*Math.exp(-((h-18.5)**2)/2);pts.push([h,Math.max(.3,b+g.n()*.45)])}
  const over=pts.filter(p=>p[1]>5).map(p=>p[0]),rg=[];over.forEach(h=>{const r=rg[rg.length-1];if(r&&h===r[1]+1)r[1]=h;else rg.push([h,h])});
- return `<div class="pad">${lineChart({label:'Minutos de espera en la caja por hora, ayer',x0:6,x1:22,y0:0,y1:Math.max(8,...pts.map(p=>p[1]))*1.1,yt:[0,2,4,6,8].map(v=>[v,v+' min']),xt:[6,9,12,15,18,21].map(h=>[h,h+' h']),hlines:[{y:5,cls:'ref-bad',label:'objetivo: 5 min'}],series:[{pts,cls:'sacc'}]})}<p class="small" style="margin-top:6px">${rg.length?`Ayer la espera pasó los 5 minutos ${rg.map(([a,b])=>`de ${a} a ${b+1} h`).join(' y ')}. <b>Sugerencia:</b> abrir la segunda caja en ${rg.length>1?'esas franjas':'esa franja'}.`:'Ayer la espera no pasó de 5 minutos.'}</p></div>`}
+ return `<div class="pad">${lineChart({label:'Minutos de espera en la caja por hora, ayer',x0:6,x1:22,y0:0,y1:Math.max(8,...pts.map(p=>p[1]))*1.1,yt:[0,2,4,6,8].map(v=>[v,v+' min']),xt:[6,9,12,15,18,21].map(h=>[h,h+' h']),hlines:[{y:5,cls:'ref-bad',label:'límite: 5 min'}],series:[{pts,cls:'sacc'}]})}<p class="small" style="margin-top:6px">${rg.length?`Ayer la espera pasó los 5 minutos ${rg.map(([a,b])=>`de ${a} a ${b+1} h`).join(' y ')}. <b>Sugerencia:</b> abrir la segunda caja en ${rg.length>1?'esas franjas':'esa franja'}.`:'Ayer la espera no pasó de 5 minutos.'}</p></div>`}
 /* calle: autos que pasan (C6) contra autos que entran (C1), ayer */
 function buildStreet(){const y=D.hist[D.hist.length-1],g=RNG(919),hrs=[];
  for(let h=6;h<=23;h++){const enter=sum(PRODS.map(p=>y.v[p.id]*hp(p.id)[h]))/CAR_L,cap=.058-.017*Math.exp(-((h-18.5)**2)/2)-.009*Math.exp(-((h-8)**2)/1.2)+g.n()*.0025;hrs.push({h,enter,pass:enter/cap,cap})}
  const pk=hrs.filter(x=>x.h>=17&&x.h<=19),rest=hrs.filter(x=>x.h<17||x.h>19),base=sum(rest.map(x=>x.enter))/sum(rest.map(x=>x.pass)),lost=sum(pk.map(x=>x.pass*Math.max(0,base-x.cap)));
  return{hrs,pass:sum(hrs.map(x=>x.pass)),enter:sum(hrs.map(x=>x.enter)),base,pkCap:sum(pk.map(x=>x.enter))/sum(pk.map(x=>x.pass)),lost}}
+/* C1 cuenta cada auto que cruza «entrada»: los atendidos (litros ÷ CAR_L = D.cv.cars) más los que se fueron sin cargar (D.cv.hrs[].ab).
+   Se llama en rebuild() después de buildCV; deja en x.atend los atendidos y recalcula captación, resto del día, pico y autos perdidos. */
+function streetIn(){const st=D.street,cv=D.cv;st.hrs.forEach((x,i)=>{const c=cv.hrs[i];x.atend=c.cars;x.enter=c.cars+c.ab;x.cap=x.enter/x.pass});
+ const pk=st.hrs.filter(x=>x.h>=17&&x.h<=19),rest=st.hrs.filter(x=>x.h<17||x.h>19);
+ st.atend=cv.cars;st.enter=sum(st.hrs.map(x=>x.enter));st.base=sum(rest.map(x=>x.enter))/sum(rest.map(x=>x.pass));st.pkCap=sum(pk.map(x=>x.enter))/sum(pk.map(x=>x.pass));st.lost=sum(pk.map(x=>x.pass*Math.max(0,st.base-x.cap)))}
 function streetEvTxt(){const x=D.street.hrs.find(r=>r.h===Math.min(23,Math.max(6,NOW.getHours()-1)))||D.street.hrs[0];return `De ${x.h} a ${x.h+1} h pasaron ${num(x.pass)} autos por la calle y entraron ${num(x.enter)} (${pcu(x.cap,1)}).`}
 function streetHtml(){const st=D.street,mgL=sum(PRODS.map(p=>S.P.p[p.id].vol*(S.P.p[p.id].precio-S.P.p[p.id].costo)))/sum(PRODS.map(p=>S.P.p[p.id].vol)),mx=Math.max(...st.hrs.map(x=>x.cap))*1.15;
  return `<div class="pad"><div class="kv2" style="grid-template-columns:repeat(2,auto minmax(0,1fr));max-width:520px"><span>Pasaron por la calle</span><b>${num(st.pass)} autos</b><span>Entraron</span><b>${num(st.enter)} (${pcu(st.enter/st.pass,1)})</b></div>
  ${barChart({label:'Porcentaje de los autos que pasan por la calle y entran a la estación, por hora',h:170,items:st.hrs.map(x=>({v:x.cap*100,l:x.h%3?'':x.h+' h',cls:x.cap<st.base*.85?'bad':'mute',t:`${x.h} h: pasaron ${num(x.pass)}, entraron ${num(x.enter)} (${pcu(x.cap,1)})`})),y0:0,y1:mx*100,yt:niceTicks(0,mx*100,3).map(v=>[v,num(v,1)+'%']),hlines:[{y:st.base*100,cls:'ref',label:'resto del día'}]})}
- <p class="small" style="margin-top:6px"><b>De 17 a 20 h entra el ${pcu(st.pkCap,1)} de los autos que pasan, contra ${pcu(st.base,1)} el resto del día.</b> Coincide con la fila en las islas: son unos ${num(st.lost)} autos por día que siguen de largo (${lit(st.lost*CAR_L)}, ${ars(st.lost*CAR_L*mgL)} de margen). Ver <a href="#personal">Personal</a>.</p></div>`}
+ <p class="small" style="margin-top:6px"><b>De 17 a 20 h entra el ${pcu(st.pkCap,1)} de los autos que pasan, contra ${pcu(st.base,1)} el resto del día.</b> Coincide con la fila en las islas: son unos ${num(st.lost)} autos por día que siguen de largo (${lit(st.lost*CAR_L)}, ${ars(st.lost*CAR_L*mgL)} de margen). Ver <a href="#personal">Personal</a>. «Entraron» cuenta cada auto que cruza el ingreso (C1): ${num(st.atend??st.enter)} cargaron y ${num(st.enter-(st.atend??st.enter))} se fueron sin cargar (<a href="#playa">Playa e islas</a>).</p></div>`}
 /* góndolas: paso, tiempo detenido y compra, con la cámara C5 y el POS de la tienda */
 const GOND=[{n:'Golosinas y alfajores',p:.78,s:24,t:.41,c:.18},{n:'Café y panadería',p:.92,s:16,t:.7,c:.62},{n:'Bebidas frías',p:.81,s:11,t:.66,c:.58},{n:'Snacks salados',p:.55,s:14,t:.35,c:.24},{n:'Lácteos',p:.38,s:9,t:.4,c:.33},{n:'Limpieza del auto',p:.22,s:19,t:.2,c:.06},{n:'Lubricantes',p:.12,s:21,t:.15,c:.04},{n:'Revistas y regalos',p:.08,s:6,t:.1,c:.02}];
 function gondHtml(){const hot=GOND.filter(g=>g.s>=18&&g.c/g.t<.5&&g.p>=.5).sort((a,b)=>b.s-a.s)[0],hid=GOND.filter(g=>g.s>=18&&g.p<.3).sort((a,b)=>a.p-b.p)[0],ms=Math.max(...GOND.map(g=>g.s));
@@ -1202,7 +1233,7 @@ function chatPanel(sc){const c=S.chat;
 V.capacitacion=()=>{const sc=SCN.find(s=>s.id===S.scn&&S.chat);
  return `<div class="cap-grid"><div class="cap-list">${SCN.map(s=>`<div class="pcard${sc&&sc.id===s.id?' on':''}" data-act="scn" data-s="${s.id}" role="button" tabindex="0"><div class="row"><span class="lbl c-${s.c}">${s.tag}</span><span class="small muted">${s.lvl}</span></div><h3>${s.t}</h3><div class="cl">${s.who}</div></div>`).join('')}</div>
  <div>${sc?chatPanel(sc):`<section class="panel pad cap-empty">${ic('cap')}<h3>Elegí una situación para practicar</h3><p class="muted">El playero responde como lo haría en la isla. GOTA hace de cliente y, al final, devuelve un puntaje con consejos concretos.</p>${engineBadge()}</section>`}</div></div>
- <p class="note">${S.P.ia?'Con IA, el cliente responde con libertad y el puntaje sigue una rúbrica fija.':'Sin endpoint de IA configurado, la demo usa un guion local que reconoce palabras clave. Con IA, el cliente responde con libertad y la rúbrica es la misma.'} Las prácticas no se guardan.</p>`};
+ <p class="note">${S.P.ia?'Con IA, el cliente responde con libertad y el puntaje sigue una rúbrica fija.':'Sin una IA conectada, la demo usa un guion que reconoce palabras clave. Con IA, el cliente responde con libertad y el puntaje sigue la misma rúbrica.'} Las prácticas no se guardan.</p>`};
 
 /* ---------- Precios: reglas del dueño ---------- */
 function rulesHtml(){const R=RL(),f=(k,l,mn,mx,st,v)=>`<label class="fld"><span>${l}</span><input class="inp" type="number" min="${mn}" max="${mx}" step="${st}" value="${v}" data-ch="rule" data-k="${k}"></label>`;
@@ -1225,7 +1256,7 @@ function parteDiario(){const P=S.P,h=D.hist,y=h[h.length-1],w=h[h.length-8],ly=s
  return `☀️ Parte diario · ${P.station}\n\nAyer: ${lit(ly)} (${pc(ly/lw-1)} vs. el ${DOWL[y.d.getDay()]} anterior) · margen ${ars(mg)}\n\n${al.length?al.map(a=>'⚠️ '+a.t).join('\n'):'✅ Sin alertas importantes'}\n\n💰 Impacto estimado del mes: ${ars(tot)}\n\nRespondé 1 para ver el detalle.`}
 function redHtml(){const P=S.P,y=D.hist[D.hist.length-1],ly=sum(PRODS.map(p=>y.v[p.id])),mg=sum(PRODS.map(p=>y.v[p.id]*(P.p[p.id].precio-P.p[p.id].costo))),pend=D.shifts.filter(x=>shiftCalc(x).pend.length).length;
  const rows=[[P.station,1,alerts().length,pend,true],['Estación Demo 2 · Ruta',1.34,4,0],['Estación Demo 3 · Centro',.71,2,1]];
- return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:480px"><thead><tr><th>Estación</th><th class="r">Litros ayer</th><th class="r">Margen ayer</th><th class="r">Alertas</th><th class="r">Cierres por revisar</th></tr></thead><tbody>${rows.map(([n,k,a,c,me])=>`<tr${me?' style="font-weight:600"':''}><td style="min-width:170px">${esc(n)}${me?' <span class="pill p-acc">esta</span>':''}</td><td class="r num">${lit(ly*k)}</td><td class="r num">${ars(mg*k)}</td><td class="r num">${a}</td><td class="r num">${c}</td></tr>`).join('')}</tbody></table></div><p class="small muted pad">Las otras dos estaciones son de ejemplo. Con varias estaciones, el dueño compara y ve dónde mirar primero.</p>`}
+ return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:480px"><thead><tr><th>Estación</th><th class="r">Litros ayer</th><th class="r">Margen ayer</th><th class="r">Alertas</th><th class="r">Cierres<br>por revisar</th></tr></thead><tbody>${rows.map(([n,k,a,c,me])=>`<tr${me?' style="font-weight:600"':''}><td style="min-width:140px">${esc(n)}${me?' <span class="pill p-acc">esta</span>':''}</td><td class="r num">${lit(ly*k)}</td><td class="r num">${ars(mg*k)}</td><td class="r num">${a}</td><td class="r num">${c}</td></tr>`).join('')}</tbody></table></div><p class="small muted pad">Las otras dos estaciones son de ejemplo. Con varias estaciones, el dueño compara y ve dónde mirar primero.</p>`}
 
 /* ---------- Precios: simulador de promociones ---------- */
 const PROMO_LIM={dow:[0,6],d:[1,30],cap:[0,1e6],part:[1,100],L:[5,200]};
@@ -1290,7 +1321,7 @@ function scene(c,id,t){const W=480,H=270;
 function hud(c,id){const W=480,H=270,d=new Date();c.clearRect(0,0,W,H);c.font='500 11px ui-monospace,Menlo,Consolas,monospace';c.fillStyle='rgba(0,0,0,.45)';c.fillRect(6,H-22,150,16);c.fillStyle='#fff';c.fillText(`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${hhmm(d)}:${pad(d.getSeconds())}`,10,H-10);
  const tile=c.canvas.parentNode,vid=tile&&tile.classList.contains('has-video')&&tile.querySelector('video'),R=S.det&&detCam(id);
  if(vid&&R){detDraw(c,R,vid.currentTime);return}
- if(id==='C6'){const st=D.street;c.strokeStyle='rgba(255,214,10,.9)';c.lineWidth=2;c.setLineDash([8,6]);c.beginPath();c.moveTo(250,82);c.lineTo(250,198);c.stroke();c.beginPath();c.moveTo(330,206);c.lineTo(440,206);c.stroke();c.setLineDash([]);c.font='600 11px Jost,system-ui,sans-serif';const tx=`Ayer: pasaron ${num(st.pass)} · entraron ${num(st.enter)} (${pcu(st.enter/st.pass,1)})`,tw=c.measureText(tx).width+12;c.fillStyle='rgba(0,0,0,.6)';c.fillRect(W-tw-6,6,tw,18);c.fillStyle='#ffd60a';c.fillText(tx,W-tw,19)}
+ if(id==='C6'){const st=D.street;c.strokeStyle='rgba(255,214,10,.9)';c.lineWidth=2;c.setLineDash([8,6]);c.beginPath();c.moveTo(250,82);c.lineTo(250,198);c.stroke();c.beginPath();c.moveTo(330,206);c.lineTo(440,206);c.stroke();c.setLineDash([]);c.font='600 11px Jost,system-ui,sans-serif';const tx=`Ayer: pasaron ${num(st.pass)} · entraron ${num(st.enter)} (${pcu(st.enter/st.pass,1)})`,tw=c.measureText(tx).width+12;c.fillStyle='rgba(0,0,0,.6)';c.fillRect(W-tw-6,30,tw,18);c.fillStyle='#ffd60a';c.fillText(tx,W-tw,43)}
  const e=D.ev.find(x=>x.id===S.ev);if(!e||camOf(e)!==id||!EV_BOX[e.id])return;const[bx,by,bw,bh]=EV_BOX[e.id],x=bx*W,y=by*H,w=bw*W,h=bh*H,col=SEVC[e.sev]||'#fff',k=14;
  c.strokeStyle=col;c.lineWidth=2.5;c.setLineDash(e.state==='NO_OBSERVABLE'?[6,5]:[]);c.strokeRect(x,y,w,h);c.setLineDash([]);c.lineWidth=4;
  [[x,y,1,1],[x+w,y,-1,1],[x,y+h,1,-1],[x+w,y+h,-1,-1]].forEach(([px,py,sx,sy])=>{c.beginPath();c.moveTo(px+sx*k,py);c.lineTo(px,py);c.lineTo(px,py+sy*k);c.stroke()});
@@ -1394,7 +1425,7 @@ function payOut(){const c=payCalc(S.pay);
  return `<div><span>Pasa a QR por mes</span><b>${ars(c.mv)}</b></div><div><span>${c.save>=0?'Ahorro por mes':'Pérdida por mes'}</span><b class="${c.save>=0?'okc':'badc'}">${ars(Math.abs(c.save))}</b></div><div><span>Por litro vendido</span><b>${ars(c.save/c.L,2)}</b></div><div class="full">${c.save>=0?`Cobrar con QR cuesta ${pcu(c.rows[3].pct,1)} y con crédito ${pcu(c.rows[2].pct,1)}, contando los días hasta que llega la plata. Aun con el incentivo de ${num(S.pay.inc,1)}%, conviene.`:`El incentivo de ${num(S.pay.inc,1)}% es más caro que la diferencia de costo entre crédito y QR: así no conviene.`}</div>`}
 function payHtml(){const c=payCalc(S.pay),o=S.pay,f=(k,l,st)=>`<label class="fld"><span>${l}</span><input class="inp" type="number" step="${st}" min="${PAY_LIM[k][0]}" max="${PAY_LIM[k][1]}" value="${o[k]}" data-in="pay" data-k="${k}"></label>`;
  return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:560px"><thead><tr><th>Medio</th><th class="r">Ventas del mes</th><th class="r">Costo</th><th class="r">Costo total</th><th>De dónde sale</th></tr></thead><tbody>${c.rows.map(r=>`<tr><td><b>${r.n}</b><div class="sub">${pcu(r.sh)} de las ventas</div></td><td class="r num">${ars(r.v)}</td><td class="r num">${pcu(r.pct,2)}</td><td class="r num">${ars(r.c)}</td><td class="small">${r.src}</td></tr>`).join('')}<tr style="font-weight:600"><td>Total</td><td class="r num">${ars(c.ventas)}</td><td class="r num">${pcu(c.tot/c.ventas,2)}</td><td class="r num">${ars(c.tot)}</td><td class="small">${ars(c.tot/c.L,2)} por litro</td></tr></tbody></table></div>
- <div class="pad"><p class="small muted" style="margin-bottom:10px">Simulador: ¿qué pasa si parte de los que pagan con crédito pasan a QR? El costo incluye el arancel y la plata que se pierde esperando la acreditación.</p><div class="promo-in" style="grid-template-columns:repeat(3,minmax(0,1fr))">${f('mv','Crédito que pasa a QR (%)',5)}${f('inc','Descuento por pagar con QR (%)',.5)}${f('tasa','Costo del dinero (% mensual)',.5)}</div><div class="promo-out" id="payOut">${payOut()}</div></div>`}
+ <div class="pad"><p class="small muted" style="margin-bottom:10px">Simulador: ¿qué pasa si parte de los que pagan con crédito pasan a QR? El costo incluye el arancel y la plata que se pierde esperando la acreditación.</p><div class="promo-in c3">${f('mv','Crédito que pasa a QR (%)',5)}${f('inc','Descuento por pagar con QR (%)',.5)}${f('tasa','Costo del dinero (% mensual)',.5)}</div><div class="promo-out" id="payOut">${payOut()}</div></div>`}
 
 /* ---------- Precios: control del precio publicado ---------- */
 function postedRows(){return PRODS.map(p=>{const c=S.P.p[p.id].precio,cart=p.id==='premium'&&!S.appr.cartel?c-20:c,app=p.id==='dpremium'?null:c;return{p,c,cart,app,ok:cart===c&&(app==null||app===c)}})}
@@ -1432,7 +1463,7 @@ const ASKQ=[
   return{t:`Ayer ${num(cv.ab)} autos entraron a la playa y se fueron sin cargar. La espera promedio hasta ser atendido fue de ${mmss(cv.wait)}${pk.length?` y pasó de 1:30 ${hourRanges(pk).join(' y ')}`:''}.`,v:'playa'}}},
  {q:'¿Qué autos entran a la estación?',k:/qué autos|modelo|marca|vehícul|antig/i,a:()=>{const T=D.traffic,d=T.days[T.days.length-1],b=T.brands,lo=T.sent.norte.cap>T.sent.sur.cap?'sur':'norte',hi=lo==='sur'?'norte':'sur';
   const mm=b.sc>CALLE_SC_MAX?`marca y modelo quedan sin dato: el ${pcu(b.sc)} no se pudo clasificar`:`lo más visto en la semana, estimado por el modelo: ${b.models.slice(0,3).map(m=>m.n).join(', ')} (${pcu(b.sc)} sin clasificar)`;
-  return{t:`Ayer entraron ${num(d.enter)} vehículos; camionetas, utilitarios y camiones fueron el ${pcu(callePick(d))}. ${mm[0].toUpperCase()+mm.slice(1)}. Del sentido ${hi} entra el ${pcu(T.sent[hi].cap,1)} de los que pasan y del ${lo}, el ${pcu(T.sent[lo].cap,1)}.`,v:'calle'}}},
+  return{t:`Ayer entraron ${num(d.enter)} vehículos en las 24 h; camionetas, utilitarios y camiones fueron el ${pcu(callePick(d))}. ${mm[0].toUpperCase()+mm.slice(1)}. Del sentido ${hi} entra el ${pcu(T.sent[hi].cap,1)} de los que pasan y del ${lo}, el ${pcu(T.sent[lo].cap,1)}.`,v:'calle'}}},
  {q:'¿Qué compran en la tienda?',k:/compr|tienda|góndola|golosina|ticket/i,a:()=>{const s=D.store,rows=storeCatRows('dia').filter(r=>r.ok).sort((a,b)=>b.imp-a.imp);
   return{t:`Ayer entraron ${num(s.ppl)} personas a la tienda y hubo ${num(s.tk)} tickets (${num(s.conv*100)} por cada 100). Lo que más plata dejó: ${rows.slice(0,2).map(r=>`${r.n.toLowerCase()} (${ars(r.imp)})`).join(' y ')}. Unas ${num(s.look)} entraron y no compraron (estimado).`,v:'tienda'}}},
  {q:'¿Me falta gente en algún horario?',k:/gente|personal|playero|horario|dotaci/i,a:()=>{const d=staffDay(addD(TODAY,1)),dh=d.need.map((n,h)=>n>d.have[h]?h:-1).filter(h=>h>=0);
@@ -1454,22 +1485,22 @@ function convHtml(){const day=CONV.filter(x=>x.t!=='Noche'),avg=sum(day.map(x=>x
 /* ---------- Analítica de video: métricas y comportamiento (motor en vision/) ---------- */
 const PUMP_W=[.34,.3,.22,.14]; // reparto de autos por surtidor: el 4 queda lejos de la entrada
 function buildCV(){const g=RNG(2024),st=D.street;
- const hrs=st.hrs.map(x=>{const rho=x.enter/(ATT*STAFF_NOW(x.h)),wait=Math.max(20,35+330*Math.max(0,rho-.75)**1.4+g.n()*4),fill=150+g.n()*8,out=38+(rho>.9?25:0)+g.n()*3;
-  return{h:x.h,cars:x.enter,wait,fill,out,rho,ab:x.enter*(wait>95?.07:wait>70?.03:.008),occ:PUMP_W.map(w=>Math.min(.98,x.enter*(wait+fill+out)/3600*w))}});
+ const hrs=st.hrs.map(x=>{const at=x.atend??x.enter,rho=at/(ATT*STAFF_NOW(x.h)),wait=Math.max(20,35+330*Math.max(0,rho-.75)**1.4+g.n()*4),fill=150+g.n()*8,out=38+(rho>.9?25:0)+g.n()*3;
+  return{h:x.h,cars:at,wait,fill,out,rho,ab:at*(wait>95?.07:wait>70?.03:.008),occ:PUMP_W.map(w=>Math.min(.98,at*(wait+fill+out)/3600*w))}});
  const cars=sum(hrs.map(x=>x.cars)),ab=sum(hrs.map(x=>x.ab)),avg=k=>sum(hrs.map(x=>x[k]*x.cars))/cars;
  const rules=[
   {id:'celular',n:'Celular durante la carga',cam:'C3',tipo:'copresencia',det:7,ok:6,fp:1},
   {id:'espera',n:'Auto esperando sin atención más de 90 s',cam:'C3 · C4',tipo:'espera sin atención',det:23,ok:21,fp:2},
-  {id:'abandono',n:'Se fue sin cargar',cam:'C4',tipo:'abandono',det:Math.round(ab),ok:Math.round(ab)-1,fp:1},
+  {id:'abandono',n:'Se fue sin cargar',cam:'C4',tipo:'abandono',det:Math.round(ab)+1,ok:Math.round(ab),fp:1}, // confirmados = los que se fueron (D.cv.ab); más una falsa alarma
   {id:'ocupa',n:'Auto ocupando la isla más de 7 min',cam:'C4',tipo:'permanencia',det:3,ok:2,fp:1},
   {id:'bidon',n:'Carga en bidón',cam:'C3',tipo:'copresencia',det:2,ok:1,fp:1},
   {id:'fila',n:'Fila de 5 o más personas en la caja',cam:'C2',tipo:'fila',det:4,ok:4,fp:0},
   {id:'merodeo',n:'Persona más de 3 min en la zona de tanques',cam:'C4',tipo:'permanencia',det:3,ok:0,fp:3},
-  {id:'fuga',n:'Patente en la lista de fugas',cam:'C1',tipo:'lectura de patente',det:1,ok:1,fp:0}];
+  {id:'fuga',n:'Patente en la lista de fugas',cam:'C1',tipo:'lectura de patente',det:0,ok:0,fp:0}]; // ayer no hubo coincidencias (D.sec.lpr.match); la de hoy está en «Eventos de hoy»
  const health=[['C1',.99,'—'],['C2',1,'—'],['C3',.97,'Gotas de lluvia en la lente, 7 a 8 h'],['C4',.92,'Reflejo de sol, 16 a 17 h'],['C5',1,'—'],['C6',.96,'Poca luz, 22 a 6 h: el conteo nocturno es menos preciso']];
  return{hrs,cars,ab,wait:avg('wait'),fill:avg('fill'),out:avg('out'),rules,health}}
 const mmss=s=>`${Math.floor(s/60)}:${pad(Math.round(s%60))}`;
-function stageChart(hrs){const W=640,Hh=220,pl=44,pr=10,pt=14,pb=24,n=hrs.length,bw=(W-pl-pr)/n,mx=Math.max(...hrs.map(x=>x.wait+x.fill+x.out))*1.1,f=v=>v.toFixed(1),Y=v=>pt+(1-v/mx)*(Hh-pt-pb);
+function stageChart(hrs){const W=chartW(),Hh=220,pl=chartPl(44),pr=10,pt=14,pb=24,n=hrs.length,bw=(W-pl-pr)/n,mx=Math.max(...hrs.map(x=>x.wait+x.fill+x.out))*1.1,f=v=>v.toFixed(1),Y=v=>pt+(1-v/mx)*(Hh-pt-pb);
  let s=`<svg class="chart" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Tiempo promedio en la isla por etapa y por hora">`;
  niceTicks(0,mx,4).forEach(v=>s+=`<line class="grid" x1="${pl}" x2="${W-pr}" y1="${f(Y(v))}" y2="${f(Y(v))}"/><text x="${pl-6}" y="${f(Y(v)+3.5)}" text-anchor="end">${mmss(v)}</text>`);
  hrs.forEach((x,i)=>{let base=0;[['wait',x.wait>90?'bad':'warn'],['fill','mute'],['out','ok']].forEach(([k,c])=>{const a=Y(base+x[k]),b=Y(base);s+=`<rect class="bar ${c}" x="${f(pl+i*bw+bw*.18)}" y="${f(a)}" width="${f(bw*.64)}" height="${f(Math.max(.5,b-a))}"><title>${x.h} h · ${k==='wait'?'espera hasta que lo atienden':k==='fill'?'carga y cobro':'salida'}: ${mmss(x[k])}</title></rect>`;base+=x[k]});if(x.h%3===0)s+=`<text x="${f(pl+i*bw+bw/2)}" y="${Hh-7}" text-anchor="middle">${x.h} h</text>`});
@@ -1478,13 +1509,13 @@ function pumpHeat(hrs){return `<div class="tbl-wrap flat"><table class="tbl heat
 function funnelHtml(cars){const so=D.store,fromCars=so?sum(so.hrs.map(x=>x.ppl-x.walk)):cars*.26,buy=so?sum(so.hrs.map(x=>x.ppl?x.tk*(x.ppl-x.walk)/x.ppl:0)):cars*.21;
  const st=[['Autos atendidos',1],['Alguien baja del auto',.41],['Entra a la tienda',fromCars/cars],['Compra (ticket del POS)',buy/cars]];
  return `<div class="pad">${st.map(([n,k])=>`<div class="row" style="gap:10px;margin:6px 0;flex-wrap:nowrap"><span class="small" style="width:170px;flex:none">${n}</span><div class="meter" style="flex:1;height:14px"><i style="width:${k*100}%"></i></div><b class="num small" style="width:92px;text-align:right">${num(cars*k)} · ${pcu(k)}</b></div>`).join('')}
- <p class="small" style="margin-top:8px"><b>Recorridos más comunes en la tienda</b> (cámaras C2 y C5):</p><ul class="why" style="padding:4px 0 0">${[['Puerta → café → caja',.34],['Puerta → bebidas frías → caja',.22],['Puerta → golosinas → bebidas → caja',.14],['Puerta → baño → puerta, sin comprar',.11,'warn']].map(([t,v,c])=>`<li class="${c||''}">${ic(c?'alert':'arrow')}<span>${t}: <b>${pcu(v)}</b></span></li>`).join('')}</ul>
- <p class="small">Uno de cada nueve va al baño y se va sin comprar: una oferta en ese pasillo es la prueba más barata para subir el ticket.</p></div>`}
+ <p class="small" style="margin-top:8px"><b>Recorridos frente a las góndolas</b> (cámara C5):</p><ul class="why" style="padding:4px 0 0">${[['Café → caja',.34],['Bebidas frías → caja',.22],['Golosinas → bebidas → caja',.14]].map(([t,v])=>`<li>${ic('arrow')}<span>${t}: <b>${pcu(v)}</b></span></li>`).join('')}</ul>
+ <p class="small">${so?`Unas ${num(so.wc)} personas (${pcu(TIENDA_WC,1)} de las que entran) van solo al baño y se van sin comprar (estimado, módulo Tienda): una oferta en ese pasillo es una prueba barata para subir el ticket. C2 no ve el baño y su recorrido no se une con el de C5.`:'Quién va solo al baño: <span class="muted">sin dato</span>.'}</p></div>`}
 /* precisión de una regla: confirmadas ÷ (confirmadas + falsas alarmas) en 7 días (D.sec.week; sin ese módulo, ayer); con menos de CV_MIN revisiones no se publica porcentaje */
 const CV_MIN=20;
 const cvQ=r=>{const w=D.sec&&D.sec.week?D.sec.week.find(x=>x.id===r.id):null,ok=w?w.ok:r.ok,fp=w?w.fp:r.fp,n=ok+fp;return{ok,fp,n,p:n>=CV_MIN?ok/n:null,win:w?'en 7 días':'ayer'}};
 function cvRulesHtml(rules){const qs=Object.fromEntries(rules.map(r=>[r.id,cvQ(r)]));
- return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:680px"><thead><tr><th>Regla</th><th>Cámara</th><th class="r">Ayer</th><th class="r">Confirmadas</th><th class="r">Falsas alarmas</th><th class="r">Precisión<div class="sub">7 días · ${CV_MIN}+ revisiones</div></th><th>Estado</th></tr></thead><tbody>${rules.map(r=>{const q=qs[r.id],off=S.cvOff[r.id];return `<tr${off?' style="opacity:.55"':''}><td><b>${r.n}</b><div class="sub">${r.tipo}</div></td><td class="small">${r.cam}</td><td class="r num">${r.det}</td><td class="r num">${r.ok}</td><td class="r num">${r.fp}</td><td class="r num ${q.p!=null&&q.p<.7?'badc':''}">${q.p==null?`<span class="muted">sin dato (n = ${q.n})</span>`:pcu(q.p)}</td><td><button class="btn sm ${off?'':'ghost'}" data-act="cvRule" data-id="${r.id}" aria-pressed="${!off}">${off?'Pausada · activar':'Activa · pausar'}</button></td></tr>`}).join('')}</tbody></table></div>
+ return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:860px"><thead><tr><th>Regla</th><th>Cámara</th><th class="r">Ayer</th><th class="r">Confirmadas</th><th class="r">Falsas alarmas</th><th class="r">Precisión<div class="sub">7 días · ${CV_MIN}+ revisiones</div></th><th>Estado</th></tr></thead><tbody>${rules.map(r=>{const q=qs[r.id],off=S.cvOff[r.id];return `<tr${off?' style="opacity:.55"':''}><td style="min-width:170px"><b>${r.n}</b><div class="sub">${r.tipo}</div></td><td class="small">${r.cam}</td><td class="r num">${r.det}</td><td class="r num">${r.ok}</td><td class="r num">${r.fp}</td><td class="r num ${q.p!=null&&q.p<.7?'badc':''}">${q.p==null?`<span class="muted">sin dato (n = ${q.n})</span>`:pcu(q.p)}</td><td><button class="btn sm ${off?'':'ghost'}" data-act="cvRule" data-id="${r.id}" aria-pressed="${!off}">${off?'Pausada · activar':'Activa · pausar'}</button></td></tr>`}).join('')}</tbody></table></div>
  ${rules.filter(r=>qs[r.id].fp>=3&&qs[r.id].fp>qs[r.id].ok).map(r=>`<div class="banner" style="margin:10px 14px">${ic('info')}<div><b>${r.n}:</b> ${qs[r.id].win} las personas descartaron ${qs[r.id].fp} de ${qs[r.id].n} avisos. Conviene subir el umbral o redibujar la zona antes de seguir avisando.</div></div>`).join('')}
  <p class="small muted pad" style="padding-top:4px">«Ayer», «Confirmadas» y «Falsas alarmas» son de ayer; la precisión se calcula sobre 7 días y se publica con ${CV_MIN} revisiones o más (si no, «sin dato» con la cantidad de revisiones).</p>`}
 function cvHealthHtml(h){return h.map(([id,o,m])=>{const c=CAMS.find(x=>x.id===id);return `<div class="item">${ic('camera')}<div class="body"><b>${id} · ${c?c.n:''}</b><small>${m==='—'?'Sin problemas de imagen ayer.':m+'. En ese intervalo los eventos quedan NO OBSERVABLE.'}</small></div><div class="side-r">${pill(o>=.98?'p-ok':o>=.95?'p-info':'p-warn',`${pcu(o)} observable`)}</div></div>`}).join('')}
@@ -1535,8 +1566,9 @@ const CALLE_SC_MAX=.4; // si «sin clasificar» supera esto, no se muestra ranki
 const callePick=d=>{const tot=sum(Object.values(d.mix));return tot?sum(CALLE_T.filter(t=>t.dsl).map(t=>d.mix[t.id]))/tot:0};
 
 /* datos: últimos 7 días derivados de D.hist (litros por producto) y del perfil horario de D.street, con semilla fija */
-function buildTraffic(){const g=RNG(3031),st=D.street,hist=D.hist.slice(-7),fr=h=>CALLE_F.find(f=>h>=f.h[0]&&h<f.h[1]);
- const days=hist.map(x=>{const dow=x.d.getDay(),fin=dow===0||dow===6,tot=sum(PRODS.map(p=>x.v[p.id])),enter=tot/CAR_L,dsl=(x.v.diesel+x.v.dpremium)/tot,k=enter/st.enter;
+function buildTraffic(){const g=RNG(3031),st=D.street,hist=D.hist.slice(-7),fr=h=>CALLE_F.find(f=>h>=f.h[0]&&h<f.h[1]),kIn=st.atend?st.enter/st.atend:1;
+ // entran = los que cargan (litros ÷ CAR_L) más los que se van sin cargar, con la proporción de ayer (streetIn)
+ const days=hist.map(x=>{const dow=x.d.getDay(),fin=dow===0||dow===6,tot=sum(PRODS.map(p=>x.v[p.id])),enter=tot/CAR_L*kIn,dsl=(x.v.diesel+x.v.dpremium)/tot,k=enter/st.enter;
   // pasan y entran por franja y por mano: el perfil horario de ayer, escalado a los litros de cada día
   const fz=CALLE_F.map(f=>{const hs=st.hrs.filter(r=>fr(r.h)===f),e=sum(hs.map(r=>r.enter))*k,p=sum(hs.map(r=>r.pass))*k*(1+g.n()*.04);
    const pN=p*f.kn,pS=p-pN,eN=e*pN*CALLE_S[0].k/(pN*CALLE_S[0].k+pS*CALLE_S[1].k);
@@ -1609,7 +1641,7 @@ function calleAgeHtml(){const a=D.traffic.age,idn=1-a.sc,old=sum(a.rows.slice(2)
  if(a.sc>CALLE_SC_MAX)return `<p class="pad">El ${pcu(a.sc)} de los vehículos quedó <b>sin dato</b> de antigüedad (modelo no identificado): no se muestra el reparto por rango hasta bajar de ${pcu(CALLE_SC_MAX)}.</p>`;
  const rows=[...a.rows.map(r=>({n:r.r,v:r.share,txt:`${pcu(r.share,1)} · estimado`})),{n:'Sin dato',sub:'modelo no identificado',v:a.sc,txt:pcu(a.sc,1),bg:'var(--line-strong)',mute:true}];
  return `${calleTbl('<th>Rango</th><th>Reparto</th><th class="r">Participación</th>',rows)}
- <p class="small pad"><b>Entre los clasificados, ${Math.round(old*10)} de cada 10 tendrían más de 8 años</b> (estimado por rango, nunca por año exacto: con año la precisión de estos modelos cae a la mitad). Referencia externa, no medida por la cámara: la edad promedio del parque argentino es ${num(CALLE_AFAC,1)} años (AFAC 2025). <b>Qué hacer:</b> aditivos, lubricantes y chequeo de agua y aceite ofrecidos en la isla. Los no identificados quedan «sin dato», no se completan con el promedio.</p>`}
+ <p class="small pad"><b>Entre los clasificados, ${Math.round(old*10)} de cada 10 tendrían más de 8 años</b> (estimado por rango, nunca por año exacto: la precisión por año se mide en el piloto). Referencia externa, no medida por la cámara: la edad promedio del parque argentino es ${num(CALLE_AFAC,1)} años (AFAC 2025). <b>Qué hacer:</b> aditivos, lubricantes y chequeo de agua y aceite ofrecidos en la isla. Los no identificados quedan «sin dato», no se completan con el promedio.</p>`}
 
 /* (f) lo que no se hace con la cámara: decisión de producto, no limitación técnica */
 const calleNoHtml=()=>`<ul class="why">
@@ -1620,14 +1652,14 @@ const calleNoHtml=()=>`<ul class="why">
 /* vista completa */
 const V_calle=()=>{const T=D.traffic,d=calleDay(),lo=T.sent.norte.cap>T.sent.sur.cap?'sur':'norte',hi=lo==='sur'?'norte':'sur',src=t=>`<span class="small muted">${t}</span>`;
  return `<div class="banner">${ic('info')}<div>La cámara de la calle (C6) cuenta los autos que pasan y en qué sentido; la del ingreso (C1) cuenta los que entran, qué tipo de vehículo son y cuánto se quedan. <b>La diferencia es la tasa de captación:</b> cuántos de los que pasan eligen esta estación. Lo que es estimación lleva la palabra «estimado» y su confianza.</div></div>
- <div class="stats">${stat('Pasaron por la calle',num(T.pass),'Últimos 7 días · cámara C6')}${stat('Entraron',num(T.enter),`${pcu(T.enter/T.pass,1)} de los que pasan · cámara C1`)}${stat(`Captación sentido ${lo}`,pcu(T.sent[lo].cap,1),`Contra ${pcu(T.sent[hi].cap,1)} en el sentido ${hi}`,'bad')}${stat('Camionetas y utilitarios',pcu(callePick(d)),`${DOWL[d.dow]} · diésel: ${pcu(d.dsl)} de los litros`)}</div>
- ${panel('Calle: autos que pasan y autos que entran',streetHtml(),{icon:'car',right:src('ayer · cámaras C6 y C1')})}
+ <div class="stats">${stat('Pasaron por la calle',num(T.pass),'Últimos 7 días, las 24 h · cámara C6')}${stat('Entraron',num(T.enter),`${pcu(T.enter/T.pass,1)} de los que pasan, 7 días · cámara C1`)}${stat(`Captación sentido ${lo}`,pcu(T.sent[lo].cap,1),`Contra ${pcu(T.sent[hi].cap,1)} en el sentido ${hi}`,'bad')}${stat('Camionetas, utilitarios y camiones',pcu(callePick(d)),`${DOWL[d.dow]} · diésel: ${pcu(d.dsl)} de los litros`)}</div>
+ ${panel('Calle: autos que pasan y autos que entran',streetHtml(),{icon:'car',right:src('ayer, 6 a 24 h · cámaras C6 y C1')})}
  <div class="mt">${panel('Captación por sentido de circulación y franja',calleSentHtml(),{icon:'map',right:src('últimos 7 días · cámara C6')})}</div>
  <div class="row mt"><div class="seg" role="group" aria-label="Día">${T.days.map((x,i)=>`<button class="${x===d?'on':''}" data-act="calleDay" data-d="${i}" aria-pressed="${x===d}">${DOW[x.dow]} ${x.d.getDate()}</button>`).join('')}</div><span class="small muted">Elegí un día: cambian el mix de vehículos y el tiempo en la estación.</span></div>
  <div class="grid2 mt">${panel(`Qué vehículos entraron · ${DOWL[d.dow]} ${d.d.getDate()}`,calleMixHtml(d),{icon:'truck',right:src('cámara C1 · controlador · medible hoy')})}${panel(`Tiempo en la estación · ${DOWL[d.dow]} ${d.d.getDate()}`,calleDwellHtml(d),{icon:'clock',right:src('cámara C1, entrada y salida · medible hoy')})}</div>
  <div class="grid2 mt">${panel('Marca y modelo estimados',calleBrandsHtml(),{icon:'car',right:pill('p-acc','estimado por el modelo')+' '+src('7 días · cámara C1')})}${panel('Antigüedad estimada por rango',calleAgeHtml(),{icon:'clock',right:pill('p-acc','estimado por el modelo')+' '+src('7 días · cámara C1')})}</div>
  <div class="mt">${panel('Lo que no se hace con la cámara',calleNoHtml(),{icon:'shield',right:src('decisión de producto')})}</div>
- <p class="note">Conteo con líneas virtuales sobre la imagen: una por mano en C6 y una de entrada y otra de salida en C1; el tipo de vehículo lo da el detector al cruzar la línea; marca, modelo y rango de años los estima un modelo de visión una vez por visita sobre el mejor cuadro de C1 y se publican solo como totales por semana, sin patente ni hora. Los litros vienen del controlador de surtidores. En producción: el motor de <span class="mono">vision/</span> en un equipo dentro de la estación, con la precisión del mix validada a mano en el piloto antes de mostrar porcentajes; a la nube suben números, no video. Los números de esta pantalla son de ejemplo.</p>`};
+ <p class="note">Conteo con líneas virtuales sobre la imagen: una por mano en C6 y una de entrada y otra de salida en C1; el tipo de vehículo lo da el detector al cruzar la línea; marca, modelo y rango de años los estima un modelo de visión una vez por visita sobre el mejor cuadro de C1 y se publican solo como totales por semana, sin patente ni hora. Los litros vienen del controlador de surtidores. En producción: el motor GOTA Vision en un equipo dentro de la estación, con la precisión del mix validada a mano en el piloto antes de mostrar porcentajes; a la nube suben números, no video. Los números de esta pantalla son de ejemplo.</p>`};
 const ACT_CALLE={calleDay:el=>{S.calleDay=+el.dataset.d;render()}};
 V.calle=V_calle;
 /* <<< módulo calle */
@@ -1753,7 +1785,7 @@ function playaStaffHtml(){const P=D.playa,t=S.playaT,rows=P.hrs.filter(x=>t==='d
   return `<tr><td><b>${x.h} a ${x.h+1} h</b></td><td class="r num">${x.vis==null?'<span class="muted">sin dato</span>':num(x.vis,1)}</td><td class="r num">${x.prog}</td><td class="r num">${num(x.cars)}</td><td class="r num ${s==='bad'?'badc':s==='warn'?'warnc':''}">${x.perStaff==null?'<span class="muted">sin dato</span>':num(x.perStaff)}</td><td>${s==null?pill('p-mute','NO OBSERVABLE'):s==='bad'?pill('p-bad','Falta gente'):s==='warn'?pill('p-warn','Justo'):pill('p-ok','Alcanza')}</td></tr>`}).join('');
  const lectura=rw
   ?`<b>De ${rw[0]} a ${rw[1]+1} h hay ${num(vis,1)} ${Math.abs(vis-1)<.05?'playero visible':'playeros visibles'} para ${num(cars)} autos por hora</b> (${num(cars/vis)} por playero, contra los ${ATT} que supone <a href="#personal">Personal</a>)${others.length?`; también falta gente ${others.join(' y ')}`:''}. ${vis<prog-.4
-   ?`La grilla dice ${prog} y la cámara ve ${num(vis,1)}: el que falta puede estar en la descarga del camión o en la tienda. Revisarlo con el encargado antes de tocar la grilla.`
+   ?`La grilla dice ${prog} y la cámara ve ${num(vis,1)}. Faltan playeros a la vista en esa hora: revisá la grilla y las tareas de la hora (descarga, tienda) con el encargado. No sirve para sancionar a nadie.`
    :'Mover media hora del turno tarde al pico o sumar un refuerzo de media jornada: ver <a href="#personal">Personal</a>.'}`
   :'En todas las horas observadas hubo playeros suficientes para los autos atendidos.';
  return `<div class="tbl-wrap flat"><table class="tbl" id="playaStaff" style="min-width:600px"><thead><tr><th>Hora</th><th class="r">Playeros visibles</th><th class="r">Programados</th><th class="r">Autos atendidos</th><th class="r">Autos por playero y hora</th><th>Lectura</th></tr></thead><tbody>${tr}</tbody></table></div>
@@ -1773,7 +1805,7 @@ const V_playa=()=>{S.playaT??='dia';const cv=D.cv,t=S.playaT,bad=cv.hrs.filter(x
  <div class="grid-fit mt">${panel('Espera hasta ser atendido, por isla y por turno',playaEsperaHtml(),{icon:'clock',right:src('cámaras C3 y C4',Math.min(c3[1],c4[1]))})}${panel('Tiempo de carga por producto',playaCargaHtml(),{icon:'fuel',right:src('controlador de surtidores')})}</div>
  <div class="grid2 mt">${panel('Rendimiento: litros por minuto de surtidor ocupado',playaRendHtml(),{icon:'gauge',right:src('controlador + cámara C4',c4[1])})}${panel('Fila en la playa',playaFilaHtml(),{icon:'car',right:src('cámara C4',c4[1])})}</div>
  <div class="mt">${panel(`Playeros visibles y autos atendidos, por hora${t==='dia'?'':' · '+playaTn(t).toLowerCase()}`,playaStaffHtml(),{icon:'users',right:src('cámara C4 + grilla de turnos',c4[1])})}</div>
- <p class="note">Tiempos medidos con las cámaras de la playa (C3 y C4): un auto «espera» desde que se detiene en la isla hasta que el playero llega a su lado. La carga (inicio → fin de despacho) y los litros salen del controlador de surtidores; el cobro es la diferencia entre los dos relojes, sincronizados por NTP (con más de 5 s de desvío: «sin dato por sincronización»). Celdas con menos de 5 autos: «sin dato por pocos casos»; horas NO OBSERVABLE: «sin dato», nunca cero. Los playeros se cuentan por uniforme, sin nombres; las métricas de tiempos son agregadas por isla y turno, se informan por escrito al personal (LCT arts. 70-72) y no se usan como sanción. GOTA propone; el encargado decide. En producción: el motor de <span class="mono">vision/</span> en un equipo local y el exporte de despachos del controlador; a la nube suben números, no video. Los números de esta pantalla son de ejemplo.</p>`};
+ <p class="note">Tiempos medidos con las cámaras de la playa (C3 y C4): un auto «espera» desde que se detiene en la isla hasta que el playero llega a su lado. La carga (inicio → fin de despacho) y los litros salen del controlador de surtidores; el cobro es la diferencia entre los dos relojes, sincronizados por NTP (con más de 5 s de desvío: «sin dato por sincronización»). Celdas con menos de 5 autos: «sin dato por pocos casos»; horas NO OBSERVABLE: «sin dato», nunca cero. Los playeros se cuentan por uniforme, sin nombres; las métricas de tiempos son agregadas por isla y turno, se informan por escrito al personal (LCT arts. 70-72) y no se usan como sanción. GOTA propone; el encargado decide. En producción: el motor GOTA Vision en un equipo local y el exporte de despachos del controlador; a la nube suben números, no video. Los números de esta pantalla son de ejemplo.</p>`};
 
 const ACT_PLAYA={
  playaSel:el=>{S.playaT=el.dataset.t;render()},
@@ -1813,7 +1845,7 @@ const SEC_LEGAL=[
  {t:'Video crudo: 30 días y borrado automático',ok:true,p:'Configurado',
   s:'Clips de eventos 90 días o hasta el cierre de la denuncia; métricas agregadas sin identificadores, sin límite.'},
  {t:'Lista de fugas solo con denuncia y acceso por rol',ok:true,p:'Cumple',
-  s:'Alta con número de denuncia, fecha y estación; vigencia acotada; cada consulta queda registrada; nada visible al público. Hoy: 1 patente sin denuncia que no alerta.'},
+  s:'Alta con número de denuncia, fecha y estación; vigencia acotada; cada consulta queda registrada; nada visible al público. Solo la estación o el mismo titular: compartirla con otro titular requiere validación legal antes. Hoy: 1 patente sin denuncia que no alerta.'},
  {t:'Aviso por escrito al personal (LCT arts. 70-72)',ok:false,p:'Pendiente de firma',
   s:'Existencia, ubicación general y métricas de las cámaras; los tiempos se usan agregados, nunca como sanción automática.'}];
 
@@ -1835,7 +1867,7 @@ function buildSec(){const g=RNG(6061),cv=D.cv,st=D.street,week=[],band=SEC_BANDS
   const noObs=night?.42+.08*g.u():.01,leg=night?.3+.1*g.u():.9+.06*g.u();
   return{h,cars,night,noObs:cars*noObs,leg:cars*(1-noObs)*leg}});
  const lpr={hrs,plates:sum(hrs.map(x=>x.cars)),legible:sum(hrs.map(x=>x.leg)),noObs:sum(hrs.map(x=>x.noObs)),
-  match:0,matchHoy:D.ev.filter(e=>e.type==='Patente en la lista de fugas').length,
+  match:(cv.rules.find(r=>r.id==='fuga')||{det:0}).det,matchHoy:D.ev.filter(e=>e.type==='Patente en la lista de fugas').length,
   chk:[{t:'Ancho de la placa en la imagen ≥ 130 px',v:'142 px (mediana de ayer)',ok:true},
    {t:'Ángulo entre la cámara y la placa < 30°',v:'24°',ok:true},
    {t:'Iluminador infrarrojo para la noche',v:'No instalado: de 21 a 6 h la lectura queda NO OBSERVABLE',ok:false},
@@ -1880,7 +1912,7 @@ function secLprHtml(){const L=D.sec.lpr,legR=L.plates?L.legible/L.plates:null,nN
   y0:0,y1:100,yt:[0,50,100].map(v=>[v,v+'%']),hlines:[{y:90,cls:'ref',label:'objetivo: 90%'}]})}
  <p class="small" style="margin-top:6px"><b>De los ${num(L.plates)} autos que entraron ayer en las 24 h, ${num(L.legible)} (${legR==null?'sin dato':pcu(legR)}) tuvieron la patente legible con confianza suficiente.</b> (Calle y acceso cuenta de 6 a 24 h; acá se suma la madrugada.) De 21 a 6 h entraron ${num(nN)} autos y ${num(L.noObs)} quedaron NO OBSERVABLES por falta de luz: hasta instalar un iluminador infrarrojo, la lista de fugas no protege de noche.</p></div>
  <ul class="why" style="padding-top:0">${L.chk.map(chk).join('')}
-  <li>${ic('lock')}<span>La patente en claro se guarda solo mientras el auto está en la estación y en el evento de fuga; después queda un <b>hash con sal rotativa</b>, que sigue siendo dato personal (Res. AAIP 4/2019): base inscripta, plazo y acceso por rol. No se usa para contar repeticiones de vehículos: eso se mide con la app de fidelización.</span></li></ul>`}
+  <li>${ic('lock')}<span>La patente en claro no se guarda: se compara como <b>hash con sal rotativa</b> y solo queda en el evento cuando coincide con la lista de fugas con denuncia. El hash sigue siendo dato personal (Res. AAIP 4/2019): base inscripta, plazo y acceso por rol. No se usa para contar repeticiones de vehículos: eso se mide con la app de fidelización.</span></li></ul>`}
 
 /* (c) reglas nuevas en la tabla de madurez */
 function secMadurezHtml(){
@@ -1907,9 +1939,9 @@ const V_seguridad=()=>{S.secCam??='all';S.secEst??='all';const cv=D.cv,s=D.sec,c
  ${panel('Reglas de comportamiento y seguridad',cvRulesHtml(rules),{icon:'shield',n:rules.length,right:`<span class="small muted">ayer · ${camTxt} · cada aviso lo confirma o descarta una persona</span>`})}
  <div class="mt">${panel('Siete días por regla: avisos, resolución y pendientes',secWeekHtml(week),{icon:'clock',n:week.length,right:`<span class="small muted">7 días · ${camTxt} · observable: ${secCov()}</span>`})}</div>
  <div class="grid2 mt">${panel('Lectura de patentes en el ingreso',secLprHtml(),{icon:'car',right:'<span class="small muted">ayer · cámara C1</span>'})}
-  ${panel('Eventos de hoy',evs.length?evs.map(e=>evItem(e,e)).join(''):'<p class="small muted pad">Ningún evento de hoy con ese filtro.</p>',{icon:'alert',n:evs.length,right:`<span class="small muted">${camTxt}</span>`})}</div>
+  ${panel('Eventos de hoy',evs.length?evs.map(e=>evItem(e,null,true)).join(''):'<p class="small muted pad">Ningún evento de hoy con ese filtro.</p>',{icon:'alert',n:evs.length,right:`<span class="small muted">${camTxt}</span>`})}</div>
  <div class="mt">${panel('Reglas nuevas: qué se mide hoy y qué no',secMadurezHtml(),{icon:'spark',n:SEC_NEW.length,right:'<span class="small muted">cámara · controlador · POS</span>'})}</div>
- <div class="grid-fit mt">${panel('Lista de fugas de la red',lprTable()+'<p class="small muted pad" style="padding-top:0">Solo los hechos con denuncia alertan; la patente sin denuncia queda inactiva. Fuente: denuncias cargadas por el encargado.</p>',{icon:'shield',n:LPR.length})}
+ <div class="grid-fit mt">${panel('Lista de fugas de la estación (o del mismo titular)',lprTable()+'<p class="small muted pad" style="padding-top:0">Solo los hechos con denuncia alertan; la patente sin denuncia queda inactiva. Fuente: denuncias cargadas por el encargado. Se comparte solo entre estaciones del mismo titular: compartirla con estaciones de distinto titular es una cesión de datos (Ley 25.326, art. 11) y requiere validación legal antes.</p>',{icon:'shield',n:LPR.length})}
   ${panel('Cumplimiento antes de salir a producción',secLegalHtml(),{icon:'lock',n:SEC_LEGAL.length,right:'<span class="small muted">Ley 25.326 · AAIP</span>'})}</div>
  <p class="note">Las patentes se leen solo en la cámara de ingreso y solo se comparan con la lista de fugas con denuncia; el resto de las cámaras no identifica personas ni vehículos. <b>En producción:</b> los avisos y su resolución salen del motor de visión (cámaras C1, C3 y C4) y del registro de quién confirmó o descartó cada uno; la fuga sin pagar necesita la hora de cada despacho del controlador y el cierre de venta del POS; la lista de fugas se administra con número de denuncia y cada consulta queda registrada. Las patentes de la demo son ficticias. Los números de esta pantalla son de ejemplo.</p>`};
 
@@ -2009,8 +2041,8 @@ function tiendaCatHtml(){S.tiendaFr??='dia';const s=D.store,f=TIENDA_FR.find(x=>
 
 /* (d) interés sin compra por góndola, en plata */
 function tiendaGainHtml(){S.tiendaPlan??={};const s=D.store,low=s.gain.filter(x=>x.mes>0),top=low[0],tot=sum(low.map(x=>x.mes));
- return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:620px"><thead><tr><th>Góndola</th><th class="r">Compran ÷ toman</th><th class="r">Compras más por día</th><th class="r">Margen más por mes</th><th></th></tr></thead>
- <tbody>${s.gain.map(x=>`<tr${x===top?' style="font-weight:600"':''}><td>${x.n}<div class="sub">ticket de la categoría ${ars(x.tkc)}</div></td><td class="r num ${x.r!=null&&x.r<s.rbar*.7?'badc':''}">${x.r==null?tiendaND:pcu(x.r)}</td>
+ return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:760px"><thead><tr><th>Góndola</th><th class="r">Compran ÷ toman</th><th class="r">Compras más por día</th><th class="r">Margen más por mes</th><th></th></tr></thead>
+ <tbody>${s.gain.map(x=>`<tr${x===top?' style="font-weight:600"':''}><td style="min-width:150px">${x.n}<div class="sub">ticket de la categoría ${ars(x.tkc)}</div></td><td class="r num ${x.r!=null&&x.r<s.rbar*.7?'badc':''}">${x.r==null?tiendaND:pcu(x.r)}</td>
   <td class="r num">${x.mes>0?'+'+num(x.extra,1):'<span class="muted">en el promedio o mejor</span>'}</td><td class="r num">${x.mes>0?'+'+ars(x.mes):'—'}</td>
   <td>${x.mes>0?S.tiendaPlan[x.n]?pill('p-ok','Prueba agendada'):`<button class="btn sm" data-act="tiendaPlan" data-n="${esc(x.n)}">Probar 2 semanas</button>`:''}</td></tr>`).join('')}</tbody></table></div>
  <p class="small pad">En la tienda compra el <b>${pcu(s.rbar)}</b> de quienes toman un producto. ${top?`<b>${top.n}:</b> si convirtiera al promedio serían unas ${num(top.extra,1)} compras más por día, <b>${ars(top.mes)} más de margen por mes</b> (${ars(tot)} sumando todas las góndolas por debajo). Lo más barato de probar: precio visible, reponer faltantes y cambiar de lugar dos semanas; la cámara C5 y el POS dicen si funcionó.`:''}
@@ -2123,7 +2155,7 @@ const MOTOR_LV=[
 const MOTOR_ST={uso:['p-ok','Elegido para producción'],piloto:['p-info','Evaluación en piloto'],acuerdo:['p-warn','Requiere acuerdo']};
 const MOTOR_MOD=[
  {n:'Detector liviano: RT-DETR o YOLOX',f:'con seguimiento de objetos (ByteTrack, MIT)',rol:'Nivel 1: autos, personas, celulares y recipientes en cada cuadro, con su recorrido',d:'Equipo de la estación',lic:'Apache 2.0',st:'uso'},
- {n:'Ultralytics YOLO',f:'YOLOv8n en el prototipo de vision/',rol:'Alternativa del nivel 1; es el que usa hoy el prototipo',d:'Equipo de la estación',lic:'AGPL-3.0: para un producto cerrado hace falta la licencia Enterprise',st:'acuerdo'},
+ {n:'Ultralytics YOLO',f:'YOLOv8n en el prototipo de GOTA Vision',rol:'Alternativa del nivel 1; es el que usa hoy el prototipo',d:'Equipo de la estación',lic:'AGPL-3.0: para un producto cerrado hace falta la licencia Enterprise',st:'acuerdo'},
  {n:'Grounding DINO u OWLv2',rol:'Vocabulario abierto con licencia permisiva: reemplazo posible del nivel 2',d:'GPU de la estación o servidor',lic:'Apache 2.0',st:'piloto'},
  {n:'LocateAnything-3B',f:'NVIDIA, familia Eagle',rol:'Nivel 2: auditor sobre cuadros muestreados; además etiqueta imágenes propias para entrenar el nivel 1',d:'GPU de escritorio o servidor; no en tiempo real',lic:'Dos razones para dejarlo en evaluación: la licencia NVIDIA del modelo es solo para investigación o evaluación, y su modelo de lenguaje, Qwen2.5-3B-Instruct, tiene la Qwen Research License (no comercial). El código es Apache 2.0',vel:'12,7 cajas por segundo en un H100 (NVIDIA): cajas, no cuadros',st:'piloto'},
  {n:'Eagle 2.5',f:'NVIDIA',rol:'Atributos del vehículo, solo en pruebas internas',d:'Servidor con GPU',lic:'Licencia NVIDIA del modelo: solo investigación académica o sin fines de lucro',st:'acuerdo'},
@@ -2142,7 +2174,7 @@ const MOTOR_LEGAL=[
  {t:'Evaluación de impacto por módulo',ok:false,c:'la evaluación de impacto de ingreso, calle y seguridad',s:'Hecha para playa y tienda; faltan ingreso y patentes, calle y seguridad (Guía de IA de la AAIP, 2024). Hoy es recomendada; sería obligatoria si se aprueba la reforma de la ley.'},
  {t:'Aviso por escrito al personal (LCT arts. 70 a 72)',ok:false,c:'la firma del aviso al personal',s:'Existencia, ubicación general y métricas de las cámaras; los tiempos se usan agregados, nunca como sanción automática. Pendiente de firma.'},
  {t:'Video crudo: 30 días y borrado automático',ok:true,s:'Clips de eventos 90 días o hasta el cierre de la denuncia; métricas sin identificadores, sin límite.'},
- {t:'Lista de fugas solo con denuncia',ok:true,s:'Alta con número de denuncia, vigencia acotada, acceso por rol y registro de cada consulta; nada visible al público.'},
+ {t:'Lista de fugas solo con denuncia',ok:true,s:'Alta con número de denuncia, vigencia acotada, acceso por rol y registro de cada consulta; nada visible al público. Solo la estación o el mismo titular: compartirla con otro titular requiere validación legal antes (cesión de datos).'},
  {t:'Sin biometría',ok:true,s:'Sin reconocimiento facial ni perfil por rostro (edad, género, emoción): cada persona es un punto anónimo que dura lo que dura su visita.'},
  {t:'Cruce con el POS solo agregado',ok:true,s:'Franjas de 15 minutos o más y por góndola; celdas con menos de 5 casos, sin dato; sin medio de pago ni identificadores.'},
  {t:'Cámara de la calle sin patentes',ok:true,s:'C6 solo cuenta y da el sentido. Si capta la vía pública, se inscribe además en el registro local que corresponda (por ejemplo, RECAVIP en CABA).'}];
@@ -2188,8 +2220,8 @@ function motorFlowHtml(){const arr=`<div class="arr">${ic('arrow')}</div>`,box=x
 
 /* (b) modelos y licencias */
 function motorModelsHtml(){
- return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:820px"><thead><tr><th>Modelo</th><th>Rol en GOTA</th><th>Dónde corre</th><th>Licencia</th><th>Velocidad o precisión publicada</th><th>Estado</th></tr></thead>
- <tbody>${MOTOR_MOD.map(m=>`<tr><td><b>${m.n}</b>${m.f?`<div class="sub">${m.f}</div>`:''}</td><td class="small">${m.rol}</td><td class="small">${m.d}</td><td class="small">${m.lic}</td><td class="small">${m.vel||'<span class="muted">sin dato: se mide en el piloto</span>'}</td><td>${pill(...MOTOR_ST[m.st])}</td></tr>`).join('')}</tbody></table></div>
+ return `<div class="tbl-wrap flat"><table class="tbl" style="min-width:960px"><thead><tr><th>Modelo</th><th>Rol en GOTA</th><th>Dónde corre</th><th>Licencia</th><th>Velocidad o precisión publicada</th><th>Estado</th></tr></thead>
+ <tbody>${MOTOR_MOD.map(m=>`<tr><td style="min-width:170px"><b>${m.n}</b>${m.f?`<div class="sub">${m.f}</div>`:''}</td><td class="small">${m.rol}</td><td class="small">${m.d}</td><td class="small">${m.lic}</td><td class="small">${m.vel||'<span class="muted">sin dato: se mide en el piloto</span>'}</td><td>${pill(...MOTOR_ST[m.st])}</td></tr>`).join('')}</tbody></table></div>
  <p class="small pad"><b>Para vender GOTA, cada modelo del producto necesita licencia comercial.</b> El nivel 1 va con RT-DETR o YOLOX (Apache 2.0), o con Ultralytics pagando la licencia Enterprise. Los atributos van con Qwen2.5-VL-7B (Apache 2.0), no con la versión 3B, que es no comercial. LocateAnything-3B y Eagle 2.5 se usan solo para evaluar en el piloto: a la licencia NVIDIA se suma la Qwen Research License del modelo de lenguaje de LocateAnything; un ajuste fino (LoRA) hecho sobre ellos hereda las mismas restricciones. Ninguna cifra de proveedor reemplaza la medida en la estación: hasta el piloto, «sin dato».</p>`}
 
 /* (c) zonas y líneas: imagen de cámara en SVG (fondo oscuro fijo, colores literales) */
@@ -2265,7 +2297,7 @@ const V_motor=()=>{S.motorCam??='C4';const M=D.motor,h=D.cv.health,obs=sum(h.map
   ${stat('Precisión de los avisos',M.prec.p==null?'sin dato':pcu(M.prec.p),`${M.win==='ayer'?'Ayer':'Últimos 7 días'}: ${num(M.prec.ok)} ciertos de ${num(M.prec.rev)} revisados · revisión de las personas`)}
   ${stat('Cámara contra controlador',pc(y.dev),`Ayer: ${num(y.cam)} autos y ${num(y.ctl)} despachos · banda ±${pcu(MOTOR_DRIFT)}`,Math.abs(y.dev)>MOTOR_DRIFT?'bad':'ok')}
   ${stat('Privacidad y cumplimiento',`${M.legal.ok} de ${M.legal.n}`,`${M.legal.n-M.legal.ok} puntos pendientes antes de producción`,M.legal.ok<M.legal.n?'bad':'ok')}</div>
- ${panel('Cómo funciona',motorFlowHtml(),{icon:'spark',right:src('motor de vision/ · tres niveles')})}
+ ${panel('Cómo funciona',motorFlowHtml(),{icon:'spark',right:src('motor GOTA Vision · tres niveles')})}
  <div class="mt">${panel('Modelos y licencias',motorModelsHtml(),{icon:'file',n:MOTOR_MOD.length,right:src('licencia de cada modelo · NVIDIA para la velocidad publicada')})}</div>
  <div class="mt">${panel('Zonas y líneas configuradas',motorZonesHtml(),{icon:'map',right:src('configuración zonas.ejemplo.json · motor local')})}</div>
  <div class="mt">${panel('Precisión y cobertura',motorPrecHtml(),{icon:'check',n:M.rules.length,right:src('ayer · confirmaciones y descartes de las personas')})}</div>
@@ -2274,7 +2306,7 @@ const V_motor=()=>{S.motorCam??='C4';const M=D.motor,h=D.cv.health,obs=sum(h.map
  <div class="grid2 mt">${panel('Salud de las cámaras',cvHealthHtml(h)+`<p class="small pad">${low[1]<1?`<b>La ${low[0]} pierde el ${pcu(1-low[1])} del día (${low[2].toLowerCase()}): ${fix}.</b> `:'<b>Todas las cámaras se vieron completas ayer.</b> '}Mientras una cámara está NO OBSERVABLE, sus eventos y conteos quedan «sin dato», nunca en cero.</p>`,{icon:'eye',right:src('ayer · control de calidad de imagen')})}
   ${panel('Hardware por estación',motorHwHtml(),{icon:'monitor',right:src('referencia · se dimensiona en el piloto')})}</div>
  <div class="mt">${panel('Privacidad y cumplimiento',motorLegalHtml(),{icon:'lock',n:MOTOR_LEGAL.length,right:src('Ley 25.326 · AAIP · LCT')})}</div>
- <p class="note">En producción: la precisión sale del registro de quién confirmó o descartó cada aviso; la exhaustividad, de una auditoría semanal de 60 minutos de video; la diferencia con el controlador, del exporte de despachos con hora (relojes sincronizados por NTP); la confianza, los cuadros por segundo y el desplazamiento de cada cámara, del propio motor de <span class="mono">vision/</span>, que compara el fondo con la imagen de referencia de la calibración. Las licencias se revisan con un abogado antes de cada versión comercial, y LocateAnything-3B y Eagle 2.5 se usan solo para evaluación interna (licencia NVIDIA y, en LocateAnything, la Qwen Research License de su modelo de lenguaje). Modelos y hardware son de referencia y se dimensionan en el piloto. Los números de esta pantalla son de ejemplo.</p>`};
+ <p class="note">En producción: la precisión sale del registro de quién confirmó o descartó cada aviso; la exhaustividad, de una auditoría semanal de 60 minutos de video; la diferencia con el controlador, del exporte de despachos con hora (relojes sincronizados por NTP); la confianza, los cuadros por segundo y el desplazamiento de cada cámara, del propio motor GOTA Vision, que compara el fondo con la imagen de referencia de la calibración. Las licencias se revisan con un abogado antes de cada versión comercial, y LocateAnything-3B y Eagle 2.5 se usan solo para evaluación interna (licencia NVIDIA y, en LocateAnything, la Qwen Research License de su modelo de lenguaje). Modelos y hardware son de referencia y se dimensionan en el piloto. Los números de esta pantalla son de ejemplo.</p>`};
 
 const ACT_MOTOR={
  motorCam:el=>{S.motorCam=el.dataset.cam;render()},
@@ -2361,7 +2393,7 @@ function cdClipHtml(id,C){const R=detCam(id);if(!R)return `<p class="pad small m
  const custom=C.clip?C.clip(J,R):null,cnt=Object.entries(J.reduce((a,j)=>(a[j.k]=(a[j.k]||0)+1,a),{})).map(([k,n])=>`${n} ${(CD_K[k]||[k,k])[n===1?0:1]}`).join(', ');
  const rows=custom?custom.rows:J.map(j=>[`<b>${j.id}</b>`,(CD_K[j.k]||[j.k])[0],`${num(j.t0,1)} a ${num(j.t1,1)} s`,Object.keys(j.zt).length?Object.entries(j.zt).map(([z,s])=>`${zn(z)} ${num(s,1)} s`).join(' · '):'<span class="muted">fuera de las zonas</span>',
   j.cr.length?j.cr.map(c=>`cruzó «${c.l}» (${c.sentido})`).join(' · '):'—',j.hastaFinal?'<span class="muted">seguía en cuadro</span>':'salió del cuadro']);
- const cols=custom?custom.cols:['Track','Qué es','En cuadro','Tiempo por zona','Líneas','Al terminar el clip'];
+ const cols=(custom?custom.cols:['Track','Qué es','En cuadro','Tiempo por zona','Líneas','Al terminar el clip']).map(c=>c==='Track'?'N.º anónimo':c);
  return `<p class="small pad" style="padding-bottom:6px">Clip de ${num(R.res.hasta-R.res.desde,0)} s: el motor siguió <b>${cnt||'nada'}</b>. ${custom&&custom.resumen?custom.resumen:''}</p>
  <div class="tbl-wrap flat"><table class="tbl" style="min-width:600px"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>`<td class="small">${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}" class="muted">El motor no siguió a nadie en este clip.</td></tr>`}</tbody></table></div>
  <p class="small muted pad" style="padding-top:8px">Medido de verdad sobre el video (${esc(window.GOTA_DET.detector)}). Cada track es un número anónimo que dura lo que dura la visita. Un track que ya estaba al empezar o que sigue al terminar tiene el tiempo cortado.${custom&&custom.nota?' '+custom.nota:''}</p>`}
@@ -2386,8 +2418,8 @@ function cdPredHtml(A){const s=A.main;if(!s||!s.hw)return '<p class="pad small m
 function cdRecoHtml(id,A){S.cdReco??={};const rs=A.recos;if(!rs.length)return '<p class="pad small muted">Sin recomendaciones: los indicadores de esta cámara están en rango.</p>';
  return `<div class="cd-recos">${rs.map(r=>{const k=id+':'+r.id,st=S.cdReco[k];return `<div class="cd-reco${st==='no'?' off':''}"><div class="row" style="gap:8px;align-items:flex-start;flex-wrap:nowrap"><span class="evdot ${r.prio==='alta'?'crit':r.prio==='media'?'warn':'info'}"></span><div style="flex:1;min-width:0"><b>${r.t}</b><p class="small" style="margin:4px 0">${r.porque}</p>
   ${r.impacto?`<p class="small" style="margin:4px 0"><b>Impacto estimado:</b> ${r.impacto}</p>`:''}<p class="small muted" style="margin:4px 0">Cómo se sabe si funcionó: ${r.medir}</p>
-  <div class="row" style="gap:6px;margin-top:6px">${pill(r.conf==='alta'?'p-ok':r.conf==='media'?'p-info':'p-warn','confianza '+r.conf)}${st==='ok'?pill('p-ok','Prueba agendada: 2 semanas'):st==='no'?pill('p-mute','Descartada'):`<button class="btn sm pri" data-act="cdReco" data-k="${k}" data-v="ok">Probar 2 semanas</button><button class="btn sm ghost" data-act="cdReco" data-k="${k}" data-v="no">Descartar</button>`}</div></div></div></div>`}).join('')}</div>
- <p class="small muted pad" style="padding-top:8px">La IA propone y una persona decide. Cada recomendación sale de una regla con sus números a la vista; al aprobarla, la cámara mide antes y después durante 2 semanas.</p>`}
+  <div class="row" style="gap:6px;margin-top:6px">${pill(r.conf==='alta'?'p-ok':r.conf==='media'?'p-info':'p-warn','confianza '+r.conf)}${st==='ok'?pill('p-ok',r.unaVez?'Hecho':'Prueba agendada: 2 semanas'):st==='no'?pill('p-mute','Descartada'):`<span class="cd-btns"><button class="btn sm pri" data-act="cdReco" data-k="${k}" data-v="ok">${r.unaVez?'Hecho':'Probar 2 semanas'}</button><button class="btn sm ghost" data-act="cdReco" data-k="${k}" data-v="no">Descartar</button></span>`}</div></div></div></div>`}).join('')}</div>
+ <p class="small muted pad" style="padding-top:8px">La IA propone y una persona decide. Cada recomendación sale de una regla con sus números a la vista; al aprobar una prueba, la cámara mide antes y después durante 2 semanas. Las acciones de una vez (instalar, recalibrar, redibujar) se marcan como hechas.</p>`}
 function camDetHtml(id){const C=CAMDET[id],cam=CAMS.find(c=>c.id===id);if(!C||!cam)return'';const A=cdAnalyze(id);
  return `<div class="cd-title"><div><span class="eyebrow-s">Análisis de la cámara</span><h2>${id} · ${cam.n}: ${C.titulo}</h2></div><div class="row" style="gap:6px">${CAMS.map(c=>`<button class="btn sm ${c.id===id?'pri':'ghost'}" data-act="cdCam" data-cam="${c.id}" aria-pressed="${c.id===id}">${c.id}</button>`).join('')}<a class="btn sm" href="#${C.modulo}" data-act="go" data-v="${C.modulo}">Módulo ${VIEW[C.modulo].name} →</a></div></div>
  <div class="grid-fit">${panel('Qué intenta identificar la IA en esta cámara',cdObjHtml(C),{icon:'eye'})}${panel('En este video: medido por el motor',cdClipHtml(id,C),{icon:'camera',right:'<span class="small muted">clip real</span>'})}</div>
@@ -2397,14 +2429,15 @@ function camDetHtml(id){const C=CAMDET[id],cam=CAMS.find(c=>c.id===id);if(!C||!c
  <div class="mt">${panel('Recomendaciones de negocio',cdRecoHtml(id,A),{icon:'check',n:A.recos.length})}</div>`}
 /* tarjeta corta en la columna de la derecha */
 function camDetCard(id){const C=CAMDET[id],cam=CAMS.find(c=>c.id===id);if(!C||!cam)return'';const A=cdAnalyze(id),R=detCam(id),J=R?cdJourneys(R):[],s=A.main,r=A.recos[0];
- return panel(`${id} · ${cam.n}: qué mide la IA`,`<div class="pad"><ul class="why" style="padding:0">${C.objetivos.slice(0,4).map(o=>`<li>${ic(o.estado==='falta'?'info':'check')}<span>${o.q}</span></li>`).join('')}</ul>
- <div class="kv2"><span>En el video</span><b>${R?`${J.length} tracks seguidos por el motor`:'<span class="muted">sin video</span>'}</b>${s?`<span>${s.n}</span><b>${cdFmt(s.y[s.y.length-1],s.fmt)} ayer · ${s.tr.ok?s.tr.dir:'sin dato'}</b><span>Mañana</span><b>${s.hw?cdFmt(s.hw.fc[1].v,s.fmt):'<span class="muted">sin dato</span>'}${A.pk?` · pico de ${A.pk[0]} a ${A.pk[0]+1} h`:''}</b>`:''}</div>
+ return panel(`${id} · ${cam.n}: qué mide la IA`,`<div class="pad"><ul class="why" style="padding:0">${C.objetivos.slice(0,4).map(o=>`<li>${ic(o.estado==='falta'||o.estado==='piloto'?'info':'check')}<span>${o.q}${o.estado==='piloto'?' <span class="muted">(en piloto)</span>':o.estado==='falta'?' <span class="muted">(falta un modelo)</span>':''}</span></li>`).join('')}</ul>
+ <div class="kv2"><span>En el video</span><b>${R?(J.length?`el motor siguió ${cdC2_y(Object.entries(J.reduce((a,j)=>(a[j.k]=(a[j.k]||0)+1,a),{})).map(([k,n])=>`${n} ${(CD_K[k]||[k,k])[n===1?0:1]}`))}`:'el motor no siguió a nadie'):'<span class="muted">sin video</span>'}</b>${s?`<span>${s.n}</span><b>${cdFmt(s.y[s.y.length-1],s.fmt)} ayer · ${s.tr.ok?s.tr.dir:'sin dato'}</b><span>Mañana</span><b>${s.hw?cdFmt(s.hw.fc[1].v,s.fmt):'<span class="muted">sin dato</span>'}${A.pk?` · pico de ${A.pk[0]} a ${A.pk[0]+1} h`:''}</b>`:''}</div>
  ${r?`<p class="small" style="margin:10px 0 0"><b>Recomendación:</b> ${r.t}</p>`:''}<button class="btn sm pri" style="margin-top:10px" data-act="cdGo">${ic('arrow')}Ver el análisis completo</button></div>`,{icon:'eye',right:pill('p-acc','cámara elegida')})}
 const ACT_CAMDET={
  cdCam:el=>{S.cam=el.dataset.cam;render();const t=document.getElementById('camdet');if(t)t.scrollIntoView({block:'start'})},
  cdGo:()=>{const t=document.getElementById('camdet');if(t)t.scrollIntoView({block:'start',behavior:'smooth'})},
  cdReco:el=>{S.cdReco??={};const k=el.dataset.k,v=el.dataset.v,[id,rid]=k.split(':'),A=cdAnalyze(id),r=A&&A.recos.find(x=>x.id===rid);S.cdReco[k]=v;
-  if(v==='ok'){log(`Visión ${id}: prueba de 2 semanas · ${r?r.t:rid}`);toast(`Prueba agendada en ${id}: la cámara mide antes y después durante 2 semanas`)}else log(`Visión ${id}: recomendación descartada · ${r?r.t:rid}`);render()}};
+  if(v==='ok'&&r&&r.unaVez){log(`Visión ${id}: hecho · ${r.t}`);toast(`Marcado como hecho en ${id}: queda en el registro de decisiones`)}
+  else if(v==='ok'){log(`Visión ${id}: prueba de 2 semanas · ${r?r.t:rid}`);toast(`Prueba agendada en ${id}: la cámara mide antes y después durante 2 semanas`)}else log(`Visión ${id}: recomendación descartada · ${r?r.t:rid}`);render()}};
 /* >>> cámara C1 */
 /* C1 · Ingreso: qué autos entran, cuánto se quedan y qué hacen adentro. La única cámara que lee patentes: solo a los que entran,
    como hash con sal contra la lista de fugas con denuncia. Números de «ayer» iguales a Calle y acceso (D.street, D.traffic) y Seguridad (D.sec). */
@@ -2434,7 +2467,7 @@ function cdC1_rows(){const N=cdC1_Z.length,g=RNG(9150),st=D.street,d=cdC1_ayerDi
  const tps=cdC1_shuf(g,cdC1_rep(cdC1_quota(CALLE_T.map(t=>d.mix[t.id]),N),CALLE_T)),scT=tps.filter(t=>t.id==='sc').length;
  const known=cdC1_shuf(g,tps.map((t,i)=>t.id==='sc'?-1:i).filter(i=>i>=0)),scB=new Set(known.slice(0,Math.max(0,Math.round(N*b.sc)-scT)));
  const ages=cdC1_shuf(g,cdC1_rep(cdC1_quota(a.rows.map(r=>r.share),N-scT-scB.size),a.rows.map(r=>r.r)));
- const nAb=Math.round(N*(cv.cars?cv.ab/cv.cars:0)),nNo=Math.max(0,N-nAb-Math.round(N*d.done)),fl=cdC1_shuf(g,[...Array(N)].map((_,i)=>i<nAb?'ab':i<nAb+nNo?'no':'ok')),zs=cdC1_shuf(g,cdC1_Z.slice());
+ const nAb=Math.round(N*(st.enter?cv.ab/st.enter:0)),nNo=Math.max(0,N-nAb-Math.round(N*d.done)),fl=cdC1_shuf(g,[...Array(N)].map((_,i)=>i<nAb?'ab':i<nAb+nNo?'no':'ok')),zs=cdC1_shuf(g,cdC1_Z.slice());
  const pr=T.map(t=>{const x=L.hrs.find(r=>r.h===Math.floor(t/60));return x&&x.cars?[x.noObs/x.cars,x.leg/x.cars]:[0,1]});
  const nNoObs=Math.round(sum(pr.map(x=>x[0]))),nIleg=Math.round(sum(pr.map(x=>1-x[0]-x[1]))),byNight=pr.map((x,i)=>[x[0],i]).sort((x,y)=>y[0]-x[0]).map(x=>x[1]);
  const pat=Array(N).fill('leg');byNight.slice(0,nNoObs).forEach(i=>pat[i]='noobs');cdC1_shuf(g,byNight.slice(nNoObs)).slice(0,nIleg).forEach(i=>pat[i]='ileg');
@@ -2453,14 +2486,14 @@ function cdC1_ayer(){const st=D.street,d=cdC1_ayerDia(),L=D.sec.lpr,b=D.traffic.
  const que=r=>{const rest=r.dur-r.pl;if(r.aban)return `Estuvo ${mmss(r.pl)} en la playa y salió: posible «se fue sin cargar» (lo confirma C4)`;
   if(!r.seen)return `Playa ${mmss(r.pl)}; la salida no se vio`;
   return rest>300?`Playa ${mmss(r.pl)}; después ${mmss(rest)} fuera de la playa`:`Playa ${mmss(r.pl)} y salió`};
- const veh=r=>`${r.tp.id==='sc'?'<span class="muted">tipo sin clasificar</span>':r.tp.n}<div class="sub">${r.mod==null?'marca y modelo sin clasificar':r.mod==='otro'?'otro modelo identificado · estimado':`${r.mod.n} · estimado, confianza ${num(r.mod.conf,2)}`}</div>`;
+ const veh=r=>r.tp.id==='sc'?'<span class="muted">tipo sin clasificar</span>':r.tp.n;
  const pat={leg:'Comparada como hash: no está en la lista',ileg:'<span class="muted">Ilegible (confianza menor a '+pcu(SEC_UMBRAL)+'): no se compara</span>',noobs:'<span class="badc">NO OBSERVABLE: falta luz</span>',nd:'<span class="muted">sin dato</span>'};
  const cars=d.dwell.auto,legR=L.plates?L.legible/L.plates:null;
- return{cols:['Vehículo','Entró → salió','En la estación','Qué hizo adentro','Tipo · marca y modelo','Antigüedad','Patente vs. lista de fugas'],
+ return{cols:['Vehículo','Entró → salió','En la estación','Qué hizo adentro','Tipo','Patente vs. lista de fugas'],
   rows:rows.map(r=>[`<b>v${r.nro}</b>`,r.seen?`${cdC1_hm(r.t0)} → ${cdC1_hm(r.t0+r.dur/60)}`:`${cdC1_hm(r.t0)} → <span class="muted">sin dato</span>`,
-   r.seen?`<b>${mmss(r.dur)}</b>`:'<span class="muted">sin dato</span>',que(r),veh(r),r.age?`${r.age} <span class="muted">· estimado</span>`:'<span class="muted">sin dato</span>',pat[r.pat]]),
+   r.seen?`<b>${mmss(r.dur)}</b>`:'<span class="muted">sin dato</span>',que(r),veh(r),pat[r.pat]]),
   resumen:`Ayer entraron <b>${num(st.enter)} autos de 6 a 24 h</b> (Calle y acceso) y ${num(L.plates)} contando la madrugada (Seguridad). Camionetas, utilitarios y camiones: <b>${pcu(callePick(d))}</b> de los que entraron. La mitad de los autos estuvo menos de <b>${mmss(cars.med)}</b> en la estación y uno de cada diez, más de ${mmss(cars.p90)} (C1 les vio entrada y salida al ${pcu(d.done)}). Patentes legibles: ${legR==null?'<span class="muted">sin dato</span>':`${num(L.legible)} (${pcu(legR)})`}; coincidencias con la lista de fugas: <b>${num(L.match)}</b> ayer. Marca y modelo sin clasificar en la semana: ${pcu(b.sc)}.`,
-  nota:`El tipo lo da el detector al cruzar «entrada». Marca, modelo y antigüedad los estima un modelo de visión y lenguaje una vez por visita: con poca confianza quedan «sin clasificar» y la antigüedad «sin dato», nunca se completan con un promedio. La antigüedad va siempre por rango, nunca el año exacto. La patente se compara como hash con la lista de fugas con denuncia y no se muestra: en esta tabla no hay ninguna. Playa = espera, carga y cobro.`,minW:980}}
+  nota:`El tipo lo da el detector al cruzar «entrada». Marca, modelo y antigüedad no se guardan por vehículo: se publican sumados por semana en Calle y acceso. La patente se compara como hash con la lista de fugas con denuncia y no se muestra: en esta tabla no hay ninguna. Playa = espera, carga y cobro.`,minW:860}}
 
 CAMDET.C1={
  titulo:'qué autos entran, cuánto se quedan y qué hacen',
@@ -2473,7 +2506,7 @@ CAMDET.C1={
   {q:'Si la patente está en la lista de fugas con denuncia',como:`Solo a los que cruzan «entrada»: con confianza de ${pcu(SEC_UMBRAL)} o más se calcula un hash con sal rotativa y se compara con la lista. La patente en claro no se guarda en el registro del vehículo ni se cruza con marca, modelo u hora; solo queda en el evento cuando coincide con la lista, para que una persona lo revise (ver Seguridad). De 21 a 6 h, sin infrarrojo, la lectura queda NO OBSERVABLE. Requiere un lector dedicado en C1 validado en el piloto; la tasa de legibles de Seguridad es de ejemplo.`,estado:'piloto',conf:'sin dato hasta validar'},
   {q:'Qué tipo de vehículo es',como:'Clase del detector al cruzar la línea; el VLM separa camioneta o SUV y utilitario una sola vez por track. «Sin clasificar» se informa y no se reparte entre los demás. La precisión se valida a mano en el piloto (200 cruces).',estado:'estimado',conf:'media'},
   {q:'Qué marca y modelo es',como:'El VLM responde marca y modelo con su confianza sobre el mejor cuadro de la visita; por debajo de 0,5 queda «sin clasificar». Se publica sumado por semana, sin patente ni hora.',estado:'estimado',conf:'media'},
-  {q:'Qué antigüedad tiene, por rango de años',como:'El mismo VLM estima un rango de 5 años de modelo (por ejemplo, 2015-2019), nunca el año exacto: con el año la precisión cae a la mitad. Se publica por semana en los rangos de Calle y acceso; si no identificó el modelo, «sin dato».',estado:'estimado',conf:'baja'},
+  {q:'Qué antigüedad tiene, por rango de años',como:'El mismo VLM estima un rango de 5 años de modelo (por ejemplo, 2015-2019), nunca el año exacto (la precisión por año se mide en el piloto). Se publica por semana en los rangos de Calle y acceso; si no identificó el modelo, «sin dato».',estado:'estimado',conf:'baja'},
   {q:'Cuántos pasan por la calle sin entrar',como:'Línea «calle», vertical, frente al ingreso: cuenta los que pasan hacia la derecha y hacia la izquierda de la imagen. La captación del día la da C6, en Calle y acceso.',estado:'medido',conf:'alta'}],
  clip:(J,R)=>{const pos={},L=R.res&&R.res.lineas||{},E=L.entrada,Cl=L.calle,lado={entra:'hacia la derecha',sale:'hacia la izquierda'};
   R.f.forEach(([,obs])=>obs.forEach(([id,,x1,,x2,y2])=>{const a=[(x1+x2)/2,y2];(pos[id]??={a0:a}).a1=a}));
@@ -2497,14 +2530,16 @@ CAMDET.C1={
  ayerTitulo:'Autos de ayer, uno por uno',
  ayer:cdC1_ayer,
  series:()=>{const st=D.street,d=cdC1_ayerDia(),L=D.sec.lpr;return[
-  // ayer = «Entraron» del panel «Calle: autos que pasan y autos que entran» (D.street.enter, de 6 a 24 h); sigue la forma de la semana de los litros
-  {id:'entradas',n:'Autos que entran por día',fmt:'num',mejor:'sube',...cdSerie({ayer:st.enter,seed:9100,motor:'autos',ruido:.03,entero:true})},
+  // ayer = «Entraron» del panel «Calle: autos que pasan y autos que entran» (D.street.enter, de 6 a 24 h: atendidos + los que se fueron sin cargar).
+  // Es la serie de autos atendidos de C4 escalada por entradas ÷ atendidos de ayer: misma forma, últimos 7 días como D.traffic.days y nunca menos que los atendidos
+  {id:'entradas',n:'Autos que entran por día (6 a 24 h)',fmt:'num',mejor:'sube',...(()=>{const A4=cdC4_autosSerie(),n=A4.y.length,r=st.enter/A4.y[n-1];return{...A4,y:A4.y.map((v,i)=>i===n-1?st.enter:Math.round(v*r))}})()},
   // ayer = «más de 8 años» de Calle y acceso (7 días, entre los clasificados). La antigüedad se publica solo por semana: cada punto es la ventana de 7 días que termina ese día
   {id:'viejos',n:'Autos de más de 8 años, entre los clasificados',fmt:'pct',mejor:'baja',...cdSerie({ayer:cdC1_old(),seed:9101,drift:.025,ruido:.012,min:0,max:1})},
   // ayer = mediana de los autos en «Tiempo en la estación» (D.traffic.days[6].dwell.auto.med); fin de semana +12 %, como en Calle y acceso
   {id:'estadia',n:'Tiempo en la estación, mediana de los autos',fmt:'min',mejor:'baja',...cdSerie({ayer:d.dwell.auto.med,seed:9120,dow:[1.12,1,1,1,1,1,1.12],ruido:.04})},
-  // ayer = callePick(ayer): camionetas/SUV, utilitarios, camiones y colectivos sobre los que entraron (stat «Camionetas y utilitarios» de Calle y acceso)
-  {id:'pick',n:'Camionetas, utilitarios y camiones',fmt:'pct',mejor:'sube',...cdSerie({ayer:callePick(d),seed:9118,ruido:.04,min:0,max:1})},
+  // ayer = callePick(ayer): camionetas/SUV, utilitarios, camiones y colectivos sobre los que entraron (stat «Camionetas, utilitarios y camiones» de Calle y acceso).
+  // La misma serie que C6 (cdC6_pickSerie): los últimos 7 días son los del gráfico por día de Calle y acceso
+  {id:'pick',n:'Camionetas, utilitarios y camiones, de los que entran',fmt:'pct',mejor:'sube',...cdC6_pickSerie()},
   // ayer = legibles ÷ autos en el ingreso en 24 h (Seguridad, «Lectura de patentes en el ingreso»)
   {id:'legibles',n:'Patentes legibles en el ingreso',fmt:'pct',mejor:'sube',...cdSerie({ayer:L.plates?L.legible/L.plates:0,seed:9119,ruido:.015,min:0,max:1})}]},
  // perfil por hora de ayer de los autos que entran (el mismo de Calle y acceso y de Personal)
@@ -2516,7 +2551,7 @@ CAMDET.C1={
    // la cuenta se hace con los factores redondeados que se muestran, para que cierre a la vista
    const manR=Math.round(man),idR=+(1-b.sc).toFixed(2),oldR=+old.toFixed(3),nOld=Math.round(manR*idR*oldR),m1=nOld*.01*lub.pr*lub.u*TIENDA_MG*30;
    out.push({id:'lubricentro',t:'Ofrecé cambio de aceite en la isla a los autos de más de 8 años',
-    porque:`Entre los autos que C1 pudo clasificar, el <b>${pcu(old,1)}</b> tiene más de 8 años${V.tr.dir==='sube'?` y ese porcentaje <b>sube ${cdFmtD(V.tr.sem,'pct')} por semana</b> (${ptxt(V.tr)}): la flota que entra envejece`:''}. Mañana se esperan ${num(manR)} autos: unos <b>${num(nOld)} de más de 8 años</b> (${num(manR)} × ${pcu(idR)} clasificados × ${pcu(oldR,1)}).${gl?` En la tienda solo el ${pcu(gl.p)} de los clientes pasa por la góndola de lubricantes y compra el ${pcu(gl.c)} de los que pasan (Tienda): por eso la oferta va en la isla, no en la góndola.`:''}`,
+    porque:`Entre los autos que C1 pudo clasificar, el <b>${pcu(old,1)}</b> tiene más de 8 años${V.tr.dir==='sube'?` y ese porcentaje <b>sube ${cdFmtD(Math.abs(V.tr.sem),'pct').slice(1)} por semana</b> (${ptxt(V.tr)}): la flota que entra envejece`:''}. Mañana se esperan ${num(manR)} autos: unos <b>${num(nOld)} de más de 8 años</b> (${num(manR)} × ${pcu(idR)} clasificados × ${pcu(oldR,1)}).${gl?` En la tienda solo el ${pcu(gl.p)} de los clientes pasa por la góndola de lubricantes y compra el ${pcu(gl.c)} de los que pasan (Tienda): por eso la oferta va en la isla, no en la góndola.`:''}`,
     impacto:`Cada 1 % de esos autos que compre un lubricante en la isla deja <b>${ars(m1)} de margen por mes</b>: ${num(nOld)} × 1 %${lub.u!==1?` × ${num(lub.u)} unidades`:''} × ${ars(lub.pr)} por unidad × ${pcu(TIENDA_MG)} de margen de tienda × 30 días (supuestos de Tienda).`,
     conf:'media',prio:V.tr.dir==='sube'?'alta':'media',
     medir:'C1 sigue el porcentaje de autos de más de 8 años y el POS, las unidades de lubricante vendidas por día; se comparan las 2 semanas de prueba con las 2 anteriores, sin unir ningún auto con un ticket.'})}
@@ -2532,7 +2567,7 @@ CAMDET.C1={
   // 3. lectura de patentes de noche: NO OBSERVABLES por falta de luz (Seguridad)
   const Lp=D.sec.lpr,Lg=A.S.legibles,nN=sum(Lp.hrs.filter(x=>x.night).map(x=>x.cars)),dH=Lp.hrs.filter(x=>!x.night),dayR=sum(dH.map(x=>x.cars))?sum(dH.map(x=>x.leg))/sum(dH.map(x=>x.cars)):null;
   if(Lp.plates&&Lp.noObs/Lp.plates>.03){const act=LPR.filter(r=>r.den).length,nO=Math.round(Lp.noObs);
-   out.push({id:'infrarrojo',t:'Instalá un iluminador infrarrojo en el ingreso',
+   out.push({id:'infrarrojo',t:'Instalá un iluminador infrarrojo en el ingreso',unaVez:true,
     porque:`Ayer de 21 a 6 h entraron ${num(nN)} autos y <b>${num(nO)} quedaron NO OBSERVABLES</b> por falta de luz: de noche la lista de fugas no protege. En 24 h la patente fue legible en el ${pcu(Lp.legible/Lp.plates)} de los autos${Lg&&Lg.tr.ok?` (${Lg.tr.dir==='estable'?'estable en 28 días':Lg.tr.dir==='baja'?'en baja':'en suba'})`:''}${dayR!=null?`; de 6 a 21 h, en el ${pcu(dayR)}`:''}.`,
     impacto:`Unos <b>${num(nO*30)} autos por mes</b> entran sin que se pueda comparar su patente (${num(nO)} de ayer × 30). La lista tiene ${cdC1_pl(act,'patente','patentes')} con denuncia activa.`,
     conf:'alta',prio:'alta',
@@ -2630,7 +2665,7 @@ function cdC2_ayer(){const s=D.store,g=RNG(9210),W=cdC2_franja(),wp=sum(W.map(x=
  const base=Math.round(sum(s.hrs.filter(x=>x.h<W[0].h).map(x=>x.ppl)));P.forEach((p,i)=>{p.id='p'+(base+1+Math.floor(i*Math.max(tot,N)/N))});
  // C2 ve la puerta, la fila y la caja; las góndolas y el baño quedan fuera de cuadro. El tracker cierra un track que no ve más de 3 s
  // (vision/gota_vision/tracker.py, max_age): quien sale de cuadro vuelve con otro número y su recorrido puerta a puerta no se puede medir.
- const RES={paga:['p-ok','pasó por la caja y pagó'],deja:['p-bad','dejó la fila sin pagar'],no:['p-mute','no pasó por la caja']},fila=v=>v>300?`<b class="badc">${mmss(v)}</b>`:mmss(v);
+ const RES={paga:['p-ok','pasó por la caja y pagó'],deja:['p-bad','dejó la fila sin comprar'],no:['p-mute','no pasó por la caja']},fila=v=>v>300?`<b class="badc">${mmss(v)}</b>`:mmss(v);
  const sale='puerta → sale de cuadro <span class="muted">(góndolas o baño)</span> · vuelve con otro número →',pp=`<span class="muted">sin dato</span><div class="sub">salió de cuadro: 2 tracks sin unir</div>`;
  const rows=P.map(p=>[`<b>${p.id}</b><div class="sub">${p.h}:${pad(p.m)}</div>`,
   p.res==='paga'?`${sale} fila → caja → puerta`:p.res==='deja'?`${sale} fila → <b>sale sin pasar por la caja</b>`:`${sale} puerta`,
@@ -2638,7 +2673,7 @@ function cdC2_ayer(){const s=D.store,g=RNG(9210),W=cdC2_franja(),wp=sum(W.map(x=
  // abandono de ayer: qué parte cae en las horas en que se fue media persona o más (las barras rojas de «Permanencia y abandono de la fila»)
  const abH=s.hrs.filter(x=>x.ab>=.5),abS=s.ab?sum(abH.map(x=>x.ab))/s.ab:null,mf=pg.length?cdAvg(pg.map(p=>p.fila)):null;
  return{cols:['Persona · entró','Lo que ve la cámara','Fila de la caja','En la caja','Puerta a puerta, mismo track','Resultado'],rows,minW:900,
-  resumen:`Ayer entraron <b>${num(s.ppl)} personas</b> (${num(s.walk)} de a pie o en moto, estimado por franja) y hubo <b>${num(s.tk)} tickets</b>: ${num(s.conv*100)} por cada 100 que entran. ${cdC2_cap(cdC2_pp(s.look,'entró y no compró','entraron y no compraron'))} y <b>${cdC2_pp(s.ab,'dejó la fila sin pagar','dejaron la fila sin pagar')}</b> (estimado)${abH.length&&Math.round(s.ab)>1?`, ${abS>=.7?'casi todas':`el ${pcu(abS)} de ellas`} ${hourRanges(abH.map(x=>x.h)).join(' y ')}`:''}. El módulo Tienda estima que quien compra se queda ${mmss(s.dwell.buy)} y quien no, ${mmss(s.dwell.no)} (medianas de los recorridos que llegaron completos). Abajo, ${N<tot?`${N} de las ${num(tot)} personas que`:'todas las personas que'} entraron <b>${rg}</b>, ${w5?'la franja en que la espera pasó de 5 min':'la franja de más espera'} (hasta ${num(qx,1)} min): entraron ${num(wp)}, hubo ${num(wtk)} tickets y ${cdC2_pp(wab,'dejó la fila','dejaron la fila')}.`,
+  resumen:`Ayer entraron <b>${num(s.ppl)} personas</b> (${num(s.walk)} de a pie o en moto, estimado por franja) y hubo <b>${num(s.tk)} tickets</b>: ${num(s.conv*100)} por cada 100 que entran. ${cdC2_cap(cdC2_pp(s.look,'entró y no compró','entraron y no compraron'))} y <b>${cdC2_pp(s.ab,'dejó la fila sin comprar','dejaron la fila sin comprar')}</b> (estimado)${abH.length&&Math.round(s.ab)>1?`, ${abS>=.7?'casi todas':`el ${pcu(abS)} de ellas`} ${hourRanges(abH.map(x=>x.h)).join(' y ')}`:''}. El módulo Tienda estima que quien compra se queda ${mmss(s.dwell.buy)} y quien no, ${mmss(s.dwell.no)} (medianas de los recorridos que llegaron completos). Abajo, ${N<tot?`${N} de las ${num(tot)} personas que`:'todas las personas que'} entraron <b>${rg}</b>, ${w5?'la franja en que la espera pasó de 5 min':'la franja de más espera'} (hasta ${num(qx,1)} min): entraron ${num(wp)}, hubo ${num(wtk)} tickets y ${cdC2_pp(wab,'dejó la fila','dejaron la fila')}.`,
   nota:`Muestra de ${N} recorridos con las proporciones de esa franja: ${nT} pasaron por la caja y pagaron, ${nA} ${nA===1?'dejó':'dejaron'} la fila y ${nO} no ${nO===1?'pasó':'pasaron'} por la caja (el módulo estima que unas ${num(wwc,1)} fueron solo al baño). ${mf!=null?`Quien pagó hizo ${mmss(mf)} de fila en promedio (la espera de esas horas en el módulo Tienda). `:''}«Pagó» es lo que ve la cámara: se quedó en la caja lo que dura un cobro; nunca se mira su ticket. Las góndolas y el baño quedan fuera de cuadro: el tracker cierra un track que no ve más de 3 s, así que quien va a buscar algo vuelve con otro número y su tiempo puerta a puerta queda sin dato (no se une a nadie por su aspecto ni con C5). Si llegó de la playa o de a pie no se sabe por persona: en la franja, ${pcu(wwk/wp)} de las entradas vienen de a pie o en moto (estimado). La fila y la caja de cada persona son de ejemplo, con la espera por hora del módulo.`}}
 
 CAMDET.C2={
@@ -2649,7 +2684,7 @@ CAMDET.C2={
   {q:'Cuántas personas entran y a qué hora',como:'Línea dibujada en la puerta: cada track que la cruza hacia adentro suma una entrada en su hora. El personal no se cuenta. En el clip de la demo la puerta queda al fondo, detrás de la fila, y no tiene línea: ahí este conteo es sin dato.',estado:'medido',conf:'alta'},
   {q:'Si llegan de la playa o de a pie',como:'Por franja de 15 minutos: entradas por la puerta menos las personas que bajan de los autos atendidos en la playa (C4). Por persona no se sabe: no se sigue a nadie entre cámaras.',estado:'estimado',conf:'media'},
   {q:'Cuánto espera cada persona en la fila de la caja',como:'Zona «fila»: segundos que los pies de cada track pasan dentro, de que entra a que llega al mostrador. La regla «fila en la caja» avisa cuando la fila se alarga. Si los de adelante tapan a alguien al fondo, ese tramo no se cuenta.',estado:'medido',conf:'alta'},
-  {q:'Quién deja la fila sin pagar',como:'El track entra a la fila, se queda 20 s o más y sale hacia la puerta sin llegar al mostrador. Se valida contra el POS por franja de 15 minutos (personas que llegaron al mostrador contra tickets de la franja), nunca persona por persona.',estado:'estimado',conf:'media'},
+  {q:'Quién deja la fila sin comprar',como:'El track entra a la fila, se queda 20 s o más y sale hacia la puerta sin llegar al mostrador. Se valida contra el POS por franja de 15 minutos (personas que llegaron al mostrador contra tickets de la franja), nunca persona por persona.',estado:'estimado',conf:'media'},
   {q:'Quién pasa por la caja y paga',como:'Comportamiento visto: el track llega al frente del mostrador y se queda lo que dura un cobro. Nunca se mira su ticket. La zona «cobro» se calibra en el piloto con los tickets del POS por franja.',estado:'piloto',conf:'media'},
   {q:'Cuántos entran y no compran',como:'Entradas menos tickets del POS de la misma franja, menos los que van solo al baño (estimado). Un grupo de dos hace un solo ticket: por eso se habla de tickets por cada 100 que entran, no de «% que compra».',estado:'estimado',conf:'media'},
   {q:'Cuánto se queda cada persona, puerta a puerta',como:'El mismo track entre el cruce de entrada y el de salida por la línea de la puerta. Solo se mide si el recorrido queda dentro de cuadro: las góndolas y el baño no se ven desde C2 y el tracker cierra un track que no ve más de 3 s, así que quien va a buscar algo vuelve con otro número y ese recorrido se excluye (no se une a nadie por su aspecto). Se informa qué parte llegó completa.',estado:'estimado',conf:'baja'},
@@ -2664,8 +2699,8 @@ CAMDET.C2={
   {id:'conv',n:'Tickets por cada 100 que entran',fmt:'dec',mejor:'sube',...cdSerie({ayer:(s.conv||0)*100,seed:9201,drift:-.007,ruido:.02,min:0,max:100})},
   // espera media en la fila de la caja, en segundos = Σ(D.store.hrs[h].q × tickets de la hora) ÷ tickets × 60 (cdC2_espera); sube: el hallazgo de esta cámara
   {id:'espera',n:'Espera media en la fila de la caja',fmt:'min',mejor:'baja',...cdSerie({ayer:cdC2_espera(s.hrs),seed:9202,drift:.05,ruido:.04,min:0})},
-  // personas que dejan la fila sin pagar = D.store.ab (panel «Permanencia y abandono de la fila»); acompaña al tránsito y sube más rápido que la espera
-  {id:'abandono',n:'Personas que dejan la fila sin pagar (estimado)',fmt:'dec',mejor:'baja',...cdSerie({ayer:s.ab,seed:9203,motor:'autos',drift:.08,ruido:.05,min:0})}]},
+  // personas que dejan la fila sin comprar = D.store.ab (panel «Permanencia y abandono de la fila»); acompaña al tránsito y sube más rápido que la espera
+  {id:'abandono',n:'Personas que dejan la fila sin comprar (estimado)',fmt:'dec',mejor:'baja',...cdSerie({ayer:s.ab,seed:9203,motor:'autos',drift:.08,ruido:.05,min:0})}]},
  // perfil por hora de ayer: personas que entran (D.store.hrs)
  horas:()=>({n:'Personas que entran a la tienda',u:'visitantes',hrs:D.store.hrs.map(x=>[x.h,x.ppl])}),
  recos:A=>{const s=D.store,H=s.hrs,E=A.S.espera,AB=A.S.abandono,CV=A.S.conv,pk=A.pk,out=[];
@@ -2677,15 +2712,15 @@ CAMDET.C2={
   if(k){const qm=H.map(x=>({h:x.h,q:x.q*k})),ov=qm.filter(x=>x.q>5),rg=hourRanges(ov.map(x=>x.h)).join(' y ');
    if(ov.length){const pm=sum(ov.map(x=>manH(x.h))),sv=r5!=null&&r35!=null?pm*(r5-r35):null,qpk=pk?(qm.find(x=>x.h===pk[0])||{q:0}).q:null,enPk=pk&&ov.some(x=>x.h===pk[0]),mx=Math.max(...ov.map(x=>x.q));
     out.push({id:'segunda_caja',t:`Abrí la segunda caja mañana ${rg}`,
-     porque:`Mañana la espera media en la caja sería de <b>${mmss(eMan)}</b> (pronóstico; ayer ${mmss(eAy)}). Con la forma por hora de ayer, <b>${rg} pasaría de 5 minutos</b> (hasta ${num(mx,1)} min).${r5!=null&&r35!=null?` Ayer, con más de 5 min de espera, dejó la fila el ${pcu(r5,1)} de los que entraron; con 3 a 5 min, el ${pcu(r35,1)}.`:''}${pk?enPk?` Y coincide con el pico de entradas de mañana: unas ${num(pk[1])} personas de ${pk[0]} a ${pk[0]+1} h (pronóstico).`:` El pico de entradas de mañana es otro: de ${pk[0]} a ${pk[0]+1} h, unas ${num(pk[1])} personas (pronóstico), con ${num(qpk,1)} min de espera${qpk>=3.5?': cerca del objetivo de 5 min, que alguien esté listo para abrir la segunda caja si salta el aviso de fila':': la caja sola alcanza'}. La fila más larga no llega cuando más gente entra.`:''}`,
-     impacto:sv!=null&&sv>0?`${cdC2_cap(rg)} entrarían unas ${num(pm)} personas (pronóstico) × (${pcu(r5,1)} − ${pcu(r35,1)}) = ${num(sv,1)} personas menos que dejan la fila × ${ars(s.tkp)} de ticket promedio = ${ars(sv*s.tkp)} de venta mañana; × ${pcu(TIENDA_MG)} de margen = <b>${ars(sv*s.tkp*TIENDA_MG)}</b>. Si se repite todos los días: <b>${ars(sv*s.tkp*TIENDA_MG*30)} por mes</b>.`:null,
+     porque:`Mañana la espera media en la caja sería de <b>${mmss(eMan)}</b> (pronóstico; ayer ${mmss(eAy)}). Con la forma por hora de ayer, <b>${rg} pasaría de 5 minutos</b> (hasta ${num(mx,1)} min).${r5!=null&&r35!=null?` Ayer, con más de 5 min de espera, dejó la fila el ${pcu(r5,1)} de los que entraron; con 3 a 5 min, el ${pcu(r35,1)}.`:''}${pk?enPk?` Y coincide con el pico de entradas de mañana: unas ${num(pk[1])} personas de ${pk[0]} a ${pk[0]+1} h (pronóstico).`:` El pico de entradas de mañana es otro: de ${pk[0]} a ${pk[0]+1} h, unas ${num(pk[1])} personas (pronóstico), con ${num(qpk,1)} min de espera${qpk>=3.5?': cerca del límite de 5 min: conviene que alguien esté listo para abrir la segunda caja si salta el aviso de fila':': la caja sola alcanza'}. La fila más larga no llega cuando más gente entra.`:''}`,
+     impacto:sv!=null&&sv>0?`${cdC2_cap(rg)} entrarían unas ${num(pm,1)} personas (pronóstico) × (${pcu(r5,1)} − ${pcu(r35,1)}) = ${num(sv,2)} personas menos que dejan la fila × ${ars(s.tkp)} de ticket promedio = ${ars(sv*s.tkp)} de venta mañana; × ${pcu(TIENDA_MG)} de margen = <b>${ars(sv*s.tkp*TIENDA_MG)}</b>. Si se repite todos los días: <b>${ars(sv*s.tkp*TIENDA_MG*30)} por mes</b>.`:null,
      conf:E.hw.mape==null?'baja':E.hw.mape<.08?'alta':E.hw.mape<.15?'media':'baja',prio:'alta',
      medir:`C2: minutos de espera y personas que dejan la fila ${rg}, con la segunda caja abierta, contra los mismos días de las 2 semanas anteriores. POS: tickets por franja de 15 minutos, nunca por persona.`})}}
   // 2 · la espera o el abandono suben semana a semana: que el aviso de fila de C2 llame a la segunda caja (regla «fila» de D.cv.rules, precisión de cvQ)
   const eS=E&&E.tr.ok&&E.tr.dir==='sube',aS=AB&&AB.tr.ok&&AB.tr.dir==='sube';
   if(eS||aS){const R0=(D.cv.rules||[]).find(r=>r.id==='fila'),q=R0&&typeof cvQ==='function'?cvQ(R0):null,f7=AB?cdAvg(AB.y.slice(0,7)):null,rec=AB&&AB.tr.ok?AB.tr.l7-f7:0;
    out.push({id:'aviso_fila',t:'Conectá el aviso de fila con la segunda caja',
-    porque:`${eS?`La espera media en la caja <b>sube ${pcu(Math.abs(E.tr.pct),1)} por semana</b> (${cdC2_p(E.tr)}): ${mmss(E.tr.p7)} la semana anterior, ${mmss(E.tr.l7)} la última. `:''}${aS?`Los que dejan la fila sin pagar <b>suben ${pcu(Math.abs(AB.tr.pct),1)} por semana</b> (${cdC2_p(AB.tr)}): ${num(AB.tr.p7,1)} por día la semana anterior, ${num(AB.tr.l7,1)} la última. `:''}${CV&&CV.tr.ok?CV.tr.dir==='estable'?`Los tickets por cada 100 que entran todavía no lo muestran (estables, ${num(CV.y[CV.y.length-1],1)} ayer): la fila avisa antes que la caja registradora. `:CV.tr.dir==='baja'?`Y los tickets por cada 100 que entran ya bajan ${pcu(Math.abs(CV.tr.pct),1)} por semana. `:'':''}${R0?`La regla «${R0.n}» saltó ${R0.det} ${R0.det===1?'vez':'veces'} ayer${q&&q.p!=null?` y acierta el ${pcu(q.p)} de las veces ${q.win}${q.p>=.8?': es confiable para mover a alguien a la caja sin mirar la pantalla':''}`:q?`; con ${q.n} revisiones ${q.win} todavía no hay precisión publicada`:''}.`:''}`,
+    porque:`${eS?`La espera media en la caja <b>sube ${pcu(Math.abs(E.tr.pct),1)} por semana</b> (${cdC2_p(E.tr)}): ${mmss(E.tr.p7)} la semana anterior, ${mmss(E.tr.l7)} la última. `:''}${aS?`Los que dejan la fila sin comprar <b>suben ${pcu(Math.abs(AB.tr.pct),1)} por semana</b> (${cdC2_p(AB.tr)}): ${num(AB.tr.p7,1)} por día la semana anterior, ${num(AB.tr.l7,1)} la última. `:''}${CV&&CV.tr.ok?CV.tr.dir==='estable'?`Los tickets por cada 100 que entran todavía no lo muestran (estables, ${num(CV.y[CV.y.length-1],1)} ayer): la fila avisa antes que la caja registradora. `:CV.tr.dir==='baja'?`Y los tickets por cada 100 que entran ya bajan ${pcu(Math.abs(CV.tr.pct),1)} por semana. `:'':''}${R0?`La regla «${R0.n}» saltó ${R0.det} ${R0.det===1?'vez':'veces'} ayer${q&&q.p!=null?` y acierta el ${pcu(q.p)} de las veces ${q.win}${q.p>=.8?': es confiable para mover a alguien a la caja sin mirar la pantalla':''}`:q?`; con ${q.n} revisiones ${q.win} todavía no hay precisión publicada`:''}.`:''}`,
     impacto:rec>0?`Volver al abandono de hace 4 semanas (${num(f7,1)} por día): ${num(rec,1)} personas menos por día × ${ars(s.tkp)} de ticket promedio × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(rec*s.tkp*TIENDA_MG*30)} por mes</b>. Ayer la fila dejó ir unos ${ars(s.ab*s.tkp)} de venta (módulo Tienda, al ticket promedio).`:null,
     conf:(!eS||E.tr.p<.01)&&(!aS||AB.tr.p<.01)?'alta':'media',prio:eS&&E.tr.p<.01?'alta':'media',
     medir:'C2: espera media y personas que dejan la fila, por hora, 2 semanas antes y después; cuántas veces saltó el aviso y cuántos minutos tardó en abrirse la segunda caja. POS: tickets por franja de 15 minutos.'})}
@@ -2695,7 +2730,7 @@ CAMDET.C2={
    // las categorías que más importe dejan en esa franja, igual que el panel «Qué compra la gente» del módulo (storeCatRows, ordenadas por importe; sin las de menos de TIENDA_MIN tickets)
    const top=storeCatRows(fr.id).filter(r=>r.ok).sort((a,b)=>b.imp-a.imp).slice(0,3).map(r=>`«${r.n}»`);
    out.push({id:'noche_apie',t:top.length?`Poné ${top[0]} a la vista de la puerta ${hr}`:`Revisá qué se ve desde la puerta ${hr}`,
-    porque:`${cdC2_cap(hr)} entran unas ${num(pin)} personas y <b>${num(pw/pin*100)} de cada 100 llegan de a pie o en moto</b> (estimado por franja; en el día, ${num(s.walk/s.ppl*100)}). Compran poco: <b>${num(ptk/pin*100)} tickets por cada 100 que entran</b>, contra ${num(rc*100)} el resto del día. La prueba es si, con lo que más importe deja a esa hora a la vista desde la puerta, más de los que entran terminan comprando.${top.length?` ${al}, lo que más importe deja en el POS es ${cdC2_y(top)} (panel «Qué compra la gente», franja ${fr.n.toLowerCase()}).`:` ${al} hay muy pocos tickets por categoría: <span class="muted">sin dato por pocos casos</span>.`}`,
+    porque:`${cdC2_cap(hr)} entran unas ${num(pin)} personas y <b>${num(pw/pin*100)} de cada 100 llegan de a pie o en moto</b> (estimado por franja; en el día, ${num(s.walk/s.ppl*100)}). Compran poco: <b>${num(ptk/pin*100)} tickets por cada 100 que entran</b>, contra ${num(rc*100)} el resto del día. La prueba es si, con lo que más se vende a esa hora a la vista desde la puerta, más de los que entran terminan comprando.${top.length?` ${al}, lo que más se vende en plata (POS) es ${cdC2_y(top)} (panel «Qué compra la gente», franja ${fr.n.toLowerCase()}).`:` ${al} hay muy pocos tickets por categoría: <span class="muted">sin dato por pocos casos</span>.`}`,
     impacto:ex>0?`Si esas horas compraran como el resto del día: ${num(ex,1)} tickets más por día × ${ars(s.tkp)} de ticket promedio × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(ex*s.tkp*TIENDA_MG*30)} por mes</b>.`:null,
     conf:'media',prio:'media',medir:`C2: tickets por cada 100 que entran ${hr} y qué parte llega de a pie o en moto, 2 semanas antes y después. POS: ${top.length?`tickets de ${cdC2_y(top)}`:'tickets'} por franja de 15 minutos, nunca por persona.`})}
   return out.slice(0,4)}
@@ -2731,8 +2766,6 @@ const cdC3_mgL=()=>sum(PRODS.map(p=>S.P.p[p.id].vol*(S.P.p[p.id].precio-S.P.p[p.
 const cdC3_hose=()=>{const h=D.playa.hose,x=h&&D.hoses.find(y=>y.id===h.id);return x&&(h.s===3||h.s===4)?{...h,pid:x.pid}:null};
 // en qué parte de los autos alguien entra a la tienda: la misma cuenta que el panel «De la playa a la caja» de Tienda (funnelHtml)
 const cdC3_tienda=()=>D.store&&D.cv.cars?sum(D.store.hrs.map(x=>x.ppl-x.walk))/D.cv.cars:null;
-// parte de los autos que va a la isla 2 según cuántos playeros hay (1 o 2): reparto real de ayer en D.playa.cars
-const cdC3_share=k=>{const a=D.playa.cars.filter(c=>STAFF_NOW(c.h)===k);return a.length?a.filter(c=>c.isla===2).length/a.length:0};
 // isla 2 a una hora: esperas de ayer de los autos observados
 const cdC3_hora=h=>{const w=cdC3_i2().filter(c=>c.h===h).map(c=>c.wait);return{n:w.length,med:w.length>=5?playaQ(w,.5):null,p90:w.length>=5?playaQ(w,.9):null,mean:w.length?cdAvg(w):null,m90:w.filter(x=>x>cdC3_ESPERA).length}};
 
@@ -2813,7 +2846,7 @@ function cdC3_celSerie(){const ay=cdC3_rule('celular').det,o=cdSerie({ayer:ay,se
 CAMDET.C3={
  titulo:'cuánto tarda la atención en la isla 2',
  modulo:'playa',
- modelo:'Corren en el equipo de la estación: YOLOv8n detecta autos y personas en cada cuadro analizado y el tracker GOTA le da a cada uno un número anónimo que dura lo que dura la visita. El playero se reconoce por el color del uniforme (se configura por bandera): en cada cuadro la persona vota según cuánto de su ropa cae en esos colores y el track entero se decide por mayoría; el umbral de color todavía no está calibrado con imágenes de la estación. Un auditor de vocabulario abierto (OWLv2, sin entrenar) mira un cuadro cada 2 a 3 s para lo que el detector no trae, como un bidón. Un VLM (Qwen2.5-VL-7B) puede preguntar una vez por persona si tiene un celular en la mano, pero solo sobre la grabación: todavía no corre en vivo. En el piloto se suma el exporte de despachos del controlador de surtidores (inicio y fin de cada carga). Sin caras, sin nombres y sin seguir a nadie a otra cámara.',
+ modelo:'Corren en el equipo de la estación: YOLOv8n detecta autos y personas en cada cuadro analizado y el tracker GOTA le da a cada uno un número anónimo que dura lo que dura la visita. El playero se reconoce por el color del uniforme (se configura por bandera): en cada cuadro la persona vota según cuánto de su ropa cae en esos colores y el track entero se decide por mayoría; el umbral de color todavía no está calibrado con imágenes de la estación. Un detector de objetos sin entrenar (OWLv2) busca bidones un cuadro cada 2 a 3 s, porque el detector principal no los trae. Un VLM (Qwen2.5-VL-7B) puede preguntar una vez por persona si tiene un celular en la mano, pero solo sobre la grabación: todavía no corre en vivo. En el piloto se suma el exporte de despachos del controlador de surtidores (inicio y fin de cada carga). Sin caras, sin nombres y sin seguir a nadie a otra cámara.',
  objetivos:[
   {q:'Cuánto espera cada auto hasta que llega el playero',como:'Zona «isla2» dibujada sobre los surtidores 3 y 4. El reloj arranca cuando el auto entra a la zona y para cuando entra una persona con el uniforme de la estación. Si ya había un playero en la isla, la espera es cero. Pasados 90 s sin atención, avisa al encargado. El reconocimiento del uniforme se calibra en el piloto.',estado:'medido',conf:'media'},
   {q:'Si el conductor usa el celular durante la carga',como:'Regla de copresencia: un celular visible junto al auto en la isla durante 3 s seguidos. El celular es un objeto chico: la precisión se mide en el piloto y una persona revisa cada aviso antes de contarlo. El VLM puede confirmarlo sobre la grabación (todavía no en vivo).',estado:'medido',conf:'media'},
@@ -2821,7 +2854,7 @@ CAMDET.C3={
   {q:'Si un auto queda ocupando el surtidor',como:'Permanencia: un auto más de 7 min en la zona (por ejemplo, el conductor lo dejó en el surtidor y se fue a la tienda) da aviso: es un surtidor que no atiende a nadie.',estado:'medido',conf:'alta'},
   {q:'Cuánto duran la carga y el cobro',como:'En piloto: cuando se conecte el exporte de despachos del controlador, la carga sale de su inicio y su fin; el cobro, del tiempo que el playero sigue con el auto después de la carga (relojes sincronizados; más de 5 s de desvío: sin dato). El motor de visión todavía no los mide.',estado:'piloto',conf:'media'},
   {q:'Cuánto tarda en irse después de pagar',como:'En piloto: desde que el playero se aleja del auto hasta que el auto deja la zona de la isla, separando la demora por autos de adelante. El motor de visión todavía no lo calcula.',estado:'piloto',conf:'baja'},
-  {q:'Si cargan combustible en un bidón',como:'El auditor sin entrenar busca «jerrycan or fuel container» un cuadro cada 2 a 3 s; si el bidón queda 5 s junto al auto en la isla, avisa. Confunde bidones con baldes y cajas: una persona confirma cada aviso. Para medirlo bien hace falta entrenar un detector propio con imágenes de la estación.',estado:'estimado',conf:'baja'},
+  {q:'Si cargan combustible en un bidón',como:'Un detector de objetos sin entrenar busca bidones un cuadro cada 2 a 3 s; si el bidón queda 5 s junto al auto en la isla, avisa. Confunde bidones con baldes y cajas: una persona confirma cada aviso. Para medirlo bien hace falta entrenar un detector propio con imágenes de la estación.',estado:'estimado',conf:'baja'},
   {q:'Si el conductor va a la tienda mientras tanto',como:'En piloto: hace falta dibujar en esta cámara la línea «hacia la tienda» para contar a la persona que baja del auto y sale de la isla por ese lado. Esta cámara no ve la puerta y no se sigue a nadie entre cámaras: el total se contrasta por franja con las entradas que cuenta C2. Mientras tanto, la proporción es la de Tienda.',estado:'piloto',conf:'baja'}],
  clip:cdC3_clip,
  ayerTitulo:'Autos de ayer en la isla 2, uno por uno',
@@ -2840,32 +2873,33 @@ CAMDET.C3={
   // ayer = «Celular durante la carga», columna Ayer de las reglas de Cámaras en vivo (D.cv.rules, id celular, cámara C3); acompaña al tránsito y sube.
   // Los últimos 7 días suman lo mismo que «Siete días por regla» de Seguridad (D.sec.week, id celular): cdC3_celSerie.
   {id:'celular',n:'Avisos de celular durante la carga',fmt:'num',mejor:'baja',...cdC3_celSerie()}]},
- // perfil por hora de ayer: autos de la playa por hora (D.cv.hrs) × parte que fue a la isla 2 con 2 playeros o con 1 (reparto real de D.playa.cars).
- // Misma base que la serie principal: sin las horas NO OBSERVABLE de la C3 (PLAYA_NOOBS.C3, de 7 a 8 h la lente tuvo gotas): esa hora no es cero, es sin dato.
- horas:()=>{const s={1:cdC3_share(1),2:cdC3_share(2)};return{n:'Autos en la isla 2, con la C3 mirando',u:'autos',hrs:D.cv.hrs.filter(x=>!PLAYA_NOOBS.C3.includes(x.h)).map(x=>[x.h,x.cars*s[STAFF_NOW(x.h)===1?1:2]])}},
+ // perfil por hora de ayer: autos de la isla 2 que vio la C3 en cada hora (D.playa.cars, los mismos de cdC3_hora); suma la serie principal (D.playa.cells['2:dia'].n).
+ // Sin las horas NO OBSERVABLE de la C3 (PLAYA_NOOBS.C3, de 7 a 8 h la lente tuvo gotas): esa hora no es cero, es sin dato.
+ horas:()=>{const A2=cdC3_i2();return{n:'Autos en la isla 2, con la C3 mirando',u:'autos',hrs:D.cv.hrs.filter(x=>!PLAYA_NOOBS.C3.includes(x.h)).map(x=>[x.h,A2.filter(c=>c.h===x.h).length])}},
  recos:A=>{const out=[],c=cdC3_cell(),cv=D.cv,P=D.playa,es=A.S.espera,ca=A.S.carga,ce=A.S.celular,pk=A.pk,f7=s=>cdAvg(s.y.slice(0,7));
   const m9=A.S.mas90,esSube=es&&es.tr.ok&&es.tr.dir==='sube',m9Sube=m9&&m9.tr.ok&&m9.tr.dir==='sube';
-  const esTxt=esSube?` Y va a peor: la espera promedio de la playa <b>sube ${pc(es.tr.pct)} por semana</b> (${cdC3_p(es.tr)}), de ${mmss(f7(es))} hace 4 semanas a ${mmss(es.tr.l7)} la última${m9Sube?`, y los autos de la isla 2 que pasan de 1:30, de ${pcu(f7(m9),1)} a ${pcu(m9.tr.l7,1)}`:''}.`:'';
-  // 1 · el pico de mañana con espera de más de 1:30: reasignar un playero a la isla 2. Plata = autos que se dejan de ir sin cargar a esa hora (D.cv.hrs.ab).
+  const esTxt=esSube?` Y va a peor: la espera promedio de la playa <b>sube ${pcu(Math.abs(es.tr.pct),1)} por semana</b> (${cdC3_p(es.tr)}), de ${mmss(f7(es))} hace 4 semanas a ${mmss(es.tr.l7)} la última${m9Sube?`, y los autos de la isla 2 que pasan de 1:30, de ${pcu(f7(m9),1)} a ${pcu(m9.tr.l7,1)}`:''}.`:'';
+  // 1 · el pico de mañana con espera de más de 1:30: que la isla 2 tenga su playero. Plata = autos que se dejan de ir sin cargar a esa hora (D.cv.hrs.ab),
+  //     con la misma base que C4: horas con al menos 5 autos y espera de hasta cdC4_ESPERA_OK, sin la hora NO OBSERVABLE de C4. Si C4 propone lo mismo a esa hora, es parte de su monto.
   if(pk){const h=pk[0],cvh=cv.hrs.find(x=>x.h===h),i2=cdC3_hora(h),ph=P.hrs.find(x=>x.h===h);
    if(cvh&&(cvh.wait>cdC3_ESPERA||(i2.p90!=null&&i2.p90>cdC3_ESPERA))){
-    // horas de referencia: las otras horas con al menos 5 autos y espera por debajo del promedio del día (D.cv.wait); tasa ponderada = Σ se fueron ÷ Σ autos (toda la playa)
-    const calm=cv.hrs.filter(x=>x.h!==h&&x.cars>=5&&x.wait<=cv.wait),rc=calm.length?sum(calm.map(x=>x.ab))/sum(calm.map(x=>x.cars)):0,rp=cvh.cars?cvh.ab/cvh.cars:0,ab=pk[1]*Math.max(0,rp-rc),mg=cdC3_mgL();
+    const no=cdC4_noobs(),calm=cv.hrs.filter(x=>x.h!==h&&!no.includes(x.h)&&x.cars>=5&&x.wait<=cdC4_ESPERA_OK),rc=calm.length?sum(calm.map(x=>x.ab))/sum(calm.map(x=>x.cars)):0,rp=cvh.cars?cvh.ab/cvh.cars:0,ab=pk[1]*Math.max(0,rp-rc),mg=cdC3_mgL();
     const dm=cdAvg(cdC3_i2().map(x=>x.wait)),min=i2.mean!=null&&dm!=null?pk[1]*Math.max(0,i2.mean-dm)/60:0,falta=ph&&ph.vis!=null&&ph.vis<ph.prog-.4;
-    out.push({id:'playero_pico',t:`Reasigná un playero a la isla 2 de ${h} a ${h+1} h`,
-     porque:`Mañana el pico de la isla 2 es de ${h} a ${h+1} h, con unos <b>${num(pk[1],1)} autos</b> (pronóstico). Ayer a esa hora ${i2.n?`esperaron más de 1:30 <b>${num(i2.m90)} de ${num(i2.n)} autos</b> de la isla 2${i2.med!=null?` (mediana ${mmss(i2.med)}, contra ${mmss(c.med)} de la isla 2 en todo el día)`:''}`:'la C3 no tuvo autos observados'} y en toda la playa la espera promedio fue <b>${mmss(cvh.wait)}</b>.${falta?` La C4 vio ${num(ph.vis,1)} playeros de los ${num(ph.prog)} de la grilla: el que falta puede estar en la descarga o en la tienda; revisalo con el encargado antes de mover a alguien.`:''}${esTxt}`,
-     impacto:ab>0?`A esa hora se fue sin cargar el ${pcu(rp,1)} de los autos, contra ${pcu(rc,1)} en las horas con espera por debajo del promedio del día (${mmss(cv.wait)}; tasas de toda la playa, aplicadas a la isla 2): ${num(pk[1],1)} autos × ${fa((rp-rc)*100,1)} puntos × ${num(CAR_L)} L × ${ars(mg)} de margen por litro × 30 días = <b>${ars(ab*CAR_L*mg*30)} por mes</b>.${min>=1?` Además, unos ${num(min)} minutos menos de espera por día en la isla 2 (${num(pk[1],1)} autos × la diferencia entre ${mmss(i2.mean)} de espera promedio a esa hora y ${mmss(dm)} de promedio en la isla 2 en todo el día, si esa hora se atiende como el resto).`:''}`:null,
+    const A4=cdAnalyze('C4'),deC4=!!(A4&&A4.pk&&A4.pk[0]===h&&A4.recos.some(r=>r.id==='playero_pico'));
+    out.push({id:'playero_pico',t:`Que la isla 2 tenga su playero de ${h} a ${h+1} h`,
+     porque:`Mañana el pico de la isla 2 es de ${h} a ${h+1} h, con unos <b>${num(pk[1],1)} autos</b> en la isla 2 (pronóstico). Ayer a esa hora ${i2.n?`<b>${num(i2.m90)} de los ${num(i2.n)} autos de la isla 2 esperaron más de 1:30</b>${i2.med!=null?` (mediana en la isla 2 a esa hora: ${mmss(i2.med)}, contra ${mmss(c.med)} en la isla 2 en todo el día)`:''}`:'la C3 no tuvo autos observados en la isla 2'}; en toda la playa (islas 1 y 2) la espera promedio fue <b>${mmss(cvh.wait)}</b>.${falta?` La C4 vio ${num(ph.vis,1)} playeros de los ${num(ph.prog)} de la grilla. Faltan playeros a la vista en esa hora: revisá la grilla y las tareas de la hora (descarga, tienda) con el encargado. No sirve para sancionar a nadie.`:''}${esTxt}`,
+     impacto:ab>0?`A esa hora se fue sin cargar el ${pcu(rp,1)} de los autos, contra ${pcu(rc,1)} en las horas con espera promedio de hasta ${mmss(cdC4_ESPERA_OK)} (tasas de toda la playa, las mismas que usa C4, aplicadas a los autos de la isla 2): ${num(pk[1],1)} autos × ${fa((rp-rc)*100,1)} puntos × ${num(CAR_L)} L × ${ars(mg)} de margen por litro × 30 días = <b>${ars(ab*CAR_L*mg*30)} por mes</b>.${deC4?' Es parte del monto de la recomendación de C4 para esa hora (toda la playa): no se suma.':''}${min>=1?` Además, unos ${num(min)} minutos menos de espera por día en la isla 2 (${num(pk[1],1)} autos × la diferencia entre ${mmss(i2.mean)} de espera promedio en la isla 2 a esa hora y ${mmss(dm)} de promedio en la isla 2 en todo el día, si esa hora se atiende como el resto).`:''}`:null,
      conf:'media',prio:'alta',medir:`C3: espera hasta que llega el playero y autos que pasan de 1:30 en la isla 2 de ${h} a ${h+1} h, dos semanas antes y dos después. C4: playeros visibles y autos que se van sin cargar a esa hora.`})}}
   // 2 · carga y cobro en suba: cobrar en el surtidor con QR o tarjeta. Plata = tiempo de playero que vuelve a atender autos (HR_PLAY, supuesto de Personal).
   if(ca&&ca.tr.ok&&ca.tr.dir==='sube'){const up=ca.tr.l7-f7(ca),hose=cdC3_hose(),mins=Math.max(0,up)*c.n/60;
    out.push({id:'cobro_qr',t:'Cobro con QR o tarjeta en el surtidor de la isla 2',
-    porque:`La carga y el cobro <b>suben ${pc(ca.tr.pct)} por semana</b> (${cdC3_p(ca.tr)}): ${mmss(f7(ca))} por auto hace 4 semanas, ${mmss(ca.tr.l7)} la última. De los ${mmss(cv.fill)} de ayer, ${mmss(P.carga)} son la carga que mide el controlador y ${mmss(P.cobro)}, el cobro. Mientras cobra, el playero no atiende al auto que espera: cobrar en el surtidor recorta el cobro sin tocar la carga.${esSube?` Y la espera promedio de la playa sube al mismo tiempo (${pc(es.tr.pct)} por semana): el tiempo que el playero pasa cobrando es tiempo que el auto siguiente espera.`:''}${hose?` Aparte, la manguera ${hose.id} (${hose.prod}, surtidor ${hose.s}, en esta isla) despacha a ${num(hose.flow,1)} L/min contra ${num(hose.ref,1)} las otras: ${mmss(hose.t-hose.tRef)} más en cada una de sus ${num(hose.desp)} cargas por día; ya tiene orden de trabajo en Mantenimiento.`:''}`,
-    impacto:up>0?`Volver al nivel de hace 4 semanas (supuesto: el QR recupera toda la suba, que es de toda la playa y no sabemos si viene de la carga o del cobro): ${num(up)} s menos por auto × ${num(c.n)} autos por día en la isla 2 = ${num(mins)} minutos de playero por día; × ${ars(HR_PLAY)} la hora de un playero ÷ 60 × 30 días = <b>${ars(mins/60*HR_PLAY*30)} por mes</b> de tiempo que vuelve a atender autos.`:null,
+    porque:`La carga y el cobro <b>suben ${pcu(Math.abs(ca.tr.pct),1)} por semana</b> (${cdC3_p(ca.tr)}): ${mmss(f7(ca))} por auto hace 4 semanas, ${mmss(ca.tr.l7)} la última. De los ${mmss(cv.fill)} de ayer, ${mmss(P.carga)} son la carga que mide el controlador y ${mmss(P.cobro)}, el cobro. Mientras cobra, el playero no atiende al auto que espera: cobrar en el surtidor recorta el cobro sin tocar la carga.${esSube?` Y la espera promedio de la playa sube al mismo tiempo (${pcu(Math.abs(es.tr.pct),1)} por semana): el tiempo que el playero pasa cobrando es tiempo que el auto siguiente espera.`:''}${hose?` Aparte, la manguera ${hose.id} (${hose.prod}, surtidor ${hose.s}, en esta isla) despacha a ${num(hose.flow,1)} L/min contra ${num(hose.ref,1)} las otras: ${mmss(hose.t-hose.tRef)} más en cada una de sus ${num(hose.desp)} cargas por día; ya tiene orden de trabajo en Mantenimiento.`:''}`,
+    impacto:up>0?`Volver al nivel de hace 4 semanas (supuesto: el QR recupera toda la suba, que es de toda la playa y no sabemos si viene de la carga o del cobro): ${num(up)} s menos por auto × ${num(c.n)} autos por día en la isla 2 = ${num(mins)} minutos de playero por día; × ${ars(HR_PLAY)} la hora de un playero ÷ 60 × 30 días = <b>${ars(mins/60*HR_PLAY*30)} por mes</b> de tiempo que vuelve a atender autos. No es un ahorro de caja salvo que se reduzcan horas de la grilla.`:null,
     conf:'media',prio:ca.tr.p<.01?'alta':'media',medir:'C3: espera hasta que llega el playero en la isla 2, dos semanas antes y dos después. Carga y cobro por auto: con el exporte de despachos del controlador (piloto), que separa la carga del cobro; la cámara sola todavía no los mide.'})}
   // 3 · avisos de celular en suba: cartel y pedido del playero. Es seguridad: sin monto.
   if(ce&&ce.tr.ok&&ce.tr.dir==='sube'){const r=cdC3_rule('celular'),q=typeof cvQ==='function'?cvQ(r):null,wk=D.sec&&D.sec.week?D.sec.week.find(x=>x.id==='celular'):null;
    out.push({id:'cartel_celular',t:'Cartel de celular guardado en la isla 2, y que el playero lo pida',
-    porque:`Los avisos de celular durante la carga <b>suben ${pc(ce.tr.pct)} por semana</b> (${cdC3_p(ce.tr)}): ${num(f7(ce),1)} por día hace 4 semanas, ${num(ce.tr.l7,1)} la última${wk?` (${num(wk.avisos)} avisos en 7 días, los mismos de Seguridad)`:''}. Ayer fueron ${num(r.det)} (${num(r.ok)} confirmados por una persona, ${cdC3_pl(r.fp,'falsa alarma','falsas alarmas')}).${q&&q.p!=null?` ${q.win==='ayer'?'Ayer':'En los últimos 7 días'}, la regla acertó el ${pcu(q.p)} de las veces (${num(q.ok)} confirmados de ${num(q.n)} revisados): no es ruido del detector.`:''} Es una norma de seguridad de la playa: el aviso es para que el playero lo pida, no para sancionar a nadie.`,
+    porque:`Los avisos de celular durante la carga <b>suben ${pcu(Math.abs(ce.tr.pct),1)} por semana</b> (${cdC3_p(ce.tr)}): ${num(f7(ce),1)} por día hace 4 semanas, ${num(ce.tr.l7,1)} la última${wk?` (${num(wk.avisos)} avisos en 7 días, los mismos de Seguridad)`:''}. Ayer fueron ${num(r.det)} (${num(r.ok)} confirmados por una persona, ${cdC3_pl(r.fp,'falsa alarma','falsas alarmas')}).${q&&q.p!=null?` ${q.win==='ayer'?'Ayer':'En los últimos 7 días'}, la regla acertó el ${pcu(q.p)} de las veces (${num(q.ok)} confirmados de ${num(q.n)} revisados): no es ruido del detector.`:''} Es una norma de seguridad de la playa: el aviso es para que el playero lo pida, no para sancionar a nadie.`,
     impacto:null,conf:'media',prio:'media',medir:'C3: avisos de celular cada 100 autos atendidos en la isla 2, dos semanas antes y dos después del cartel; una persona sigue revisando cada aviso.'})}
   return out.slice(0,4)}
 };
@@ -2895,6 +2929,11 @@ const cdC4_pico=()=>{const ob=D.playa.hrs.filter(x=>x.obs);return ob.reduce((a,b
 const cdC4_occ=()=>{let best={v:-1};D.cv.hrs.forEach(x=>x.occ.forEach((v,i)=>{if(v>best.v)best={v,h:x.h,s:i+1}}));return best};
 // autos que esperaron más de 1:30 por isla (datos de ayer, solo con la cámara mirando)
 const cdC4_largas=isla=>D.playa.cars.filter(c=>c.obs&&c.isla===isla&&c.wait>90).length;
+/* autos atendidos por día, 28 días (ayer = Math.round(D.cv.cars)): sigue la forma de la semana de los litros y sus últimos 7 días son los de Calle y acceso
+   (D.traffic.days, entradas de 24 h) llevados al nivel de ayer. C1 usa esta misma serie escalada a sus entradas (atendidos + los que se van), así
+   que nunca se pronostican más atendidos que entradas. */
+function cdC4_autosSerie(){const T=D.traffic,d6=T.days[T.days.length-1],ay=Math.round(D.cv.cars);
+ return cdC6_ancla(cdSerie({ayer:ay,seed:9400,motor:'autos',drift:0,ruido:.04,entero:true}),T.days.slice(0,-1).map(d=>d.enter*ay/d6.enter),null,true)}
 
 /* ---------- el clip real ---------- */
 /* puntos de cada track (punto de apoyo y caja), en orden */
@@ -2974,7 +3013,7 @@ function cdC4_rows(){const g=RNG(9400),cv=D.cv,no=cdC4_noobs(),A=D.playa.cars.fi
  const tm=new Map(at.map(r=>[r.c,r.h*60+r.m])),k={},ev=D.playa.cars.filter(c=>!no.includes(c.h)).map(c=>{const i=k[c.h]=(k[c.h]??-1)+1;return{o:c,t:tm.has(c)?tm.get(c):c.h*60+Math.min(59.5,(i+.5)*60/nh(c.h))}});
  ab.forEach(r=>ev.push({o:r,t:r.h*60+r.m}));ev.sort((x,y)=>x.t-y.t);const id=new Map(ev.map((e,i)=>[e.o,i+1]));
  return at.map(r=>({...r,n:id.get(r.c)})).concat(ab.map(r=>({...r,n:id.get(r)}))).sort((x,y)=>x.n-y.n).map(r=>({...r,id:'v'+r.n}))}
-function cdC4_ayer(){const cv=D.cv,P=D.playa,rows=cdC4_rows(),nAb=Math.round(cv.ab),ent=Math.round(cv.cars)+nAb,r=cdC4_rule('abandono'),c1=P.cells['1:dia'],c2=P.cells['2:dia'],oc=cdC4_occ(),pk=cdC4_pico();
+function cdC4_ayer(){const cv=D.cv,P=D.playa,rows=cdC4_rows(),nAb=Math.round(cv.ab),ent=D.street.enter,r=cdC4_rule('abandono'),c1=P.cells['1:dia'],c2=P.cells['2:dia'],oc=cdC4_occ(),pk=cdC4_pico();
  const h4=(cv.health||[]).find(x=>x[0]==='C4'),no=cdC4_noobs(),fila=P.hrs.filter(x=>x.fila>15),nS=rows.filter(x=>!x.ab).length,i1=rows.filter(x=>x.isla===1).length;
  const hora=h=>{const x=P.hrs.find(y=>y.h===h);return x&&x.obs?`${num(x.vis,1)} de ${x.prog}<div class="sub">${x.fila?`fila ${x.fila} min · hasta ${cdC4_pl(x.qmax,'auto','autos')}`:'sin fila'}</div>`:'<span class="muted">sin dato (C4 no observable)</span>'};
  const ll=x=>`<b>${x.id}</b><div class="sub">${x.h}:${pad(x.m)}</div>`;
@@ -2982,8 +3021,8 @@ function cdC4_ayer(){const cv=D.cv,P=D.playa,rows=cdC4_rows(),nAb=Math.round(cv.
   rows:rows.map(x=>x.ab
    ?[ll(x),'<span class="muted">ninguna</span>','<span class="muted">no llegó a una isla</span>','<span class="muted">no cargó</span>','<span class="muted">no aplica</span>',hora(x.h),`${pill('p-bad','se fue sin cargar')}<div class="sub">estuvo <b class="badc">${mmss(x.acc)}</b> en la playa sin llegar a una isla</div>`]
    :[ll(x),`Isla ${x.isla}<div class="sub">surtidor ${x.s}${x.isla===2?' · espera medida por C3':''}</div>`,x.wait>90?`<b class="badc">${mmss(x.wait)}</b><div class="sub">más de 1:30: aviso</div>`:`<b>${mmss(x.wait)}</b>`,`${mmss(x.fill)}<div class="sub">salida ${mmss(x.out)}</div>`,`<b>${mmss(x.wait+x.fill+x.out)}</b>`,hora(x.h),pill('p-ok','cargó')]),
-  resumen:`Ayer se atendieron <b>${num(cv.cars)} autos</b> y ${nAb?`${nAb===1?'otro <b>se fue':`otros <b>${num(nAb)} se fueron`} sin cargar</b> (${pcu(nAb/ent,1)} de los ${num(ent)} que entraron)`:'ninguno se fue sin cargar'}: la regla dio ${num(r.det)} ${r.det===1?'aviso':'avisos'} y una persona confirmó ${num(r.ok)} (${cdC4_pl(r.fp,'falsa alarma','falsas alarmas')}). Tiempo total en la isla: <b>${mmss(cv.wait+cv.fill+cv.out)}</b> por auto (espera ${mmss(cv.wait)}, carga y cobro ${mmss(cv.fill)}, salida ${mmss(cv.out)}). La isla 1 (surtidores 1 y 2, cerca de la entrada) atendió ${num(c1.n)} autos observados con espera mediana de <b>${mmss(c1.med)}</b>; la isla 2, ${num(c2.n)} con ${mmss(c2.med)}. El surtidor más cargado fue el ${oc.s}: <b>${pcu(oc.v)} ocupado</b> de ${oc.h} a ${oc.h+1} h. ${fila.length?`Hubo fila en la playa ${hourRanges(fila.map(x=>x.h)).join(' y ')} (${num(P.filaMin)} minutos con autos esperando una isla en todo el día). `:''}En la hora de más autos (${pk.h} a ${pk.h+1} h) se vieron ${num(pk.vis,1)} de los ${pk.prog} playeros de la grilla.${h4&&h4[1]<1?` La C4 estuvo observable el ${pcu(h4[1])} del día: ${h4[2].charAt(0).toLowerCase()+h4[2].slice(1)}, esa hora queda sin dato.`:''}`,
-  nota:`Muestra de ${nS} autos atendidos repartidos por isla como en el día (${num(i1)} en la isla 1 y ${num(nS-i1)} en la isla 2) y a lo largo de las horas, con la hora, la isla y la espera que tienen en los datos de ayer de Playa e islas, más los ${cdC4_pl(nAb,'auto que se fue','autos que se fueron')} sin cargar (${nAb===1?'el único':'todos'} los de ayer), en las horas con más abandono: por eso en esta tabla los que se van pesan más que en el día (${pcu(nAb/ent,1)}). El número de track sigue el orden de llegada de todos los autos del día. Carga y cobro y salida, de los promedios de esa hora; playeros y fila, de la hora completa. Las horas en que la C4 no vio${no.length?` (${no.map(h=>`${h} a ${h+1} h`).join(', ')})`:''} no entran.`}}
+  resumen:`Ayer se atendieron <b>${num(cv.cars)} autos</b> y ${nAb?`${nAb===1?'otro <b>se fue':`otros <b>${num(nAb)} se fueron`} sin cargar</b> (${pcu(cv.ab/ent,1)} de los ${num(ent)} que entraron, como cuenta C1 en Calle y acceso)`:'ninguno se fue sin cargar'}: la regla dio ${num(r.det)} ${r.det===1?'aviso':'avisos'} y una persona confirmó ${num(r.ok)} (${cdC4_pl(r.fp,'falsa alarma','falsas alarmas')}). Tiempo total en la isla: <b>${mmss(cv.wait+cv.fill+cv.out)}</b> por auto (espera ${mmss(cv.wait)}, carga y cobro ${mmss(cv.fill)}, salida ${mmss(cv.out)}). La isla 1 (surtidores 1 y 2, cerca de la entrada) atendió ${num(c1.n)} autos observados con espera mediana de <b>${mmss(c1.med)}</b>; la isla 2, ${num(c2.n)} con ${mmss(c2.med)}. El surtidor más cargado fue el ${oc.s}: <b>${pcu(oc.v)} ocupado</b> de ${oc.h} a ${oc.h+1} h. ${fila.length?`Hubo fila en la playa ${hourRanges(fila.map(x=>x.h)).join(' y ')}: ${num(sum(fila.map(x=>x.fila)))} minutos en esas horas, como en Playa e islas (${num(P.filaMin)} contando también las esperas cortas del resto del día). `:''}En la hora de más autos (${pk.h} a ${pk.h+1} h) se vieron ${num(pk.vis,1)} de los ${pk.prog} playeros de la grilla.${h4&&h4[1]<1?` La C4 estuvo observable el ${pcu(h4[1])} del día: ${h4[2].charAt(0).toLowerCase()+h4[2].slice(1)}, esa hora queda sin dato.`:''}`,
+  nota:`Muestra de ${nS} autos atendidos repartidos por isla como en el día (${num(i1)} en la isla 1 y ${num(nS-i1)} en la isla 2) y a lo largo de las horas, con la hora, la isla y la espera que tienen en los datos de ayer de Playa e islas, más los ${cdC4_pl(nAb,'auto que se fue','autos que se fueron')} sin cargar (${nAb===1?'el único':'todos'} los de ayer), en las horas con más abandono: por eso en esta tabla los que se van pesan más que en el día (${pcu(cv.ab/ent,1)}). El número de track sigue el orden de llegada de todos los autos del día. Carga y cobro y salida, de los promedios de esa hora; playeros y fila, de la hora completa. Las horas en que la C4 no vio${no.length?` (${no.map(h=>`${h} a ${h+1} h`).join(', ')})`:''} no entran.`}}
 
 CAMDET.C4={
  titulo:'cómo se ocupa la playa y quién se va sin cargar',
@@ -3004,7 +3043,7 @@ CAMDET.C4={
  ayer:cdC4_ayer,
  series:()=>{const cv=D.cv,pk=cdC4_pico();return[
   // ayer = «Autos atendidos ayer» de Playa e islas: num(D.cv.cars) → Math.round(D.cv.cars); acompaña al tránsito, estable
-  {id:'autos',n:'Autos atendidos por día',fmt:'num',mejor:'sube',...cdSerie({ayer:Math.round(cv.cars),seed:9400,motor:'autos',drift:0,ruido:.04,entero:true})},
+  {id:'autos',n:'Autos atendidos por día',fmt:'num',mejor:'sube',...cdC4_autosSerie()},
   // ayer = «Se fueron sin cargar» de Playa e islas: num(D.cv.ab) → Math.round(D.cv.ab); acompaña al tránsito y sube (mala). Decimal: los promedios de 7 días de pocos autos no son enteros
   {id:'abandono',n:'Autos que se fueron sin cargar',fmt:'dec',mejor:'baja',...cdSerie({ayer:Math.round(cv.ab),seed:9401,motor:'autos',drift:.08,ruido:.05,min:0})},
   // ayer = «Tiempo total en la isla» de Playa e islas: D.cv.wait + D.cv.fill + D.cv.out (promedio por auto); sube
@@ -3022,22 +3061,22 @@ CAMDET.C4={
   if(pk){const h=pk[0],ph=P.hrs.find(x=>x.h===h),cvh=cv.hrs.find(x=>x.h===h);
    if(ph&&ph.obs&&cvh&&ph.perStaff>ATT){const falta=ph.vis<ph.prog-.4,no=cdC4_noobs(),calm=cv.hrs.filter(x=>x.h!==h&&!no.includes(x.h)&&x.cars>=5&&x.wait<=cdC4_ESPERA_OK),rc=calm.length?sum(calm.map(x=>x.ab))/sum(calm.map(x=>x.cars)):null,rp=cvh.cars?cvh.ab/cvh.cars:0,dAb=rc==null?0:pk[1]*Math.max(0,rp-rc),gan=dAb*CAR_L*mg*30,cost=HR_PLAY*30;
     out.push({id:'playero_pico',t:falta?`Que los ${ph.prog} playeros estén en la playa de ${h} a ${h+1} h`:`Sumá un playero de refuerzo de ${h} a ${h+1} h`,
-     porque:`Mañana el pico es de ${h} a ${h+1} h, con unos <b>${num(pk[1])} autos</b> (pronóstico). Ayer a esa hora la C4 vio <b>${num(ph.vis,1)} playeros</b> de los ${ph.prog} de la grilla: ${num(ph.perStaff)} autos por playero, contra los ${ATT} que supone Personal. La espera promedio fue ${mmss(cvh.wait)}, hubo ${ph.fila} minutos de fila en la playa y el surtidor ${cvh.occ.indexOf(Math.max(...cvh.occ))+1} llegó al ${pcu(Math.max(...cvh.occ))} de ocupación.${falta?' El que falta está en la grilla pero no al lado de los autos: puede estar en la descarga o en la tienda; revisalo con el encargado antes de tocar la grilla.':''}${tiSube?` Y el tiempo total en la isla <b>sube ${pc(ti.tr.pct)} por semana</b> (${cdC4_p(ti.tr)}).`:''}`,
+     porque:`Mañana el pico es de ${h} a ${h+1} h, con unos <b>${num(pk[1])} autos</b> (pronóstico). Ayer a esa hora la C4 vio <b>${num(ph.vis,1)} playeros</b> de los ${ph.prog} de la grilla: ${num(ph.perStaff)} autos por playero, contra los ${ATT} que supone Personal. La espera promedio fue ${mmss(cvh.wait)}, hubo ${ph.fila} minutos de fila en la playa y el surtidor ${cvh.occ.indexOf(Math.max(...cvh.occ))+1} llegó al ${pcu(Math.max(...cvh.occ))} de ocupación.${falta?' Faltan playeros a la vista en esa hora: revisá la grilla y las tareas de la hora (descarga, tienda) con el encargado. No sirve para sancionar a nadie.':''}${tiSube?` Y el tiempo total en la isla <b>sube ${pcu(Math.abs(ti.tr.pct),1)} por semana</b> (${cdC4_p(ti.tr)}).`:''}`,
      impacto:dAb>0?`A esa hora se fue sin cargar el ${pcu(rp,1)} de los autos, contra ${pcu(rc,1)} en las demás horas con espera de hasta ${mmss(cdC4_ESPERA_OK)}: ${num(pk[1],1)} autos × ${fa((rp-rc)*100,1)} puntos × ${num(CAR_L)} L × ${ars(mg,1)} de margen por litro × 30 días = <b>${ars(gan)} por mes</b>.${falta?' Sin costo extra si el playero vuelve a la playa;':''} un refuerzo de una hora cuesta ${ars(HR_PLAY)} × 30 días = ${ars(cost)} por mes (supuesto de Personal)${gan<cost&&!falta?': solo lo paga si además baja la espera de los que sí cargan':''}.`:null,
      conf:'media',prio:'alta',medir:`C4: playeros a la vista, minutos de fila en la playa y autos que se van sin cargar de ${h} a ${h+1} h, dos semanas antes y dos después. C3: espera hasta que llega el playero en la isla 2 a esa hora.`})}}
   // 2 · abandono en suba con un surtidor libre mientras hay fila: revisar la isla 1 (la que acumula la espera larga) y señalizar el surtidor 4.
   //     Plata = volver al abandono de hace 4 semanas.
   if(ab&&ab.tr.ok&&ab.tr.dir==='sube'){const l1=cdC4_largas(1),l2=cdC4_largas(2),w=l1>=l2?1:2,c=P.cells[w+':dia'],co=P.cells[(3-w)+':dia'],up=Math.max(0,ab.tr.l7-f7(ab)),libre=P.free4!=null&&P.free4>=.5;
-   out.push({id:'isla_abandono',t:`Revisá la isla ${w}: ahí se arma la espera que hace irse a los autos`,
-    porque:`Los autos que se van sin cargar <b>suben ${pc(ab.tr.pct)} por semana</b> (${cdC4_p(ab.tr)}): ${num(f7(ab),1)} por día hace 4 semanas, ${num(ab.tr.l7,1)} la última. Un auto se va cuando la isla a la que apunta está trabada: ayer la isla ${w} acumuló <b>${num(w===1?l1:l2)} de los ${num(l1+l2)} autos</b> que esperaron más de 1:30 (mediana ${mmss(c.med)} contra ${mmss(co.med)} en la isla ${3-w}).${libre?` Mientras hubo fila en la playa, el surtidor 4 estuvo libre el <b>${pcu(P.free4)}</b> del tiempo: la fila es de señalización, no de capacidad.`:''}${ocSube?` La ocupación del surtidor más cargado en su pico también sube (${cdFmtD(oc.tr.sem,'pct')} por semana).`:''}`,
+   out.push({id:'isla_abandono',t:libre?`Señalizá el surtidor 4: la espera se arma en la isla ${w}`:`Revisá la isla ${w}: ahí se arma la espera que hace irse a los autos`,
+    porque:`Los autos que se van sin cargar <b>suben ${pcu(Math.abs(ab.tr.pct),1)} por semana</b> (${cdC4_p(ab.tr)}): ${num(f7(ab),1)} por día hace 4 semanas, ${num(ab.tr.l7,1)} la última. Un auto se va cuando la isla a la que apunta está trabada: ayer la isla ${w} acumuló <b>${num(w===1?l1:l2)} de los ${num(l1+l2)} autos</b> que esperaron más de 1:30 (mediana ${mmss(c.med)} contra ${mmss(co.med)} en la isla ${3-w}).${libre?` Mientras hubo fila en la playa, el surtidor 4 estuvo libre el <b>${pcu(P.free4)}</b> del tiempo: la fila es de señalización, no de capacidad.`:''}${ocSube?` La ocupación del surtidor más cargado en su pico también sube (${cdFmtD(Math.abs(oc.tr.sem),'pct').slice(1)} por semana).`:''}`,
     impacto:up>0?`Volver al nivel de hace 4 semanas: ${num(up,1)} autos por día × ${num(CAR_L)} L × ${ars(mg,1)} de margen por litro × 30 días = <b>${ars(up*CAR_L*mg*30)} por mes</b>.`:null,
     conf:'media',prio:ab.tr.p<.01?'alta':'media',medir:`C4: autos que se van sin cargar, espera por isla y uso del surtidor 4 mientras hay fila, dos semanas antes y dos después de ${libre?'señalizar el surtidor 4 y que el playero de la isla 2 llame a los autos':'reordenar la entrada a las islas'}.`})}
   // 3 · el aviso de merodeo en la zona de tanques casi nunca se confirma: recalibrar la zona antes de que el encargado deje de mirarlo. Sin monto: no hay un dato de minutos de trabajo por aviso
   //     (D.sec.week[].med es la mediana hasta que el aviso se resuelve, no minutos del encargado), así que impacto queda en null.
   {const r=cdC4_rule('merodeo'),w=D.sec&&D.sec.week?D.sec.week.find(x=>x.id==='merodeo'):null,q=typeof cvQ==='function'?cvQ(r):{ok:r.ok,fp:r.fp,n:r.ok+r.fp,win:'ayer'};
    if(q.n>=3&&q.ok/q.n<.5){
-    out.push({id:'tanques_merodeo',t:'Recalibrá la zona de tanques: el aviso de merodeo casi nunca se confirma',
-     porque:`Ayer la regla «persona más de 3 min en la zona de tanques» dio ${num(r.det)} avisos y una persona confirmó ${num(r.ok)}. ${q.win==='ayer'?'':`En 7 días: <b>${num(q.ok)} confirmados y ${num(q.fp)} falsas alarmas</b>${w?`, ${num(w.noche)} de los ${num(w.avisos)} avisos de madrugada y ${num(w.pend)} todavía sin revisar${w.med!=null?`; cada aviso de esta regla tarda ${num(w.med)} min de mediana en resolverse`:''}`:''}. `}La regla todavía no distingue al playero que mide los tanques ni al chofer de la descarga, que pasan ahí más de 3 min por trabajo. Un aviso que siempre es falso termina ignorado, y es el que importa de noche.`,
+    out.push({id:'tanques_merodeo',t:'Recalibrá la zona de tanques: el aviso de merodeo casi nunca se confirma',unaVez:true,
+     porque:`Ayer la regla «persona más de 3 min en la zona de tanques» dio ${num(r.det)} avisos y una persona confirmó ${num(r.ok)}. ${q.win==='ayer'?'':`${w?`En 7 días hubo ${num(w.avisos)} avisos (${num(w.noche)} de madrugada): `:'En 7 días: '}<b>${num(q.ok)} confirmados y ${num(q.fp)} falsas alarmas</b>${w?`, y ${num(w.pend)} todavía sin revisar${w.med!=null?`; cada aviso de esta regla tarda ${num(w.med)} min de mediana en resolverse`:''}`:''}. `}La regla todavía no distingue al playero que mide los tanques ni al chofer de la descarga, que pasan ahí más de 3 min por trabajo. Un aviso que siempre es falso termina ignorado, y es el que importa de noche.`,
      impacto:null,
      conf:'alta',prio:'media',medir:'C4: avisos de merodeo y cuántos confirma una persona, dos semanas antes y dos después de excluir al personal con uniforme y los horarios de descarga del remito.'})}}
   return out.slice(0,4)}
@@ -3086,7 +3125,7 @@ function cdC5_clip(J,R){const zn=z=>DET_Z[z]||z,E=cdC5_ends(R),pp=J.filter(j=>j.
  const durs=pp.map(j=>j.dur),golVacia=Z.includes('golosinas')&&!en('golosinas').length,nU=pp.filter(j=>PV[j.id]).length;
  return{cols:['Track','Segundos por zona','¿Pasó por la zona de caja?','Tomó o devolvió','Qué se puede decir'],rows,
   resumen:`${con.map(z=>{const t=en(z);return `<b>${zn(z)}</b>: ${t.length} ${t.length===1?'track':'tracks'}, ${num(sum(t.map(j=>j.zt[z]||0)),1)} s entre todos`}).join(' · ')}.${vac.length?` Sin detecciones: ${cdC5_y(vac.map(z=>zn(z)+(z==='golosinas'&&golVacia?' (punto ciego, ver nota)':'')))}.`:''}${nU?` ${nU} de los ${pp.length} tracks ${nU===1?'retoma':'retoman'} a otro que el tracker perdió: serían unas ${pp.length-nU} personas${golVacia?', más el cliente que tapa la góndola de golosinas':''}.`:''}`,
-  nota:`${golVacia?'Golosinas figura sin visitas, pero en el pasillo de la izquierda hay un cliente: la góndola lo tapa casi entero y el motor no lo detecta. Es un punto ciego, no «nadie»: se corrige subiendo la cámara o sumando una al fondo del pasillo. ':''}«Tomó o devolvió»: sin dato, el motor todavía no detecta la mano tomando un producto (pose + VLM, en piloto).${pp.length?` En este clip los tracks duran de ${num(Math.min(...durs),1)} a ${num(Math.max(...durs),1)} s: el clip es corto y las góndolas cortan tracks; en vivo llega completo el ${pcu(D.store.dwell.full)} de los recorridos.`:''}`}}
+  nota:`${golVacia?'Golosinas figura sin visitas, pero en el pasillo de la izquierda hay un cliente: la góndola lo tapa casi entero y el motor no lo detecta. Es un punto ciego, no «nadie»: se corrige subiendo la cámara o sumando una al fondo del pasillo. ':''}«Tomó o devolvió»: sin dato, el motor todavía no detecta la mano tomando un producto (pose + VLM, en piloto).${pp.length?` En este clip los tracks duran de ${num(Math.min(...durs),1)} a ${num(Math.max(...durs),1)} s: el clip es corto y las góndolas cortan tracks; en la estación de ejemplo, el ${pcu(D.store.dwell.full)} de los recorridos llega completo.`:''}`}}
 
 /* ayer, cliente por cliente (ejemplo): muestra armada con las proporciones de ayer (GOND y D.store), determinista */
 function cdC5_ayer(){const s=D.store,dw=s.dwell,g=RNG(9510),N=13,vis=s.ppl-s.wc,hw=s.hrs.map(x=>x.ppl-x.wc),tot=sum(hw),G=cdC5_G(cdC5_GOL),gl=s.gain.find(x=>x.n===cdC5_GOL);
@@ -3171,14 +3210,14 @@ CAMDET.C5={
   if(baja&&pk&&sh>0&&rc!=null&&rc>=s.rbar&&gl&&gl.r<s.rbar&&gl.mes>0){
    out.push({id:'combo_cafe',t:`Probá un combo café + golosina de ${pk[0]} a ${pk[0]+1} h`,
     porque:`Mañana el pico frente a las góndolas es de ${pk[0]} a ${pk[0]+1} h, con unos <b>${num(pk[1])} clientes</b> (pronóstico). El café se compra: de cada 100 que lo toman, lo pagan ${num(rc*100)}; las golosinas, ${num(gl.r*100)}, y en baja (${cdC5_p(cg.tr)}). Pasa por café el ${pcu(Cf.p)} de los clientes: el combo pone la golosina en la mano de quien ya va a la caja.`,
-    impacto:`La hora pico pesa el ${pcu(sh)} de los clientes de un día típico (perfil por hora de ayer): ${pcu(sh)} × ${ars(gl.mes)} (lo que golosinas deja de ganar por mes) = <b>${ars(gl.mes*sh)} por mes</b> si en esa hora compran como el promedio. Es parte de los ${ars(gl.mes)} de golosinas: no se suma.`,
+    impacto:`La hora pico pesa el ${pcu(sh,1)} de los clientes de un día típico (perfil por hora de ayer): ${pcu(sh,1)} × ${ars(gl.mes)} (lo que golosinas deja de ganar por mes) = <b>${ars(gl.mes*sh)} por mes</b> si en esa hora compran como el promedio. Es parte de los ${ars(gl.mes)} de golosinas: no se suma.`,
     conf:'media',prio:'media',medir:`C5: de ${pk[0]} a ${pk[0]+1} h, cuántos de los que toman café pasan por golosinas y cuántos llegan a la caja con las dos. POS: tickets con café y golosina juntos en esa franja.`})}
   // 4 · lo que interesa y casi nadie ve (poco paso, muchos segundos: la misma regla que el panel de góndolas) y lo que nadie mira
   const hid=GOND.filter(x=>x.p<.3&&x.s>=18).sort((a,b)=>a.p-b.p),nadie=GOND.filter(x=>x.p<.1&&x.s<10);
   if(hid.length){const it=hid.map(x=>{const c=TIENDA_CAT.find(y=>y.n===x.n),tkc=c?c.pr*c.u:0,ex=s.ppl*cdC5_MAS*x.c;return{x,tkc,ex,mes:ex*tkc*TIENDA_MG*30}}),tot=sum(it.map(i=>i.mes));
    out.push({id:'mover',t:`Probá ${cdC5_y(hid.map(x=>x.n.toLowerCase()))} cerca de la caja dos semanas`,
-    porque:`${it.map(i=>`<b>${i.x.n}</b>: pasa solo el ${pcu(i.x.p)} de los clientes, pero quien llega mira ${num(i.x.s)} s.`).join(' ')} Interesan, pero casi nadie las ve.${nadie.length?' '+nadie.map(x=>`<b>${x.n}</b>: pasa el ${pcu(x.p)} y miran ${num(x.s)} s: es la góndola que nadie mira, y su lugar puede ser para lo que se mueve.`).join(' '):''}`,
-    impacto:`Por cada ${num(cdC5_MAS*100)} de cada 100 clientes más que pasen frente a cada una (${num(s.ppl)} entradas × ${pcu(cdC5_MAS)} × lo que compra hoy quien pasa): ${it.map(i=>`${i.x.n.toLowerCase()} +${num(i.ex,1)} compras por día × ${ars(i.tkc)}`).join(' y ')}; × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(tot)} por mes</b>.`,
+    porque:`${it.map(i=>`<b>${i.x.n}</b>: pasa solo el ${pcu(i.x.p)} de los clientes, pero quien llega mira ${num(i.x.s)} s.`).join(' ')} Interesan, pero casi nadie las ve.${nadie.length?' '+nadie.map(x=>`<b>${x.n}</b>: pasa el ${pcu(x.p)} y miran ${num(x.s)} s: es la góndola que menos se mira, y su lugar puede ser para lo que se mueve.`).join(' '):''}`,
+    impacto:`Si pasa por cada una un ${pcu(cdC5_MAS)} más de los clientes (${num(s.ppl)} entradas × ${pcu(cdC5_MAS)} × lo que compra hoy quien pasa): ${it.map(i=>`${i.x.n.toLowerCase()} +${num(i.ex,1)} compras por día × ${ars(i.tkc)}`).join(' y ')}; × ${pcu(TIENDA_MG)} de margen × 30 días = <b>${ars(tot)} por mes</b>.`,
     conf:'media',prio:'media',medir:'C5: qué parte de los clientes pasa y cuántos segundos mira cada góndola movida, antes y después. POS: tickets de esas categorías por franja.'})}
   return out.slice(0,4)}
 };
@@ -3198,6 +3237,9 @@ const cdC6_capMano=(d,m)=>{const p=sum(d.fz.map(z=>z[m].pass));return p>0?sum(d.
    c = (7·m7 − ayer) ÷ Σv para que el promedio de los 7 sea exactamente ese número; sin m7, c = 1 (se copian tal cual). */
 function cdC6_ancla(P,v,m7,entero){const n=P.y.length,ay=P.y[n-1],c=m7==null?1:(7*m7-ay)/sum(v);v.forEach((x,i)=>P.y[n-1-v.length+i]=entero?Math.round(x*c):x*c);return P}
 const cdC6_pl=(n,a,b)=>`${num(n)} ${n===1?a:b}`;
+/* camionetas, utilitarios y camiones entre los que entran, 28 días; ayer = callePick(D.traffic.days[6]) y los últimos 7 días, los de D.traffic.days. La usan C1 y C6 */
+function cdC6_pickSerie(){const T=D.traffic,d6=T.days[T.days.length-1];
+ return cdC6_ancla(cdSerie({ayer:callePick(d6),seed:9605,dow:[0,1,2,3,4,5,6].map(k=>callePick(T.days.find(x=>x.dow===k)||d6)),ruido:.03,min:0,max:1}),T.days.slice(0,-1).map(callePick))}
 const cdC6_ptxt=t=>t.p<.001?'p &lt; 0,001':'p = '+t.p.toFixed(3).replace('.',',');
 // horas de ayer con mucha pasada (al menos la mediana del día) y captación 15 % por debajo del resto del día (el rojo del gráfico de Calle y acceso)
 function cdC6_flojas(){const st=D.street,ps=st.hrs.map(x=>x.pass).sort((a,b)=>a-b),med=(ps[(ps.length-1)>>1]+ps[ps.length>>1])/2;
@@ -3276,7 +3318,7 @@ CAMDET.C6={
   // ayer = «Pasaron por la calle» del panel «Calle: autos que pasan y autos que entran» (D.street.pass, de 6 a 24 h); sigue la forma de la semana de los litros.
   // Últimos 7 días con la forma de D.traffic.days, llevada al nivel de D.street: × D.street.pass ÷ D.traffic.days[6].pass. La suma de la semana no da el stat
   // «Pasaron por la calle, últimos 7 días» (D.traffic.pass) porque buildTraffic escala ayer con los litros del día entero y D.street no: forzarla plantaría una suba falsa
-  {id:'pasan',n:'Autos que pasan por la calle por día',fmt:'num',mejor:'sube',...cdC6_ancla(cdSerie({ayer:st.pass,seed:9600,motor:'autos',ruido:.03,entero:true}),dd.map(d=>d.pass*st.pass/d6.pass),null,true)},
+  {id:'pasan',n:'Autos que pasan por la calle por día (6 a 24 h)',fmt:'num',mejor:'sube',...cdC6_ancla(cdSerie({ayer:st.pass,seed:9600,motor:'autos',ruido:.03,entero:true}),dd.map(d=>d.pass*st.pass/d6.pass),null,true)},
   // ayer = D.street.enter ÷ D.street.pass, el «(x %)» junto a «Entraron» en el mismo panel. Baja 2 % por semana: el hallazgo de esta cámara.
   // Últimos 7 días: entran ÷ pasan de cada día de D.traffic.days, con promedio = stat «Entraron: x % de los que pasan» (D.traffic.enter ÷ D.traffic.pass)
   {id:'captacion',n:'Captación: entran ÷ pasan',fmt:'pct',mejor:'sube',...cdC6_ancla(cdSerie({ayer:st.enter/st.pass,seed:9601,drift:-.02,ruido:.02,min:0,max:1}),dd.map(d=>d.enter/d.pass),T.enter/T.pass)},
@@ -3285,9 +3327,9 @@ CAMDET.C6={
   {id:'capFloja',n:`Captación del sentido ${lo} por día`,fmt:'pct',mejor:'sube',...cdC6_ancla(cdSerie({ayer:capS(d6),seed:9602,drift:-.03,ruido:.025,min:0,max:1}),dd.map(capS),T.sent[lo].cap)},
   // ayer = «De 17 a 20 h entra el x %» de Calle y acceso (D.street.pkCap): la caída de la tarde es estructural (fila en las islas), no empeora
   {id:'capTarde',n:'Captación de 17 a 20 h',fmt:'pct',mejor:'sube',...cdSerie({ayer:st.pkCap,seed:9607,ruido:.03,min:0,max:1})},
-  // ayer = stat «Camionetas y utilitarios» de Calle y acceso con el día de ayer (callePick(D.traffic.days[6])): camionetas, utilitarios, camiones y colectivos entre los que entran.
+  // ayer = stat «Camionetas, utilitarios y camiones» de Calle y acceso con el día de ayer (callePick(D.traffic.days[6])): camionetas, utilitarios, camiones y colectivos entre los que entran.
   // Forma de la semana = la de D.traffic.days; los últimos 7 días son exactamente los del gráfico por día de «Qué vehículos entraron» (calleMixHtml)
-  {id:'pick',n:'Camionetas y utilitarios, de los que entran',fmt:'pct',mejor:'sube',...cdC6_ancla(cdSerie({ayer:callePick(d6),seed:9605,dow:[0,1,2,3,4,5,6].map(k=>callePick(T.days.find(x=>x.dow===k)||d6)),ruido:.03,min:0,max:1}),dd.map(callePick))}]},
+  {id:'pick',n:'Camionetas, utilitarios y camiones, de los que entran',fmt:'pct',mejor:'sube',...cdC6_pickSerie()}]},
  // perfil por hora de ayer de los autos que pasan (D.street.hrs, el mismo del gráfico de Calle y acceso)
  horas:()=>({n:'Autos que pasan por hora',u:'autos',hrs:D.street.hrs.map(x=>[x.h,x.pass])}),
  recos:A=>{const out=[],st=D.street,T=D.traffic,lo=cdC6_lo(),hi=lo==='sur'?'norte':'sur',Sl=CALLE_S.find(s=>s.id===lo),Lc=T.sent[lo],Hc=T.sent[hi],mgL=cdC6_mgL();
@@ -3316,12 +3358,12 @@ CAMDET.C6={
    const pre=caro.length?`Hoy estás por encima del promedio de la zona (ponderado por distancia) en ${caro.map(x=>`${x.p.short} (${arsS(x.m.p0-x.m.ref)})`).join(', ')}.`:`Hoy tus ${num(PRODS.length)} precios están en o por debajo del promedio de la zona (ponderado por distancia): la causa no parece ser el precio.`;
    const comp=`${baja.length?` ${baja.map(cTxt).join('; ')}: eso sí puede llevarse autos.`:''}${sube.length?` ${sube.map(cTxt).join('; ')}: eso no explica la caída.`:''}`;
    out.push({id:'precios',t:porPrecio?'Mirá los precios de la competencia: la captación viene cayendo':'La captación viene cayendo: descartá el precio y la cámara antes de actuar',
-    porque:`La captación del día cae <b>${fa(Math.abs(C.tr.sem)*100,1)} puntos por semana</b> (${cdC6_ptxt(C.tr)}): los últimos 7 días promedió ${pcu(C.tr.l7,1)} contra ${pcu(C.tr.p7,1)} la semana anterior. ${pre}${comp} Ver <a href="#precios">Precios</a>.${M&&M.moved?' Antes de decidir, descartá que sea la cámara: ver «Redibujá las líneas de C6».':''}`,
+    porque:`La captación del día cae <b>${fa(Math.abs(C.tr.sem)*100,2)} puntos por semana</b> (${cdC6_ptxt(C.tr)}): los últimos 7 días promedió ${pcu(C.tr.l7,1)} contra ${pcu(C.tr.p7,1)} la semana anterior. ${pre}${comp} Ver <a href="#precios">Precios</a>.${M&&M.moved?' Antes de decidir, descartá que sea la cámara: ver «Redibujá las líneas de C6».':''}`,
     impacto:menos>=1?`Cada semana que sigue así son unos <b>${num(menos)} autos menos por día</b> (${num(st.pass)} pasan × ${fa(Math.abs(C.tr.sem)*100,2)} puntos): ${lit(menos*CAR_L)} por día y <b>${ars(menos*CAR_L*mgL*30)} de margen por mes</b> (× ${CAR_L} L × ${ars(mgL,1)} por litro × 30 días).`:null,
     conf:'media',prio:'alta',
     medir:porPrecio?'C6 sigue la captación diaria por sentido: si se ajusta un precio, se comparan las 2 semanas siguientes con las 2 anteriores y la tendencia tiene que dejar de bajar.':'C6 sigue la captación diaria por sentido: con las líneas redibujadas, se comparan las 2 semanas siguientes con las 2 anteriores; si la tendencia sigue bajando con la cámara en su lugar, la causa está fuera del precio y de la cámara.'})}
   // 4. el motor estima que C6 se corrió (D.motor) → redibujar líneas y verificar una hora a mano antes de usar los números de esos días
-  if(M&&M.moved){out.push({id:'recalibrar',t:'Redibujá las líneas de C6: la cámara se corrió',
+  if(M&&M.moved){out.push({id:'recalibrar',t:'Redibujá las líneas de C6: la cámara se corrió',unaVez:true,
     porque:`El Motor de visión estima que la C6 se corrió <b>${pcu(M.mov,1)}</b> respecto de su imagen de referencia desde el ${fWhen(M.since)} (avisa arriba de ${pcu(MOTOR_MOV)}; confianza ${num(M.conf,2)}). Si la línea «calle» o los ingresos quedan fuera del carril, cuentan de menos y la captación de esos días no es confiable. Ver <a href="#motor">Motor de visión</a>.`,
     impacto:null,conf:M.conf>=.85?'alta':'media',prio:'alta',
     medir:`Después de redibujar, una hora contada a mano contra el contador de «calle» y de los ingresos: la diferencia tiene que quedar por debajo del ${pcu(MOTOR_DRIFT)}.`})}
@@ -3337,19 +3379,25 @@ const TOUR=[
  {v:'turnos',t:'Cierre de turno en 5 minutos',d:'Aprobá las causas: la cascada se acerca a cero y quedan $ 3.400 para revisar. La IA no culpa a nadie.'},
  {v:'documentos',t:'Plata que vuelve',d:'Abrí el remito con 75 L de menos y prepará el reclamo. Mismo cruce para aranceles de tarjeta y precios de proveedores.'},
  {v:'precios',t:'Precio con las reglas del dueño',d:'El competidor 2 subió $ 25: mirá la sugerencia y su porqué. Abajo, el simulador dice si una promo «10% OFF los miércoles» conviene.'},
- {v:'vision',t:'Seis cámaras, cero sorpresas',d:'Las 6 cámaras que la estación ya tiene, con video real. Una patente con fugas previas entra a la playa: aviso al playero para cobrar antes. Cada cámara alimenta un módulo de Computer Vision.'},
- {v:'calle',t:'La calle, contada',d:'Cuántos autos pasan, cuántos entran y de qué mano. Qué tipo de vehículos son y, estimados por el modelo, marca, modelo y rango de años, sin guardar patentes.'},
+ {v:'vision',sel:'#view .item.sel',t:'Seis cámaras, medidas',d:'Clips reales con los recuadros que dibuja el motor de visión. Arriba, una patente de la lista de fugas con denuncia: aviso al playero para pedir el pago antes (la lectura de patentes está en piloto y necesita un lector en el ingreso).'},
+ {v:'vision',cam:'C5',t:'Góndolas: cada cliente, uno por uno',d:'Tocá una cámara y la IA explica qué mira. En Góndolas: segundos frente a cada góndola, cuántos llegan a la caja y cuántos se van sin comprar (tomar y devolver, en piloto). Abajo, la tendencia de golosinas que baja y lo que vale arreglarla.'},
+ {v:'vision',cam:'C3',t:'Isla 2: cuánto tarda la atención',d:'En el video, el motor reconoce al playero por el color del uniforme y mide cuántos segundos pasan hasta que llega al auto. Con 28 días de historia predice el pico de mañana y propone dónde reforzar.'},
+ {v:'vision',cam:'C6',t:'Calle: los autos que se pierden',d:'Cuántos pasan y cuántos entran, hora por hora. La captación viene bajando: la tendencia, el pronóstico y las recomendaciones con su impacto en plata. Probar 2 semanas o descartar: decide una persona.'},
+ {v:'calle',t:'La calle, contada',d:'Cuántos autos pasan, cuántos entran y de qué mano. Qué tipo de vehículos son y, estimados por el modelo, marca, modelo y rango de años, sin asociarlos a ninguna patente.'},
  {v:'tienda',t:'La tienda, medida',d:'Cuántos entran, cuántos compran y cuántos solo miran; qué se compra por franja (POS) y qué góndolas miran sin comprar, con la plata en juego.'},
  {v:'playa',t:'La espera, medida',d:'Cuánto espera un auto hasta que llega el playero, por isla y por turno; cuánto tarda la carga según el controlador y cuándo hay fila. Autos que se van sin cargar.'},
  {v:'seguridad',t:'Seguridad que se mide',d:'Cada aviso lo confirma o descarta una persona: así se conoce la precisión real de cada regla. De noche, sin infrarrojo, las patentes quedan NO OBSERVABLE y la pantalla lo dice.'},
  {v:'fidelizacion',t:'Una app propia, no la de la bandera',d:'Puntos, pago con QR y promos con la marca de la estación. Los clientes y sus datos quedan en la estación.'},
- {v:'flotas',t:'Lo que te deben, bajo control',d:'Cuentas corrientes con su límite y antigüedad de deuda. Abajo, la carga de 142 L en un camión con tanque de 100 L.'},
+ {v:'flotas',sel:'[data-act="fSus"][data-id="s1"]',t:'Lo que te deben, bajo control',d:'Cuentas corrientes con su límite y antigüedad de deuda. Abajo, la carga de 142 L en un camión con tanque de 100 L.'},
  {v:'personal',t:'La gente justa en cada hora',d:'La dotación sale del mismo pronóstico que arma el pedido: dónde falta gente y cuánto se ahorra en horas extra.'},
- {v:'capacitacion',t:'Entrenar sin sacar a nadie de la isla',d:'Que el cliente juegue de playero en «Cliente enojado por la demora». Si dice «cálmese», el puntaje baja.'},
- {v:'inicio',t:'Con sus números',d:'Probá «Preguntale a GOTA». Después abrí Parámetros, cargá los litros, precios y costos de su estación y mirá el impacto mensual con sus datos.',x:'<button class="btn sm pri" data-act="params">Abrir Parámetros</button>'}];
+ {v:'capacitacion',sel:'[data-act="scn"][data-s="enojado"]',t:'Entrenar sin sacar a nadie de la isla',d:'Que el cliente juegue de playero en «Cliente enojado por la demora». Si dice «cálmese», el puntaje baja.'},
+ {v:'inicio',sel:'#askIn',t:'Con sus números',d:'Probá «Preguntale a GOTA». Después abrí Parámetros, cargá los litros, precios y costos de su estación y mirá el impacto mensual con sus datos.',x:'<button class="btn sm pri" data-act="params">Abrir Parámetros</button>'}];
 function renderTour(){const el=$('tour');if(S.tour==null){el.hidden=true;el.innerHTML='';return}const st=TOUR[S.tour];el.hidden=false;
- el.innerHTML=`<div class="th"><span style="display:inline-grid;width:22px;height:22px">${LOGO}</span><span class="grow">Modo presentación</span><span class="small">${S.tour+1} / ${TOUR.length}</span><button class="btn sm ghost" data-act="tourEnd" aria-label="Cerrar la presentación">${ic('x')}</button></div><div class="tb"><b>${st.t}</b><span>${st.d}</span>${st.x?`<div>${st.x}</div>`:''}</div><div class="tf"><div class="dots">${TOUR.map((_,i)=>`<i class="${i===S.tour?'on':''}"></i>`).join('')}</div><button class="btn sm" data-act="tourPrev"${S.tour===0?' disabled':''}>Anterior</button><button class="btn sm pri" data-act="tourNext">${S.tour===TOUR.length-1?'Terminar':'Siguiente'}</button></div>`}
-function goTour(i){S.tour=i;const v=TOUR[i].v;if(location.hash==='#'+v)route();else location.hash=v;renderTour()}
+ el.innerHTML=`<div class="th"><span style="display:inline-grid;width:22px;height:22px">${LOGO}</span><span class="grow">Modo presentación</span><span class="small">${S.tour+1} / ${TOUR.length}</span><button class="btn sm ghost" data-act="tourEnd" aria-label="Cerrar la presentación">${ic('x')}</button></div><div class="tb"><b>${st.t}</b><span>${st.d}</span>${st.x?`<div>${st.x}</div>`:''}</div><div class="tf"><div class="dots">${TOUR.map((_,i)=>`<i class="${i===S.tour?'on':''}"></i>`).join('')}</div><button class="btn sm" data-act="tourPrev"${S.tour===0?' disabled':''}>Anterior</button><button class="btn sm pri" data-act="tourNext">${S.tour===TOUR.length-1?'Terminar':'Siguiente'}</button></div>`;el.scrollLeft=0}
+function goTour(i){S.tour=i;const st=TOUR[i],v=st.v;if(st.cam)S.cam=st.cam;if(location.hash==='#'+v)route();else location.hash=v;renderTour();
+ // lleva la pantalla a lo que menciona el paso: el análisis de la cámara o el elemento de st.sel (sin mover la página si ya está a la vista)
+ const go=st.cam?()=>document.getElementById('camdet'):st.sel?()=>document.querySelector(st.sel):null;
+ if(go)setTimeout(()=>{const t=go();if(t&&S.tour===i)t.scrollIntoView({block:'start',behavior:'smooth'})},120)}
 
 /* ================= parámetros ================= */
 function paramsDrawer(){const P=S.P;
@@ -3390,6 +3438,8 @@ function renderSide(){const cnt={};alerts().forEach(a=>{const c=cnt[a.mod]=cnt[a
  $('side').innerHTML=`<div class="brand"><div class="mark">${LOGO}</div><div><b>GOTA</b><small>Estaciones inteligentes</small></div></div><nav class="nav" aria-label="Módulos">${secs.map(s=>`<div class="sec">${s}</div>`+VIEWS.filter(v=>v.sec===s).map(v=>{const c=cnt[v.id];return `<button data-act="go" data-v="${v.id}" class="${S.view===v.id?'on':''}"${S.view===v.id?' aria-current="page"':''}>${ic(v.icon)}<span class="lbltxt">${v.name}</span>${c?`<span class="badge${c.crit?'':' soft'}" aria-label="${c.n} pendientes">${c.n}</span>`:''}</button>`}).join('')).join('')}</nav><div class="side-foot"><div class="proto">Demo con datos simulados. Ningún número corresponde a una estación real.</div></div>`}
 let lastView=null;
 function render(){const v=VIEW[S.view]||VIEW.inicio,el=$('view'),keep=lastView===v.id?el.scrollTop:0;renderSide();
+ // en el teléfono el menú es una fila que se desliza: centra la pestaña activa sin mover la página
+ if(innerWidth<=820){const b=document.querySelector('.nav button.on'),n=b&&b.parentNode;if(n)n.scrollLeft+=b.getBoundingClientRect().left-n.getBoundingClientRect().left-(n.clientWidth-b.offsetWidth)/2}
  $('eyebrow').textContent=S.P.station+' · datos simulados';$('pageTitle').textContent=v.title;el.innerHTML=V[v.id]();el.scrollTop=keep;lastView=v.id;if(v.id==='vision')startCams()}
 function route(){const h=decodeURIComponent(location.hash.slice(1));S.view=VIEW[h]?h:'inicio';render();$('view').focus({preventScroll:true})}
 
